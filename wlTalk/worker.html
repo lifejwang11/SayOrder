@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>标注端</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+    <script>
+        var tokenID;
+        var rootURL = "http://127.0.0.1:8080"
+        var orderID = 0;
+        var keywordTypeList;//关键词类别
+        var myTrees;//所有类别
+        var choseID = 0;//选择的id
+        $(document).ready(function () {//获取信息
+            tokenID = getQueryString("tokenID");
+            get("/admin/getInitMessage");
+        });
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+            var context = "";
+            if (r != null)
+                context = decodeURIComponent(r[2]);
+            reg = null;
+            r = null;
+            return context == null || context == "" || context == "undefined" ? "" : context;
+        }
+        function getTitle(type_id) {
+            var title;
+            for (var i = 0; i < myTrees.length; i++) {
+                let tree = myTrees[i];
+                if (tree.type_id == type_id) {
+                    title = tree.title;
+                    break;
+                }
+            }
+            return title;
+        }
+        function selectMessage(message) {
+            myTrees = message.myTrees;//当前语言分类
+            keywordTypeList = message.keywordTypeList;//关键词类别信息
+            var adminSentenceList = message.adminSentenceList;//今日标注信息
+            if (myTrees != null) {
+                upDateOrderMessage();
+            }
+            if (adminSentenceList != null) {//展示今日标注信息
+                selectSentenceMessage(adminSentenceList);
+            }
+        }
+        function delSentence(sentence_id) {//删除语句
+            get("/myData/delSentence?sentence_id=" + sentence_id);
+        }
+        function selectSentenceMessage(adminSentenceList) {
+            for (var i = 0; i < adminSentenceList.length; i++) {
+                let adminSentence = adminSentenceList[i];
+                let sentence_id = adminSentence.sentence_id;
+                let word = adminSentence.word;//语句
+                let title = getTitle(adminSentence.type_id);
+                if (sentence_id > orderID) {
+                    orderID = sentence_id;
+                    var tr = $("<tr></tr>").attr("id", "od" + sentence_id);
+                    var td = $("<td>id：" + sentence_id + "</td><td>语句：" + word + "</td><td>类别：" + title + "</td>");
+                    tr.append(td);
+                    var btn = $("<button>删除语句</button>").attr("type", "button").attr("class", "btn btn-primary").attr("onclick", "delSentence(" + sentence_id + ")");
+                    var btd = $("<td></td>").append(btn);
+                    tr.append(btd);
+                    $("#orderMessage").append(tr);
+                }
+            }
+        }
+        function upDateOrderMessage() {
+            for (var i = 0; i < myTrees.length; i++) {
+                var myTree = myTrees[i];
+                let type_id = myTree.type_id;//类别id
+                let title = myTree.title;//类别名称
+                let sentence_nub = myTree.sentence_nub;//语句数量
+                let op = $("<option>" + title + ",数量:" + sentence_nub + "</option>").attr("value", type_id);
+                $("#myType").append(op);
+                $("#myType").change(function () {
+                    checkType($(this));
+                });
+            }
+        }
+        function checkType(mySelect) {
+            if (choseID > 0) {
+                let upKey = getKeywordsByTypeID(choseID);//所有关键词
+                $("#mySub").remove();
+                if (upKey != null) {
+                    for (var j = 0; j < upKey.length; j++) {
+                        $("#myBody").find("#f" + upKey[j].keyword_type_id).remove();
+                    }
+                }
+            }
+            var type_id = mySelect.val();//选择当前语句的类别
+            choseID = type_id;
+            let keywords = getKeywordsByTypeID(type_id);//所有关键词
+            if (keywords != null) {
+                for (var j = 0; j < keywords.length; j++) {
+                    let keyword = keywords[j];
+                    let keyword_mes = keyword.keyword_mes;//订单信息
+                    let answer = keyword.answer;//回答问题
+                    let keyword_type_id = keyword.keyword_type_id;
+                    let father = $("<div></div>").attr("class", "input-group input-group-lg").attr("style", "margin-top: 20px;")
+                        .attr("id", "f" + keyword_type_id);
+                    let son1 = $("<span>" + keyword_mes + ":</span>").attr("class", "input-group-addon");
+                    let son2 = $("<input></input>").attr("type", "text").attr("placeholder", "语句中的关键词")
+                        .attr("class", "form-control").attr("aria-describedby", "basic-addon1").attr("id", "m" + keyword_type_id);
+                    father.append(son1).append(son2);
+                    $("#myBody").append(father);
+                }
+            }
+            let btf = $("<div></div>").attr("class", "input-group input-group-lg").attr("style", "margin-top: 20px;").attr("id", "mySub");
+            let btn = $("<button>点击提交</button>").attr("type", "button").attr("class", "btn btn-primary btn-lg btn-block").attr("onclick", "addSentence()");
+            btf.append(btn);
+            $("#myBody").append(btf);
+        }
+        function addSentence() {//增加语句
+            var type_id = $("#myType").val();//选择当前语句的类别
+            var myWord = $("#myWord").val();//当前语句
+            if (myWord.length > 1) {
+                let keywords = getKeywordsByTypeID(type_id);//所有关键词
+                var upKeywordList = [];
+                if (keywords != null) {
+                    for (var j = 0; j < keywords.length; j++) {
+                        let keyword = keywords[j];
+                        let keyword_mes = keyword.keyword_mes;//订单信息
+                        let keyword_type_id = keyword.keyword_type_id;
+                        var UpKeyword = {
+                            "keyword": $("#m" + keyword_type_id).val(),
+                            "keyword_type_id": keyword_type_id
+                        }
+                        upKeywordList.push(UpKeyword);
+                    }
+                }
+                var params = {
+                    "word": myWord,
+                    "type_id": type_id,
+                    "upKeywordList": upKeywordList
+                }
+                post(params, "/myData/addSentence");
+            } else {
+                alert("输入语句长度必须大于1");
+            }
+        }
+        function getKeywordsByTypeID(type_id) {
+            var keywords = [];
+            for (var i = 0; i < keywordTypeList.length; i++) {
+                let keyword = keywordTypeList[i];
+                if (keyword.type_id == type_id) {
+                    keywords.push(keyword);
+                }
+            }
+            return keywords;
+        }
+        function get(url) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', rootURL + url);
+            xhr.setRequestHeader('tokenID', tokenID);
+            xhr.send()
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {//固定写法
+                    var response = xhr.responseText;
+                    var message = JSON.parse(response);//返回数据
+                    if (message.error == 0) {//加载当前已有分类和关键词
+                        if (message.responseType == 2) {
+                            selectMessage(message);
+                        } else {//删除语句成功
+                            $("#od" + message.resultID).remove();
+                        }
+                    } else {
+                        alert("错误：" + message.errorMessage);
+                    }
+                }
+            }
+        }
+        function post(data, url) {//post请求
+            let xh = new XMLHttpRequest();
+            xh.onreadystatechange = function () {
+                if (xh.readyState == 4 && (xh.status >= 200 && xh.status < 400)) {
+                    var response = xh.responseText;
+                    var message = JSON.parse(response);//返回数据
+                    if (message.error == 0) {
+                        get("/admin/getInitMessage");
+                    } else {//弹出异常
+                        alert("错误：" + message.errorMessage);
+                    }
+                }
+            };
+            xh.open("POST", rootURL + url);
+            xh.setRequestHeader('Content-Type', 'application/json');
+            xh.setRequestHeader('tokenID', tokenID);
+            xh.send(JSON.stringify(data));
+        }
+    </script>
+</head>
+
+<body style="overflow-x: hidden;">
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table  table-hover" id="orderMessage">
+                <caption style="text-align: center;">
+                    <h3>已添加语句 <span class="label label-default">刷新更新</span></h3>
+                </caption>
+            </table>
+        </div>
+        <div class="col-md-5" id="myBody">
+            <div class="input-group input-group-lg" style="margin-top: 20px;">
+                <span class="input-group-addon" id="sentenceType">语句分类:</span>
+                <select class="form-control" id="myType">
+                    <option value="0">请选择</option>
+                </select>
+            </div>
+            <div class="input-group input-group-lg" style="margin-top: 20px;">
+                <span class="input-group-addon">语句:</span>
+                <input type="text" placeholder="输入语句" class="form-control" id="myWord" aria-describedby="basic-addon1">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
