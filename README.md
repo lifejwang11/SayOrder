@@ -32,6 +32,7 @@
 * 在com.wlld.myjecs.config.Config;中starModel = true;当它为true的时候，服务启动会自动加载模型或更新训练，当用户想快速启动管理端，不希望进行此耗时行为时将其改为 false,其默认为true。
 ### 演示数据sql脚本及静态资源位置
 * sql脚本（包含用于测试的数据）位置：/testData/sentence_data.sql
+* sql脚本（仅结构无测试数据）位置：/testData/sentence.sql
 * 对应模型文件位置：/testModel/**
 * myJesc前端页面资源位置：/wlTalk/**
 ### 模型说明
