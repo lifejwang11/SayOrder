@@ -5,7 +5,7 @@
 * 本项目是依赖easyAi引擎衍生应用，以easyAi高性能廉价部署的思路，可在cpu上无压力高效运行，开包即用。功能持续扩展，敬请期待。
 * 本项目永久免费商用，如果能对您生产和学习有帮助请给作者一个star，这会非常鼓励我。
 ## 详细视频教程地址：
-* 视频教程地址：https://www.bilibili.com/video/BV1W7411J7zr?p=1&vd_source=20cf39c973b43e60c3bdbe8d47dc9e71
+* 视频教程地址：https://www.bilibili.com/video/BV1W7411J7zr/?spm_id_from=333.1007.tianma.1-2-2.click&vd_source=20cf39c973b43e60c3bdbe8d47dc9e71
 ### myJecs分类配置及标注后台
 * 登录页面
 ![登录页面](./picture/index.png)
