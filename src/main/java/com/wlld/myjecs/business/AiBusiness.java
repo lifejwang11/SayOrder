@@ -51,12 +51,20 @@ public class AiBusiness {
                                     order.setKeyWords(keyWords);
                                     order.setKeyword_type_id(keyword_type_id);
                                     orders.add(order);
-                                }else {
-                                    shop.setAnswer(keywordType.getAnswer());
+                                } else {
+                                    if (shop.getAnswer() == null) {
+                                        shop.setAnswer(keywordType.getAnswer());
+                                    } else {
+                                        shop.setAnswer(shop.getAnswer() + "," + keywordType.getAnswer());
+                                    }
                                 }
                             }
                         } else {
-                            shop.setAnswer(keywordType.getAnswer());
+                            if (shop.getAnswer() == null) {
+                                shop.setAnswer(keywordType.getAnswer());
+                            } else {
+                                shop.setAnswer(shop.getAnswer() + "," + keywordType.getAnswer());
+                            }
                         }
                     }
                     shop.setFree(isFree(word));
