@@ -20,6 +20,7 @@
         var keywordTypeList;//关键词类别
         var myTrees;//所有类别
         var choseID = 0;//选择的id
+        var load = false;
         $(document).ready(function () {//获取信息
             tokenID = getQueryString("tokenID");
             get("/admin/getInitMessage");
@@ -49,8 +50,9 @@
             myTrees = message.myTrees;//当前语言分类
             keywordTypeList = message.keywordTypeList;//关键词类别信息
             var adminSentenceList = message.adminSentenceList;//今日标注信息
-            if (myTrees != null) {
+            if (myTrees != null && !load) {
                 upDateOrderMessage();
+                load = true;
             }
             if (adminSentenceList != null) {//展示今日标注信息
                 selectSentenceMessage(adminSentenceList);

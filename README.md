@@ -5,7 +5,21 @@
 * 本项目是依赖easyAi引擎衍生应用，以easyAi高性能廉价部署的思路，可在cpu上无压力高效运行，开包即用。功能持续扩展，敬请期待。
 * 本项目永久免费商用，如果能对您生产和学习有帮助请给作者一个star，这会非常鼓励我。
 ## 详细视频教程地址：
-* 视频教程地址：稍等录制
+* 视频教程地址：https://www.bilibili.com/video/BV1W7411J7zr?p=3&vd_source=20cf39c973b43e60c3bdbe8d47dc9e71
+### myJecs分类配置及标注后台
+* 登录页面
+![登录页面](./picture/index.png)
+* 配置业务分类及分类订单必要关键信息
+![配置订单分类与关键词](./picture/admin.png)
+* 对分类业务填写训练样本并标注关键信息
+![标注界面](./picture/worker.png)
+### myJecs智能客服基本流程演示
+* 用户第一次进行输入表达自己的想法
+![用户输入1](./picture/a1.png)
+* 用户接收到myJecs的反问，进一步补充的自己的想法
+![用户输入2](./picture/a2.png)
+* 用户第二次输入信息依然不满足后台14分类法律咨询的订单关键信息要求，继续补充信息，最终完成订单信息补充生成订单。
+![用户输入3](./picture/a3.png)
 ### API 说明:
 ``` java
     package com.wlld.myjecs.config.Config;

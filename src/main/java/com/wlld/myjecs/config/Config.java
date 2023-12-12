@@ -2,7 +2,7 @@ package com.wlld.myjecs.config;
 
 public class Config {//配置文件 "/usr/local/depends/
     public static final String Word2VecModelUrl = "D:\\testModel\\end.json";//词向量嵌入模型（注意词向量模型无需频繁更新，只有当样本有超过50%增量时才有更新必要）
-    public static final String SentenceModelUrl = "D:\\testModel\\sentence.json";//语句生成模型
+    public static final String SentenceModelUrl = "D:\\testModel\\sentence.json";//语义分辨模型
     public static final String onlyKeyWord = "D:\\testModel\\preKeyWord.json";//关键词敏感性嗅探
     public static final String KeyWordModelUrl = "D:\\testModel\\myKeyWord.json";//关键词查找模型
     public static final String keyWordIndex = "D:\\testModel\\keyWordIndex.json";//关键词索引模型
