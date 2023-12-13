@@ -22,6 +22,16 @@
 ![用户输入2](./picture/a2.png)
 * 用户第二次输入信息依然不满足后台14分类法律咨询的订单关键信息要求，继续补充信息，最终完成订单信息补充生成订单。
 ![用户输入3](./picture/a3.png)
+### 快速开始
+* 将/testModel/**，里面的模型文件，一一对应配置类里字段，创建文件夹目录，让这五个模型可以被系统读取到。
+![设置模型保存路径](./picture/start.png)
+* /testData/sentence_data.sql，建立本地数据库，并执行此带有测试数据的mySQl数据库脚本到本地数据库。
+* 修改application.properties 本地数据库配置，指向执行上一步脚本所执行的数据库
+* 下载easyAi-1.1.4依赖并打包到本地maven仓库：https://gitee.com/ldp_dpsmax/easyAi
+* 启动应用，访问127.0.0.1:8080/ai/talk，直接输入语句字符串，不要使用JSON格式
+* 目前测试数据支持的语言类型保存在数据库表如下位置，请自行查看
+![测试数据支持语义类别](./picture/start2.png)
+* 具体使用的详细教程链接：https://www.bilibili.com/video/BV1W7411J7zr/?spm_id_from=333.1007.tianma.1-2-2.click&vd_source=20cf39c973b43e60c3bdbe8d47dc9e71
 ### API 说明:
 ``` java
     package com.wlld.myjecs.config.Config;
