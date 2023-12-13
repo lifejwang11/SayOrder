@@ -7,7 +7,7 @@
 * 若有想扩充的功能或技术交流请进群提意见，技术交流群：222475213，561433236（满）
 * 项目依赖easyAi下载链接：https://gitee.com/ldp_dpsmax/easyAi
 ## 详细视频教程地址：
-* 视频教程地址：https://www.bilibili.com/video/BV1W7411J7zr/?spm_id_from=333.1007.tianma.1-2-2.click&vd_source=20cf39c973b43e60c3bdbe8d47dc9e71
+* 视频教程地址：https://www.bilibili.com/video/BV1W7411J7zr?p=1
 ### myJecs分类配置及标注后台
 * 登录页面
 ![登录页面](./picture/index.png)
@@ -31,7 +31,7 @@
 * 启动应用，访问127.0.0.1:8080/ai/talk，直接输入语句字符串，不要使用JSON格式
 * 目前测试数据支持的语言类型保存在数据库表如下位置，请自行查看
 ![测试数据支持语义类别](./picture/start2.png)
-* 具体使用的详细教程链接：https://www.bilibili.com/video/BV1W7411J7zr/?spm_id_from=333.1007.tianma.1-2-2.click&vd_source=20cf39c973b43e60c3bdbe8d47dc9e71
+* 具体使用的详细教程链接：https://www.bilibili.com/video/BV1W7411J7zr?p=1
 ### API 说明:
 ``` java
     package com.wlld.myjecs.config.Config;
