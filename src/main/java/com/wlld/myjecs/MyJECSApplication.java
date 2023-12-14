@@ -46,8 +46,12 @@ public class MyJECSApplication implements WebMvcConfigurer {
         registrationAll.addPathPatterns("/**");
         registrationAll.excludePathPatterns("/ai/talk");
         registration.addPathPatterns("/**");
-        registration.excludePathPatterns("/admin/register"
-                , "/admin/login", "/ai/talk", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
+        if (!Config.starModel) {
+            registration.excludePathPatterns("/admin/register"
+                    , "/admin/login", "/ai/talk", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
+        } else {
+            registration.excludePathPatterns("/ai/talk");
+        }
     }
 
     private static void init(ConfigurableApplicationContext applicationContext) throws Exception {//初始化启动配置

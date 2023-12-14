@@ -91,6 +91,9 @@ public interface SqlMapper {
     @Delete("delete from keyword_sql where keyword_type_id=#{keyword_type_id}")
     void deleteKeyWordSqlByType(int keyword_type_id);
 
+    @Delete("delete from keyword_sql where sentence_id=#{sentence_id}")
+    void deleteKeyWordSqlBySentenceID(int sentence_id);
+
     @Delete("delete from keyword_type where type_id= #{type_id}")
     void deleteKeyWordTypeByID(int type_id);
 

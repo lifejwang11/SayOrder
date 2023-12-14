@@ -96,6 +96,7 @@ public class DataBusiness {
         Response response = new Response();
         int adminID = (int) WlldSession.getSESSION().getValue(res, "myID");
         sqlMapper.deleteSentenceByID(adminID, sentence_id);
+        sqlMapper.deleteKeyWordSqlBySentenceID(sentence_id);
         response.setResultID(sentence_id);
         response.setResponseType(Config.delSentence);
         response.setError(ErrorCode.OK.getError());
