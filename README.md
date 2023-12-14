@@ -33,6 +33,8 @@
 ![测试数据支持语义类别](./picture/start2.png)
 * 部署管理后台，将项目目录/wlTalk/**部署到web容器根目录下，启动后访问127.0.0.1:8080/wlTalk，默认超管端账号：admin，密码:admin
 * 具体使用的详细教程链接：https://www.bilibili.com/video/BV1W7411J7zr?p=1
+#### 作者太穷了，快没饭吃了！如果该项目对你有用，请可怜一下作者的劳动力支持开源，请作者吃一顿早饭就好！给作者持续更新easyAi引擎，同时封装更多依赖easyAi的常用应用提供动力！为大家低成本部署AI应用添砖加瓦！万谢!好心人！
+![支付宝支付](/zf/zs.jpg)![微信支付](/zf/ws.jpg)
 ### API 说明:
 ``` java
     package com.wlld.myjecs.config.Config;
