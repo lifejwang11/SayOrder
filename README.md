@@ -58,7 +58,7 @@
 * 前端页面UI组件直接使用的bootstrap v3.0，js框架使用的是JQUERY，主要是因为作者不会vue。
 * 管理端超管账号:admin，密码:admin，超管账号密码不在数据库，在com.wlld.myjecs.config.Config;请自行修改。
 * 在com.wlld.myjecs.config.Config;中starModel = true;当它为true的时候，服务启动会自动加载模型或更新训练，当用户想快速启动管理端，不希望进行此耗时行为时将其改为 false,其默认为true。
-* sentenceConfig.setMaxWordLength(20)(package com.wlld.myjecs.bean.BeanMangerOnly)，设置最大语句长度（超出该长度的语句将被截断，只处理最大长度之内的）。该数值与模型绑定，若修改该数值除了词嵌入模型外，其他都需要重新训练。该数值越大运算速度越慢，需要样本量越大，所以请根据各自业务实际情况修改。
+* sentenceConfig.setMaxWordLength(20)(package com.wlld.myjecs.bean.BeanMangerOnly)，设置最大语句长度（语句中超出该长度部分将被截断，只处理最大长度之内的语句）。该数值与模型绑定，若修改该数值除了词嵌入模型外，其他都需要重新训练。该数值越大运算速度越慢，需要样本量越大，所以请根据各自业务实际情况修改。
 ### 演示数据sql脚本及静态资源位置
 * sql脚本（包含用于测试的数据）位置：/testData/sentence_data.sql
 * sql脚本（仅结构无测试数据）位置：/testData/sentence.sql
