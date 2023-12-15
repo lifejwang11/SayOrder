@@ -7,7 +7,7 @@ public class Config {//配置文件 "/usr/local/depends/
     public static final String KeyWordModelUrl = "D:\\testModel\\myKeyWord.json";//关键词查找模型
     public static final String keyWordIndex = "D:\\testModel\\keyWordIndex.json";//关键词索引模型
     public static final boolean selfTest = false;//服务启动时是否需要自检（自检时间较长）
-    public static final boolean starModel = true;//服务启动是否启动模型
+    public static final boolean starModel = false;//服务启动是否启动模型
     public static final String adminAccount = "admin";//管理员账号
     public static final String adminPassWord = "admin";//管理员密码
     public static final boolean duplicateCheck = true;//输入语句是否需要查重
