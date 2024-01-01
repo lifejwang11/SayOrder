@@ -29,7 +29,6 @@ public class BeanMangerOnly {//需要单例的类
     public SentenceConfig getConfig() {//配置文件
         SentenceConfig sentenceConfig = new SentenceConfig();
         sentenceConfig.setMaxWordLength(20);//语言长度 越长越好，但是越长需求的数据量越大，计算时间越长性能越差，也需要更多的内存。
-        sentenceConfig.setMinLength(5);//语言最小长度
         sentenceConfig.setTrustPowerTh(0.7);//可信阈值，范围0-1
         sentenceConfig.setSentenceTrustPowerTh(0.4);//生成语句可信阈值
         sentenceConfig.setMaxAnswerLength(20);//回复语句的最长长度
