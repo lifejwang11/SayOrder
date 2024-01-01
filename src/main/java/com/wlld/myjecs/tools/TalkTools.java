@@ -51,7 +51,7 @@ public class TalkTools {
         customManager.init();
         if (file.exists() && !isStudy) {//读模型
             customManager.insertModel(readCreatorModel());
-        } else {//训练
+        } else if (sentences != null && !sentences.isEmpty()) {//训练
             CreatorModel creatorModel = customManager.study(sentences, 1);
             String model = JSON.toJSONString(creatorModel);
             writeModel(model, Config.talkUrl);
@@ -65,7 +65,7 @@ public class TalkTools {
         boolean isStudy = false;
         if (file.exists()) {//模型文件存在
             wordEmbedding.insertModel(readWord2VecModel());//初始化word2Vec编码器
-        } else {//模型文件不存在
+        } else if (sentences != null && !sentences.isEmpty()) {//模型文件不存在
             isStudy = true;
             SentenceModel sentenceModel = new SentenceModel();
             for (TalkBody sentence : sentences) {

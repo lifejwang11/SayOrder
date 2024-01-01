@@ -240,7 +240,7 @@ public class Tools {
         boolean isStudy = false;
         if (file.exists()) {//模型文件存在
             wordEmbedding.insertModel(readWord2VecModel());//初始化word2Vec编码器
-        } else {//模型文件不存在
+        } else if (sentences != null && !sentences.isEmpty()) {//模型文件不存在
             isStudy = true;
             SentenceModel sentenceModel = new SentenceModel();
             for (MySentence sentence : sentences) {
@@ -250,6 +250,8 @@ public class Tools {
             WordTwoVectorModel wordTwoVectorModel = wordEmbedding.start();//词向量开始学习
             String model = JSON.toJSONString(wordTwoVectorModel);
             writeModel(model, Config.Word2VecModelUrl);
+        } else {
+            throw new Exception("训练数据为空");
         }
         return isStudy;
     }
