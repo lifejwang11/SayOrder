@@ -20,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.wlld.config.SentenceConfig;
+import org.wlld.entity.TalkBody;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,9 +49,9 @@ public class MyJECSApplication implements WebMvcConfigurer {
         registration.addPathPatterns("/**");
         if (!Config.starModel) {
             registration.excludePathPatterns("/admin/register"
-                    , "/admin/login", "/ai/talk", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
+                    , "/admin/login", "/ai/talk", "/ai/myTalk", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
         } else {
-            registration.excludePathPatterns("/ai/talk");
+            registration.excludePathPatterns("/ai/talk", "/ai/myTalk");
         }
     }
 
@@ -94,7 +95,31 @@ public class MyJECSApplication implements WebMvcConfigurer {
             }
         }
         applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
+        List<TalkBody> talkBodies = null;
+        if (needTalkSql()) {
+            talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
+            for (int i = 0; i < talkBodies.size(); i++) {
+                TalkBody talkBody = talkBodies.get(i);
+                String answer = talkBody.getAnswer();
+                String question = talkBody.getQuestion();
+                if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
+                    talkBodies.remove(i);
+                    i--;
+                }
+            }
+        }
+        applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
         System.out.println("完成初始化");
+    }
+
+    private static boolean needTalkSql() {
+        boolean isNeedSReadSql = true;
+        File file1 = new File(Config.wordUrl);//词嵌入
+        File file2 = new File(Config.talkUrl);//语句模型
+        if (file1.exists() && file2.exists()) {
+            isNeedSReadSql = false;
+        }
+        return isNeedSReadSql;
     }
 
     private static boolean needReadSql() {

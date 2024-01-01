@@ -2,6 +2,7 @@ package com.wlld.myjecs.bean;
 
 import com.wlld.myjecs.mesEntity.Response;
 import com.wlld.myjecs.mesEntity.Shop;
+import com.wlld.myjecs.tools.TalkTools;
 import com.wlld.myjecs.tools.Tools;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,5 +30,10 @@ public class BeanManger {
     @Bean
     public Tools tools() {
         return new Tools();
+    }
+
+    @Bean
+    public TalkTools talkTools() {
+        return new TalkTools();
     }
 }

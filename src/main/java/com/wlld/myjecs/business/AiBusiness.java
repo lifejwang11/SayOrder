@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wlld.naturalLanguage.languageCreator.CatchKeyWord;
 import org.wlld.naturalLanguage.word.MyKeyWord;
+import org.wlld.rnnJumpNerveCenter.CustomManager;
 import org.wlld.rnnJumpNerveCenter.RRNerveManager;
 
 import java.util.*;
@@ -20,6 +21,18 @@ import java.util.*;
 public class AiBusiness {
     @Autowired
     private BeanMangerOnly beanMangerOnly;
+
+    public Response myTalk(String word) throws Exception {
+        Response response = new Response();
+        CustomManager customManager = beanMangerOnly.getCustomManager();
+        String answer = customManager.getAnswer(word, SnowflakeIdWorker.get().nextId());
+        if (answer != null) {
+            response.setAnswer(answer);
+        } else {
+            response.setAnswer("抱歉，我们还没有相关服务，请等待探仔下一步更新");
+        }
+        return response;
+    }
 
     public Response talk(String word) throws Exception {//对话返回分类
         Response response = new Response();

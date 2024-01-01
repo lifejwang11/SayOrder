@@ -6,6 +6,7 @@ import com.wlld.myjecs.mesEntity.MyAdmin;
 import com.wlld.myjecs.sqlEntity.*;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+import org.wlld.entity.TalkBody;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface SqlMapper {
     //展示分类的所有结构关系
     @Select("select sentence_id,word,type_id from sentence")
     List<Sentence> getModel();
+
+    @Select("select question,answer from q_a")
+    List<TalkBody> getTalkModel();
 
     @Select("select * from keyword_type")
     List<KeywordType> getKeywordType();

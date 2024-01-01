@@ -11,7 +11,7 @@
  Target Server Version : 50744
  File Encoding         : 65001
 
- Date: 12/12/2023 10:43:10
+ Date: 31/12/2023 20:42:57
 */
 
 SET NAMES utf8mb4;
@@ -40,7 +40,7 @@ CREATE TABLE `keyword_sql`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '关键词内容',
   `keyword_type_id` int(11) NULL DEFAULT NULL COMMENT '该关键词类型id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2871 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2875 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for keyword_type
@@ -64,7 +64,18 @@ CREATE TABLE `my_tree`  (
   `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '类别名称',
   `sentence_nub` int(11) NULL DEFAULT NULL COMMENT '样本条目数',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for q_a
+-- ----------------------------
+DROP TABLE IF EXISTS `q_a`;
+CREATE TABLE `q_a`  (
+  `question` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '问题',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `answer` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '回答',
+  UNIQUE INDEX `q_a_pk`(`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1023 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '聊天样本' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sentence
@@ -77,6 +88,6 @@ CREATE TABLE `sentence`  (
   `date` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '日期',
   `adminID` int(11) NULL DEFAULT NULL COMMENT '标注人id',
   PRIMARY KEY (`sentence_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4493 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4497 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

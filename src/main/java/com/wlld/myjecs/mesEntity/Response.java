@@ -40,4 +40,6 @@ public class Response {
     private int resultID;
     @ApiModelProperty(value = "返回今日标注语句")
     private List<AdminSentence> adminSentenceList;
+    @ApiModelProperty(value = "回复语句")
+    private String answer;
 }

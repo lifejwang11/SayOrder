@@ -11,7 +11,7 @@
  Target Server Version : 50744
  File Encoding         : 65001
 
- Date: 11/12/2023 14:27:07
+ Date: 31/12/2023 20:43:34
 */
 
 SET NAMES utf8mb4;
@@ -45,7 +45,7 @@ CREATE TABLE `keyword_sql`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '关键词内容',
   `keyword_type_id` int(11) NULL DEFAULT NULL COMMENT '该关键词类型id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2871 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2875 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of keyword_sql
@@ -2917,6 +2917,8 @@ INSERT INTO `keyword_sql` VALUES (2867, 4489, '保洁', 10);
 INSERT INTO `keyword_sql` VALUES (2868, 4490, '电视', 11);
 INSERT INTO `keyword_sql` VALUES (2869, 4491, '玻璃', 10);
 INSERT INTO `keyword_sql` VALUES (2870, 4492, '卫生', 10);
+INSERT INTO `keyword_sql` VALUES (2871, 4493, '按摩', 8);
+INSERT INTO `keyword_sql` VALUES (2873, 4495, '火锅', 9);
 
 -- ----------------------------
 -- Table structure for keyword_type
@@ -2934,8 +2936,8 @@ CREATE TABLE `keyword_type`  (
 -- ----------------------------
 -- Records of keyword_type
 -- ----------------------------
-INSERT INTO `keyword_type` VALUES (8, 8, '服务内容', '需要我为您的宠物做什么呢', 0);
-INSERT INTO `keyword_type` VALUES (9, 9, '食物', '您想吃点什么呢', 0);
+INSERT INTO `keyword_type` VALUES (8, 8, '服务内容', '需要我为您的宠物做什么呢', 1);
+INSERT INTO `keyword_type` VALUES (9, 9, '食物', '您想吃点什么呢', 3);
 INSERT INTO `keyword_type` VALUES (10, 10, '服务内容', '您需要找什么样的家政服务呢', 0);
 INSERT INTO `keyword_type` VALUES (11, 11, '回收物品', '您需要让我们回收什么东西呢', 0);
 INSERT INTO `keyword_type` VALUES (12, 12, '用车类别', '您需要使用什么类型的车辆', 0);
@@ -2951,18 +2953,51 @@ CREATE TABLE `my_tree`  (
   `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '类别名称',
   `sentence_nub` int(11) NULL DEFAULT NULL COMMENT '样本条目数',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of my_tree
 -- ----------------------------
-INSERT INTO `my_tree` VALUES (8, '宠物服务', 0);
-INSERT INTO `my_tree` VALUES (9, '餐饮美食', 0);
+INSERT INTO `my_tree` VALUES (8, '宠物服务', 1);
+INSERT INTO `my_tree` VALUES (9, '餐饮美食', 3);
 INSERT INTO `my_tree` VALUES (10, '生活服务', 0);
 INSERT INTO `my_tree` VALUES (11, '资源回收', 0);
 INSERT INTO `my_tree` VALUES (12, '车辆租赁', 0);
 INSERT INTO `my_tree` VALUES (13, '医疗咨询', 0);
 INSERT INTO `my_tree` VALUES (14, '法律咨询', 0);
+
+-- ----------------------------
+-- Table structure for q_a
+-- ----------------------------
+DROP TABLE IF EXISTS `q_a`;
+CREATE TABLE `q_a`  (
+  `question` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '问题',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `answer` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '回答',
+  UNIQUE INDEX `q_a_pk`(`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1023 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '聊天样本' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of q_a
+-- ----------------------------
+INSERT INTO `q_a` VALUES ('广告可以退款么', 1, '抱歉，投放广告后款项不可以退还');
+INSERT INTO `q_a` VALUES ('家里宠物拉稀怎么办', 2, '是不是吃的有问题，不行就吃点药吧');
+INSERT INTO `q_a` VALUES ('宠物拉稀了是怎么回事', 3, '吃的食物有点凉，导致狗狗肚子受凉');
+INSERT INTO `q_a` VALUES ('宠物鼻子特别干燥怎么回事', 4, '可能是空气干燥，狗狗缺水导致');
+INSERT INTO `q_a` VALUES ('为什么宠物没有精神', 5, '可能是感冒了');
+INSERT INTO `q_a` VALUES ('宠物会不会得细小', 6, '会得细小');
+INSERT INTO `q_a` VALUES ('宠物吃的东西少', 7, '可能是消化系统有问题');
+INSERT INTO `q_a` VALUES ('狗狗变得没有精神', 8, '没有休息好');
+INSERT INTO `q_a` VALUES ('猫咪干呕吐不出毛怎么办', 9, '吃化毛膏');
+INSERT INTO `q_a` VALUES ('为什么猫咪会干呕', 10, '可能吃了毛发');
+INSERT INTO `q_a` VALUES ('为什么家里的狗吃的少', 11, '可能之前食物喂的过多');
+INSERT INTO `q_a` VALUES ('家里的狗吃的少是不是生病了', 12, '不一定是生病了');
+INSERT INTO `q_a` VALUES ('我家宠物是不是生病了', 13, '要根据情况判断');
+INSERT INTO `q_a` VALUES ('宠物受伤了怎么办', 14, '及时去宠物医院');
+INSERT INTO `q_a` VALUES ('宠物被车压倒了脚', 15, '前往宠物医院');
+INSERT INTO `q_a` VALUES ('宠物变得狂躁怎么办', 16, '注意观察是否有狂犬病');
+INSERT INTO `q_a` VALUES ('家里的狗变得狂躁怎么办', 17, '做检查判断是否有狂犬病');
+INSERT INTO `q_a` VALUES ('宠物不开心是不是生病了', 18, '有可能是生病了');
 
 -- ----------------------------
 -- Table structure for sentence
@@ -2975,7 +3010,7 @@ CREATE TABLE `sentence`  (
   `date` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '日期',
   `adminID` int(11) NULL DEFAULT NULL COMMENT '标注人id',
   PRIMARY KEY (`sentence_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4493 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4497 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sentence
@@ -5847,5 +5882,7 @@ INSERT INTO `sentence` VALUES (4489, '我想找个保洁', 10, '2023-12-11', 1);
 INSERT INTO `sentence` VALUES (4490, '我要卖二手电视', 11, '2023-12-11', 1);
 INSERT INTO `sentence` VALUES (4491, '我要擦洗玻璃', 10, '2023-12-11', 1);
 INSERT INTO `sentence` VALUES (4492, '给我找个打扫卫生的阿姨', 10, '2023-12-11', 1);
+INSERT INTO `sentence` VALUES (4493, '给小狗做个按摩', 8, '2023-12-12', 1);
+INSERT INTO `sentence` VALUES (4495, '我要去吃火锅', 9, '2023-12-14', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

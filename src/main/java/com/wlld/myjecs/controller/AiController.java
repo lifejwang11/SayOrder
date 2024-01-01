@@ -28,7 +28,7 @@ public class AiController {
     private AiBusiness business;
 
     @RequestMapping(value = "/talk", method = RequestMethod.POST)//
-    @ApiOperation("对话")
+    @ApiOperation("语义识别对话")
     @ApiImplicitParam(name = "sentence", value = "用户对话语句", defaultValue = "给我找个保洁", required = true)
     public Response talk(@RequestBody String sentence) throws Exception {
         Response response;
@@ -42,5 +42,18 @@ public class AiController {
         return response;
     }
 
-
+    @RequestMapping(value = "/myTalk", method = RequestMethod.POST)//
+    @ApiOperation("聊天")
+    @ApiImplicitParam(name = "sentence", value = "用户对话语句", defaultValue = "广告可以退款么", required = true)
+    public Response myTalk(@RequestBody String sentence) throws Exception {
+        Response response;
+        if (Config.starModel) {
+            response = business.myTalk(sentence);
+        } else {
+            response = new Response();
+            response.setError(ErrorCode.notStartModel.getError());
+            response.setErrorMessage(ErrorCode.notStartModel.getErrorMessage());
+        }
+        return response;
+    }
 }
