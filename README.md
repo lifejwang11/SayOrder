@@ -83,7 +83,10 @@
   false,其默认为true。
 * sentenceConfig.setMaxWordLength(20)(package com.wlld.myjecs.bean.BeanMangerOnly)
   ，设置最大语句长度（语句中超出该长度部分将被截断，只处理最大长度之内的语句部分）。该数值与模型绑定，若修改该数值除了词嵌入模型外，其他都需要重新训练。该数值越大运算速度越慢，需要样本量越大，所以请根据各自业务实际情况修改。
-
+*  sentenceConfig.setTrustPowerTh(0.7);//语义理解可信阈值，范围0-1，该值越大则排斥掉的不可理解语句越多
+* sentenceConfig.setSentenceTrustPowerTh(0.4);//生成语句可信阈值 范围0-1 该值越大排斥掉的不可理解聊天语句越多
+* sentenceConfig.setMaxAnswerLength(20);//回复语句的最长长度 最长回复的语句字数，该值越大训练量越大，速度越慢，样本数据要求也越多
+* sentenceConfig.setTimes(100);//该值越大 结果越准确，训练时间也越长。
 ### 演示数据sql脚本及静态资源位置
 
 * sql脚本（包含用于测试的数据）位置：/testData/sentence_data.sql
