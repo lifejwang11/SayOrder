@@ -7,7 +7,7 @@
 * 本项目是依赖easyAi引擎衍生应用，以easyAi高性能廉价部署的思路，可在cpu上无压力高效运行，开包即用。功能持续扩展，敬请期待。
 * 本项目永久免费商用，如果能对您生产和学习有帮助请给作者一个star，这会非常鼓励我。
 * 若有想扩充的功能或技术交流请进群提意见，技术交流群：222475213，561433236（满）
-* 项目依赖easyAi下载链接：https://gitee.com/ldp_dpsmax/easyAi
+* 项目依赖easyAi下载链接：https://gitee.com/dromara/easyAi
 
 ## 详细视频教程地址：
 
@@ -115,7 +115,7 @@
 项目依赖：
 
 * springboot-2.5.6
-* easyAi-1.1.4：https://gitee.com/ldp_dpsmax/easyAi
+* easyAi-1.1.5：https://gitee.com/dromara/easyAi
 
 ### 常见抛错
 
