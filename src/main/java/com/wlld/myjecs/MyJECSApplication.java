@@ -45,14 +45,10 @@ public class MyJECSApplication implements WebMvcConfigurer {
         InterceptorRegistration registrationAll = registry.addInterceptor(new SessionCreator());
         InterceptorRegistration registration = registry.addInterceptor(new UserFilter());
         registrationAll.addPathPatterns("/**");
-        registrationAll.excludePathPatterns("/ai/talk");
+        registrationAll.excludePathPatterns("/ai/talk", "/ai/myTalk");
         registration.addPathPatterns("/**");
-        if (!Config.starModel) {
-            registration.excludePathPatterns("/admin/register"
-                    , "/admin/login", "/ai/talk", "/ai/myTalk", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
-        } else {
-            registration.excludePathPatterns("/ai/talk", "/ai/myTalk");
-        }
+        registration.excludePathPatterns("/admin/register"
+                , "/admin/login", "/ai/talk", "/ai/myTalk", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 
     private static void init(ConfigurableApplicationContext applicationContext) throws Exception {//初始化启动配置
