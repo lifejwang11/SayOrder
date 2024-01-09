@@ -87,7 +87,12 @@ public class MyJECSApplication implements WebMvcConfigurer {
                 MyKeywordStudy myKeywordStudy = new MyKeywordStudy();
                 myKeywordStudy.setKeyword(keywordSql.getKeyword());
                 myKeywordStudy.setKeyword_type_id(keywordSql.getKeyword_type_id());
-                sentenceMap.get(keywordSql.getSentence_id()).getMyKeywordStudyList().add(myKeywordStudy);
+                int sentence_id = keywordSql.getSentence_id();
+                if (sentenceMap.containsKey(sentence_id)) {
+                    sentenceMap.get(sentence_id).getMyKeywordStudyList().add(myKeywordStudy);
+                } else {
+                    throw new Exception("关键词表 keyword_sql sentence_id:" + sentence_id + ",无法在sentence表找到对应的语句 sentence_id:" + sentence_id);
+                }
             }
         }
         applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
@@ -105,6 +110,7 @@ public class MyJECSApplication implements WebMvcConfigurer {
             }
         }
         applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
+        Config.start = true;
         System.out.println("完成初始化");
     }
 

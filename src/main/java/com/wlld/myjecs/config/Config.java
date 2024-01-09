@@ -19,4 +19,5 @@ public class Config {//配置文件 "/usr/local/depends/
     public static final int agreeAdmin = 4;//同意申请账号
     public static final int addSentenceType = 5;//添加语句类别
     public static final int delSentence = 6;//删除语句
+    public static boolean start = false;//模型是否准备好了
 }

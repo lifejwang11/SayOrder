@@ -33,7 +33,13 @@ public class AiController {
     public Response talk(@RequestBody String sentence) throws Exception {
         Response response;
         if (Config.starModel) {
-            response = business.talk(sentence);
+            if (Config.start) {
+                response = business.talk(sentence);
+            } else {
+                response = new Response();
+                response.setError(ErrorCode.ModelNotStart.getError());
+                response.setErrorMessage(ErrorCode.ModelNotStart.getErrorMessage());
+            }
         } else {
             response = new Response();
             response.setError(ErrorCode.notStartModel.getError());
@@ -48,7 +54,13 @@ public class AiController {
     public Response myTalk(@RequestBody String sentence) throws Exception {
         Response response;
         if (Config.starModel) {
-            response = business.myTalk(sentence);
+            if (Config.start) {
+                response = business.myTalk(sentence);
+            } else {
+                response = new Response();
+                response.setError(ErrorCode.ModelNotStart.getError());
+                response.setErrorMessage(ErrorCode.ModelNotStart.getErrorMessage());
+            }
         } else {
             response = new Response();
             response.setError(ErrorCode.notStartModel.getError());
