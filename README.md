@@ -24,7 +24,8 @@ int wordVectorDimension;//词嵌入维度，该数字越大则词嵌入越稳定
 int maxWordLength;//用户输入语句最大长度  
 int maxAnswerLength;//Ai最大回答长度  
 int keyWordNerveDeep;//关键词敏感嗅探颗粒度大小  
-> 2，加载词向量模型后，检查wordEmbedding.getWordList().size()，新加载的数据要与老模型该数据大小差别在2%以内！
+> 2，加载词向量模型后，检查wordEmbedding.getWordList().size()，新加载的数据要与老模型该数据大小差别在2%以内！  
+> 3，模型训练顺序要根据myJecs原模型训练顺序不能改变，因为有的模型有相互依赖关系，修改训练顺序会让模型无效化！
 ## 详细视频教程地址：
 * 视频教程地址：https://www.bilibili.com/video/BV1W7411J7zr?p=1
 
