@@ -20,7 +20,7 @@
 >>——可行，但要注意以下问题，若不满足则会报错：
 > ![登录页面](./picture/can.png)1，这五个参数与模型绑定，若增量训练该五个参数被修改，则加载老模型会报错，不可增量训练。  
 > int typeNub;//语义分类种类数与表my_tree数据条数对应  
-int wordVectorDimension;//词嵌入维度，该数字越大则词嵌入越稳定，但速度越慢  
+int wordVectorDimension;//词嵌入维度，该数字越大，支持的分类复杂度越高，支持数据量越多，越接近大模型，生成问答模型越稳定，但速度越慢  
 int maxWordLength;//用户输入语句最大长度  
 int maxAnswerLength;//Ai最大回答长度  
 int keyWordNerveDeep;//关键词敏感嗅探颗粒度大小  
