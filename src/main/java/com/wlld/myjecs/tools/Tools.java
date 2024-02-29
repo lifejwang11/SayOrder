@@ -239,14 +239,14 @@ public class Tools {
         WordEmbedding wordEmbedding = beanMangerOnly.getWordEmbedding();
         boolean isStudy = false;
         if (file.exists()) {//模型文件存在
-            wordEmbedding.insertModel(readWord2VecModel());//初始化word2Vec编码器
+            wordEmbedding.insertModel(readWord2VecModel(), beanMangerOnly.getConfig().getWordVectorDimension());//初始化word2Vec编码器
         } else if (sentences != null && !sentences.isEmpty()) {//模型文件不存在
             isStudy = true;
             SentenceModel sentenceModel = new SentenceModel();
             for (MySentence sentence : sentences) {
                 sentenceModel.setSentence(sentence.getWord());
             }
-            wordEmbedding.init(sentenceModel);
+            wordEmbedding.init(sentenceModel, beanMangerOnly.getConfig().getWordVectorDimension());
             WordTwoVectorModel wordTwoVectorModel = wordEmbedding.start();//词向量开始学习
             String model = JSON.toJSONString(wordTwoVectorModel);
             writeModel(model, Config.Word2VecModelUrl);

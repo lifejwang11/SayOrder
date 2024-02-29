@@ -15,7 +15,7 @@
 	</properties>
 	<groupId>com.wlld</groupId>
 	<artifactId>myJecs</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>myJecs</name>
 	<description>myJecs</description>
 	<dependencies>
@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>com.wlld</groupId>
 			<artifactId>easyAi</artifactId>
-			<version>1.1.6</version>
+			<version>1.1.7</version>
 		</dependency>
 	</dependencies>
 

@@ -29,10 +29,11 @@ public class BeanMangerOnly {//需要单例的类
     public SentenceConfig getConfig() {//配置文件
         SentenceConfig sentenceConfig = new SentenceConfig();
         sentenceConfig.setMaxWordLength(20);//语言长度 越长越好，但是越长需求的数据量越大，计算时间越长性能越差，也需要更多的内存。
-        sentenceConfig.setTrustPowerTh(0.7);//可信阈值，范围0-1
-        sentenceConfig.setSentenceTrustPowerTh(0.4);//生成语句可信阈值
+        sentenceConfig.setTrustPowerTh(0);//语义分类可信阈值，范围0-1
+        sentenceConfig.setSentenceTrustPowerTh(0.3);//生成语句可信阈值
         sentenceConfig.setMaxAnswerLength(20);//回复语句的最长长度
-        sentenceConfig.setTimes(100);//生成语句数据增强，数据越少该数字越大，训练时间越长，反之亦然
+        sentenceConfig.setTimes(8);//qa模型训练增强
+        sentenceConfig.setParam(0.3);//正则抑制系数
         return sentenceConfig;
     }
 

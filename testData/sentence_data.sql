@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 50744
  Source Host           : localhost:3306
- Source Schema         : sentence_data
+ Source Schema         : test
 
  Target Server Type    : MySQL
  Target Server Version : 50744
  File Encoding         : 65001
 
- Date: 31/12/2023 20:43:34
+ Date: 29/02/2024 20:11:29
 */
 
 SET NAMES utf8mb4;
@@ -28,7 +28,7 @@ CREATE TABLE `admin`  (
   `pass` int(11) NULL DEFAULT NULL COMMENT '账号是否通过，0未审核，1通过',
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '账户拥有者姓名',
   PRIMARY KEY (`id`, `account`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin
@@ -45,7 +45,7 @@ CREATE TABLE `keyword_sql`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '关键词内容',
   `keyword_type_id` int(11) NULL DEFAULT NULL COMMENT '该关键词类型id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2875 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2874 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of keyword_sql
@@ -2931,7 +2931,7 @@ CREATE TABLE `keyword_type`  (
   `answer` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '用户语句缺失该关键词对应的回复问题',
   `type_number` int(11) NULL DEFAULT NULL COMMENT '该种类关键词标注数量',
   PRIMARY KEY (`keyword_type_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of keyword_type
@@ -2953,7 +2953,7 @@ CREATE TABLE `my_tree`  (
   `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '类别名称',
   `sentence_nub` int(11) NULL DEFAULT NULL COMMENT '样本条目数',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of my_tree
@@ -2975,7 +2975,7 @@ CREATE TABLE `q_a`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `answer` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '回答',
   UNIQUE INDEX `q_a_pk`(`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1023 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '聊天样本' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 451 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '聊天样本' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of q_a
@@ -2998,6 +2998,70 @@ INSERT INTO `q_a` VALUES ('宠物被车压倒了脚', 15, '前往宠物医院');
 INSERT INTO `q_a` VALUES ('宠物变得狂躁怎么办', 16, '注意观察是否有狂犬病');
 INSERT INTO `q_a` VALUES ('家里的狗变得狂躁怎么办', 17, '做检查判断是否有狂犬病');
 INSERT INTO `q_a` VALUES ('宠物不开心是不是生病了', 18, '有可能是生病了');
+INSERT INTO `q_a` VALUES ('宠物变得不粘人是不是生病了', 19, '不一定');
+INSERT INTO `q_a` VALUES ('宠物生病了去哪里看靠谱', 20, '宠物医院');
+INSERT INTO `q_a` VALUES ('帮我找个靠谱的宠物医生', 21, '联系当地得宠物站询问一下');
+INSERT INTO `q_a` VALUES ('给宠物打一个三联疫苗', 22, '好的，这就给您准备');
+INSERT INTO `q_a` VALUES ('给宠物打个狂犬疫苗', 23, '行，我去拿疫苗');
+INSERT INTO `q_a` VALUES ('宠物几个月可以打疫苗', 24, '45天左右');
+INSERT INTO `q_a` VALUES ('宠物三联疫苗需要打几针', 25, '需要打三针');
+INSERT INTO `q_a` VALUES ('给我家猫预约个宠物医院打疫苗', 26, '好的，我这就给您预约');
+INSERT INTO `q_a` VALUES ('给我家狗做一个体外驱虫', 27, '行，我去准备药水');
+INSERT INTO `q_a` VALUES ('给我家猫做一个体内驱虫', 28, '行，我去准备药水');
+INSERT INTO `q_a` VALUES ('宠物疫苗可以自己打吗', 29, '不建议自己打');
+INSERT INTO `q_a` VALUES ('猫咪打疫苗需要多少钱', 30, '大概200左右');
+INSERT INTO `q_a` VALUES ('宠物多久打一次疫苗', 31, '从45天开始，间隔20天左右打一针');
+INSERT INTO `q_a` VALUES ('宠物狂犬病疫苗多少钱', 32, '产品不同间隔不一样，大概200左右');
+INSERT INTO `q_a` VALUES ('给我家狗打个疫苗', 33, '你是要打几联得啊');
+INSERT INTO `q_a` VALUES ('给我家猫打狂犬疫苗', 34, '行，猫咪多大了');
+INSERT INTO `q_a` VALUES ('宠物几个月打疫苗', 35, '狗狗得话大概45天左右开始打');
+INSERT INTO `q_a` VALUES ('宠物疫苗需要打几次', 36, '3次');
+INSERT INTO `q_a` VALUES ('帮我找个兽医打疫苗', 37, '好，我找一下医生');
+INSERT INTO `q_a` VALUES ('帮我找个医生给宠物打疫苗', 38, '好的，没问题您稍等');
+INSERT INTO `q_a` VALUES ('烟台哪里可以给宠物打疫苗', 39, '很多地方都可以打的');
+INSERT INTO `q_a` VALUES ('给宠物做个体检', 40, '宝贝是有什么问题吗');
+INSERT INTO `q_a` VALUES ('宠物体检怎样收费', 41, '项目不同收费不同');
+INSERT INTO `q_a` VALUES ('宠物体检有哪些流程', 42, '询问症状，确定检查项目，做检查');
+INSERT INTO `q_a` VALUES ('宠物体检多少钱', 43, '大概在200到1000左右');
+INSERT INTO `q_a` VALUES ('怎样给宠物做体检', 44, '去宠物医院找到医生做检查');
+INSERT INTO `q_a` VALUES ('宠物体检怎么做', 45, '找到专业得宠物机构，做相应检查');
+INSERT INTO `q_a` VALUES ('宠物体检有哪些项目', 46, '血常规检查，血生化检查，B超');
+INSERT INTO `q_a` VALUES ('宠物体检费用多少', 47, '项目不用，机构不同，收费标准不一样');
+INSERT INTO `q_a` VALUES ('宠物体检哪里靠谱', 48, '前往大型宠物医院');
+INSERT INTO `q_a` VALUES ('帮我推荐个靠谱的宠物医院', 49, '好的，您提供一下地址，我给您推荐');
+INSERT INTO `q_a` VALUES ('找个靠谱的宠物医院', 50, '好的，我查一下附近得宠物医院');
+INSERT INTO `q_a` VALUES ('哪家宠物医院好', 51, '我看这家宠物医院就还不错');
+INSERT INTO `q_a` VALUES ('哪家宠物医院可以做体检', 52, '基本上所有得宠物医院都可以');
+INSERT INTO `q_a` VALUES ('蓝猫体检要多少钱', 53, '蓝猫体检大概在500左右');
+INSERT INTO `q_a` VALUES ('泰迪体检要多少钱', 54, '泰迪体检得话有可能需要300');
+INSERT INTO `q_a` VALUES ('宠物体检麻烦吗', 55, '不麻烦');
+INSERT INTO `q_a` VALUES ('找一个靠谱的宠物医院', 56, '好的我帮您找一下专业的宠物医院');
+INSERT INTO `q_a` VALUES ('猫咪发情了怎么办', 57, '可以找到公猫交配');
+INSERT INTO `q_a` VALUES ('给我家猫咪找个老公', 58, '您想找个什么品种得猫咪呢');
+INSERT INTO `q_a` VALUES ('给我家猫咪找个老婆', 59, '您想找给宝贝找个什么品种的老婆呢');
+INSERT INTO `q_a` VALUES ('给我家猫配种', 60, '行配一次2000');
+INSERT INTO `q_a` VALUES ('给我家猫咪绝育', 61, '好的手术时间大概需要半个小时');
+INSERT INTO `q_a` VALUES ('给我家猫咪割蛋蛋', 62, '好，费用大概需要1000元');
+INSERT INTO `q_a` VALUES ('猫咪乱撒尿怎么办', 63, '在日常中做好训练');
+INSERT INTO `q_a` VALUES ('猫咪半夜乱叫怎么办', 64, '让它多熟悉熟悉一下环境');
+INSERT INTO `q_a` VALUES ('猫咪最近不开心怎么办', 65, '多陪它玩，使用逗猫棒或者猫薄荷');
+INSERT INTO `q_a` VALUES ('母猫绝育多少钱', 66, '我们这边的话母猫绝育是500元');
+INSERT INTO `q_a` VALUES ('公猫绝育多少钱', 67, '公猫价格300元');
+INSERT INTO `q_a` VALUES ('帮忙给我家泰迪绝育', 68, '行我这边联系我们店医生');
+INSERT INTO `q_a` VALUES ('找个有经验的宠物医生绝育', 69, '您放心给您找我们这最有经验的医生');
+INSERT INTO `q_a` VALUES ('找个蓝猫配种', 70, '您看这只蓝猫可以吗');
+INSERT INTO `q_a` VALUES ('找个有血统的暹罗配种', 71, '有血统的暹罗只有这两只，你看哪只您喜欢');
+INSERT INTO `q_a` VALUES ('找个有经验的兽医', 72, '我们这的兽医都是有经验的');
+INSERT INTO `q_a` VALUES ('宠物绝育多少钱', 73, '不一样机构价格不一样');
+INSERT INTO `q_a` VALUES ('公猫绝育多少钱', 74, '不一定的看您做什么样得');
+INSERT INTO `q_a` VALUES ('母猫绝育多少钱', 75, '我们这给猫绝育一次收费300');
+INSERT INTO `q_a` VALUES ('宠物绝育怎么收费', 76, '母狗做绝育手术费用在500-3000元');
+INSERT INTO `q_a` VALUES ('狗狗脏了', 77, '您可以带它去宠物医院洗个澡');
+INSERT INTO `q_a` VALUES ('给狗狗洗澡', 78, '我帮您找一家宠物美容店帮您的宠物洗澡');
+INSERT INTO `q_a` VALUES ('我要带狗狗洗澡', 79, '好的我帮您联系我们店的美容师');
+INSERT INTO `q_a` VALUES ('给狗狗洗毛', 80, '我帮你找附近的宠物用品店');
+INSERT INTO `q_a` VALUES ('搜索附近的宠物洗澡店', 81, '我知道一家宠物洗澡店不错');
+INSERT INTO `q_a` VALUES ('猫咪脏了', 82, '您可以带猫咪到宠物店洗澡');
 
 -- ----------------------------
 -- Table structure for sentence
@@ -3010,7 +3074,7 @@ CREATE TABLE `sentence`  (
   `date` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '日期',
   `adminID` int(11) NULL DEFAULT NULL COMMENT '标注人id',
   PRIMARY KEY (`sentence_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4497 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4496 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sentence
