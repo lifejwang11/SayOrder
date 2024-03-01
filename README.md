@@ -1,4 +1,4 @@
-# SayOrder
+### <div align=center>![logo](./zf/SayOrder.png)</div>
 
 ### 项目说明：
 * 该项目是基于easyAi引擎的JAVA高性能，低成本，轻量级智能客服助手。可与用户自动对话，自动捕捉订单信息，分辨用户需求，自动生成订单，自动交互问答，轻量级的智能客服助手。
