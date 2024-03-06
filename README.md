@@ -6,7 +6,7 @@
 * 为电商类，咨询类，平台类服务应用(web/小程序/APP/JAVA)，提供高性能的自动智能客服支持。
 * 本项目是依赖easyAi引擎衍生应用，以easyAi高性能廉价部署的思路，可在cpu上无压力高效运行，开包即用。功能持续扩展，敬请期待。
 * 本项目永久免费商用，如果能对您生产和学习有帮助请给作者一个star，这会非常鼓励我。
-* 若有想扩充的功能或技术交流请进群提意见，技术交流群：222475213，561433236（满）
+* 若有想扩充的功能或技术交流请进群提意见，加微信交流群：thenk008
 * 项目依赖easyAi下载链接：https://gitee.com/dromara/easyAi
 ## 开发者常见疑问整理
 > 问：为什么 /ai/myTalk 有时候返回结果不是我想要的？
@@ -141,7 +141,7 @@ int keyWordNerveDeep;//关键词敏感嗅探颗粒度大小
 项目依赖：
 
 * springboot-2.5.6
-* easyAi-1.1.5：https://gitee.com/dromara/easyAi
+* easyAi-1.1.7：https://gitee.com/dromara/easyAi
 
 ### 常见抛错
 
