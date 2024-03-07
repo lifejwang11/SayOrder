@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -14,7 +14,7 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
     <script>
-        var rootURL = "127.0.0.1:8080"
+        let rootURL = "127.0.0.1:8080";
         $(document).ready(function () {
             // 在这里编写需要在页面加载完毕后执行的代码
             $("#success").hide();
@@ -43,10 +43,11 @@
                             var tokenID = xhr.getResponseHeader("tokenID");
                             switch (response.role) {
                                 case 1://管理员
-                                    window.location.href = "/wlTalk/admin.html?tokenID=" + tokenID;
+                                    window.location.href = "/api/to_admin?tokenID=" + tokenID;
                                     break;
                                 case 2://标注员
-                                    window.location.href = "/wlTalk/worker.html?tokenID=" + tokenID;
+                                    console.log(tokenID);
+                                    window.location.href = "/api/to_worker?tokenID=" + tokenID;
                                     break;
                             }
                         } else {//异常返回
@@ -63,7 +64,7 @@
             let account = $("#account").val();
             let passWord = $("#passWord").val();
             let name = $("#name").val();
-            if (account != "" && passWord != "" && name != "") {
+            if (account !== "" && passWord !== "" && name !== "") {
                 var params = {
                     "account": account,
                     "pass_word": passWord,
@@ -75,7 +76,7 @@
                     data: JSON.stringify(params),
                     contentType: "application/json",
                     success: function (data) {
-                        if (data.error == 0) {//正常返回
+                        if (data.error === 0) {//正常返回
                             $("#success").fadeIn(1000, hide("success"));
                         } else {//异常返回
                             $("#fail").text(data.errorMessage + "！");
