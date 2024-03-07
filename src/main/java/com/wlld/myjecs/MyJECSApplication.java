@@ -109,7 +109,9 @@ public class MyJECSApplication implements WebMvcConfigurer {
                 }
             }
         }
-        applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
+        if (talkBodies != null && !talkBodies.isEmpty()) {
+            applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
+        }
         Config.start = true;
         System.out.println("完成初始化");
     }
