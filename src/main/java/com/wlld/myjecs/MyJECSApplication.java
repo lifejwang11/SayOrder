@@ -97,7 +97,8 @@ public class MyJECSApplication implements WebMvcConfigurer {
         }
         applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
         List<TalkBody> talkBodies = null;
-        if (needTalkSql()) {
+        boolean needTalk = needTalkSql();
+        if (needTalk) {
             talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
             for (int i = 0; i < talkBodies.size(); i++) {
                 TalkBody talkBody = talkBodies.get(i);
@@ -109,7 +110,7 @@ public class MyJECSApplication implements WebMvcConfigurer {
                 }
             }
         }
-        if (talkBodies != null && !talkBodies.isEmpty()) {
+        if (!needTalk || !talkBodies.isEmpty()) {
             applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
         }
         Config.start = true;
