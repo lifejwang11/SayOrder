@@ -1,14 +1,13 @@
 package com.wlld.myjecs;
 
-import com.wlld.myjecs.Session.SessionCreator;
 import com.wlld.myjecs.Session.WlldSession;
+import com.wlld.myjecs.access.SessionCreator;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
-import com.wlld.myjecs.controller.UserFilter;
 import com.wlld.myjecs.entity.MyKeywordStudy;
-import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.entity.MySentence;
+import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.sqlEntity.KeywordType;
 import com.wlld.myjecs.sqlEntity.Keyword_sql;
 import com.wlld.myjecs.sqlEntity.MyTree;
@@ -16,7 +15,6 @@ import com.wlld.myjecs.sqlEntity.Sentence;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.wlld.config.SentenceConfig;
@@ -42,13 +40,17 @@ public class MyJECSApplication implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration registrationAll = registry.addInterceptor(new SessionCreator());
-        InterceptorRegistration registration = registry.addInterceptor(new UserFilter());
-        registrationAll.addPathPatterns("/**");
-        registrationAll.excludePathPatterns("/ai/talk", "/ai/myTalk");
-        registration.addPathPatterns("/**");
-        registration.excludePathPatterns("/admin/register"
-                , "/admin/login", "/ai/talk", "/ai/myTalk", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
+
+        registry.addInterceptor(new SessionCreator())
+                .addPathPatterns("/**")
+                // 排除的请求路径
+                .excludePathPatterns("/ai/talk", "/ai/myTalk", "/admin/register", "/admin/login","/api/*");
+
+//        registry.addInterceptor(new UserFilter())
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/admin/register"
+//                , "/admin/login", "/ai/talk", "/ai/myTalk", "/swagger-resources/**",
+//                        "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 
     private static void init(ConfigurableApplicationContext applicationContext) throws Exception {//初始化启动配置

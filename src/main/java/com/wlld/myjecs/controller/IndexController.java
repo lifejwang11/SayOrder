@@ -22,14 +22,12 @@ public class IndexController {
     }
 
     @RequestMapping("/to_admin")
-    public String toAdmin(@RequestParam(name = "tokenID") String tokenID) {
-        logger.info(">>>>>> toAdmin tokenID={}",tokenID);
+    public String toAdmin() {
         return "admin";
     }
 
     @RequestMapping("/to_worker")
-    public String toWorker(@RequestParam(name = "tokenID") String tokenID) {
-        logger.info(">>>>>> toWorker tokenID={}",tokenID);
+    public String toWorker() {
         return "worker";
     }
 }

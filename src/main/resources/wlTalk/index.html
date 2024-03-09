@@ -28,7 +28,7 @@
         function myLogin() {
             let account = $("#account").val();
             let passWord = $("#passWord").val();
-            if (account != "" && passWord != "") {
+            if (account !== "" && passWord !== "") {
                 var params = {
                     "account": account,
                     "pass_word": passWord
@@ -39,15 +39,13 @@
                     data: JSON.stringify(params),
                     contentType: "application/json",
                     success: function (response, status, xhr) {
-                        if (response.error == 0) {//
-                            var tokenID = xhr.getResponseHeader("tokenID");
+                        if (response.error === 0) {//
                             switch (response.role) {
                                 case 1://管理员
-                                    window.location.href = "/api/to_admin?tokenID=" + tokenID;
+                                    window.location.href = "/api/to_admin";
                                     break;
                                 case 2://标注员
-                                    console.log(tokenID);
-                                    window.location.href = "/api/to_worker?tokenID=" + tokenID;
+                                    window.location.href = "/api/to_worker";
                                     break;
                             }
                         } else {//异常返回

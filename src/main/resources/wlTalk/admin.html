@@ -14,25 +14,14 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
     <script>
-        var tokenID;
         var rootURL = "http://127.0.0.1:8080"
         var orderID = 0;
         var myProduct = [];
         var click = false;
         $(document).ready(function () {//获取信息
-            tokenID = getQueryString("tokenID");
             get("/admin/getInitMessage");
         });
-        function getQueryString(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-            var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
-            var context = "";
-            if (r != null)
-                context = decodeURIComponent(r[2]);
-            reg = null;
-            r = null;
-            return context == null || context == "" || context == "undefined" ? "" : context;
-        }
+
         function mySubmit(id) {//删除分类
             get("/myData/delSentenceType?type_id=" + id);
         }
@@ -123,14 +112,15 @@
         function get(url) {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', rootURL + url);
-            xhr.setRequestHeader('tokenID', tokenID);
+            // 允许浏览器在自己的域设置cookie值
+            xhr.withCredentials = true;
             xhr.send()
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {//固定写法
                     var response = xhr.responseText;
                     var message = JSON.parse(response);//返回数据
-                    if (message.error == 0) {//加载当前已有分类和关键词
-                        if (message.responseType == 2) {
+                    if (message.error === 0) {//加载当前已有分类和关键词
+                        if (message.responseType === 2) {
                             selectMessage(message);
                         } else {//删除语句分类成功
                             delSentenceType(message.resultID);
@@ -162,7 +152,6 @@
             };
             xh.open("POST", rootURL + url);
             xh.setRequestHeader('Content-Type', 'application/json');
-            xh.setRequestHeader('tokenID', tokenID);
             xh.send(JSON.stringify(data));
         }
         function addProduct() {//添加产品

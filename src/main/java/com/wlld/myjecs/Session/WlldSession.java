@@ -35,6 +35,14 @@ public class WlldSession implements Runnable {
         return SESSION;
     }
 
+
+    /**
+     * header存储tokenID，本地缓存记录角adminId
+     *
+     * @param res
+     * @param key
+     * @param value
+     */
     public void setValue(HttpServletResponse res, String key, Object value) {
         String token = res.getHeader("tokenID");
         if (token != null) {
