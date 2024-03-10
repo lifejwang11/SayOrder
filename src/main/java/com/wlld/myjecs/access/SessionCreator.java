@@ -22,12 +22,15 @@ import java.util.Objects;
 public class SessionCreator implements HandlerInterceptor {//会话
 
     private static ThreadLocal<Integer> adminHolder = new ThreadLocal<>();
+
     public static void setAdmin(Integer user) {
         adminHolder.set(user);
     }
+
     public static Integer getAdmin() {
         return adminHolder.get();
     }
+
     /**
      * session 拦截器
      *
@@ -42,11 +45,11 @@ public class SessionCreator implements HandlerInterceptor {//会话
 
         //判断用户是否登录
         HttpSession session = request.getSession();
-        log.info("Session preHandle"+request.getRequestURI() + "sessionId={}", session.getId());
+        log.debug("Session preHandle " + request.getRequestURI() + "sessionId={}", session.getId());
 
         // 若存在，则放行
         if (Objects.nonNull(session.getAttribute("adminId"))) {
-            adminHolder.set((Integer)session.getAttribute("adminId"));
+            adminHolder.set((Integer) session.getAttribute("adminId"));
             return true;
         }
         //拦截住，并给前端页面返回未登录信息，以输出流的方式，json格式返回

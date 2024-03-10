@@ -14,7 +14,7 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
     <script>
-        let rootURL = "127.0.0.1:8080";
+
         $(document).ready(function () {
             // 在这里编写需要在页面加载完毕后执行的代码
             $("#success").hide();
@@ -35,7 +35,7 @@
                 };
                 $.ajax({
                     type: "POST",
-                    url: 'http://' + rootURL + "/admin/login",
+                    url: "/admin/login",
                     data: JSON.stringify(params),
                     contentType: "application/json",
                     success: function (response, status, xhr) {
@@ -70,7 +70,7 @@
                 };
                 $.ajax({
                     type: "POST",
-                    url: 'http://' + rootURL + "/admin/register",
+                    url: "/admin/register",
                     data: JSON.stringify(params),
                     contentType: "application/json",
                     success: function (data) {
@@ -83,7 +83,7 @@
                     }
                 });
             } else {
-                alert("注册信息没有填写完整：" + role);
+                alert("注册信息没有填写完整");
             }
         }
     </script>

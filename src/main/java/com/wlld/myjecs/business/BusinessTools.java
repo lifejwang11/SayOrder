@@ -46,7 +46,7 @@ public class BusinessTools {
      */
     public void setSessionValue(HttpServletRequest request, Integer adminId) {
         HttpSession session = request.getSession();
-        log.info(request.getRequestURI() + "sessionId={}", session.getId());
+        log.info(request.getRequestURI() + " set sessionId={}", session.getId());
         request.getSession().setAttribute("adminId", adminId);
         // 设置session失效时间为30分钟
         request.getSession().setMaxInactiveInterval(1800);

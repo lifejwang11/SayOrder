@@ -14,7 +14,6 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
     <script>
-        var rootURL = "http://127.0.0.1:8080"
         var orderID = 0;
         var keywordTypeList;//关键词类别
         var myTrees;//所有类别
@@ -163,7 +162,7 @@
         }
         function get(url) {
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', rootURL + url);
+            xhr.open('GET',  url);
             xhr.send()
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {//固定写法
@@ -194,7 +193,7 @@
                     }
                 }
             };
-            xh.open("POST", rootURL + url);
+            xh.open("POST", url);
             xh.setRequestHeader('Content-Type', 'application/json');
             xh.send(JSON.stringify(data));
         }

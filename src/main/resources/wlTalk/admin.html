@@ -14,7 +14,14 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
     <script>
-        var rootURL = "http://127.0.0.1:8080"
+        window.onbeforeunload = function() {
+            localStorage.setItem( "session", JSON.stringify( window.sessvars) );
+        };
+
+        window.onload = function() {
+            window.sessvars = JSON.parse( localStorage.getItem( "session") || "{}" );;
+        };
+
         var orderID = 0;
         var myProduct = [];
         var click = false;
@@ -111,7 +118,7 @@
         }
         function get(url) {
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', rootURL + url);
+            xhr.open('GET',  url);
             // 允许浏览器在自己的域设置cookie值
             xhr.withCredentials = true;
             xhr.send()
@@ -150,7 +157,7 @@
                     }
                 }
             };
-            xh.open("POST", rootURL + url);
+            xh.open("POST", url);
             xh.setRequestHeader('Content-Type', 'application/json');
             xh.send(JSON.stringify(data));
         }

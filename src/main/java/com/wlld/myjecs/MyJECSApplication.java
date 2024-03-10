@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
-public class MyJECSApplication implements WebMvcConfigurer {
+public class MyJECSApplication {
 
     public static void main(String[] args) throws Exception {
         Thread thread = new Thread(WlldSession.getSESSION());
@@ -36,21 +36,6 @@ public class MyJECSApplication implements WebMvcConfigurer {
         if (Config.starModel) {
             init(applicationContext);
         }
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(new SessionCreator())
-                .addPathPatterns("/**")
-                // 排除的请求路径
-                .excludePathPatterns("/ai/talk", "/ai/myTalk", "/admin/register", "/admin/login","/api/*");
-
-//        registry.addInterceptor(new UserFilter())
-//                .addPathPatterns("/**")
-//                .excludePathPatterns("/admin/register"
-//                , "/admin/login", "/ai/talk", "/ai/myTalk", "/swagger-resources/**",
-//                        "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 
     private static void init(ConfigurableApplicationContext applicationContext) throws Exception {//初始化启动配置
