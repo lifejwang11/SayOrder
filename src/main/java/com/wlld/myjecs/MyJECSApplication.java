@@ -1,7 +1,5 @@
 package com.wlld.myjecs;
 
-import com.wlld.myjecs.Session.WlldSession;
-import com.wlld.myjecs.access.SessionCreator;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
@@ -15,8 +13,6 @@ import com.wlld.myjecs.sqlEntity.Sentence;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.wlld.config.SentenceConfig;
 import org.wlld.entity.TalkBody;
 
@@ -30,8 +26,6 @@ import java.util.Map;
 public class MyJECSApplication {
 
     public static void main(String[] args) throws Exception {
-        Thread thread = new Thread(WlldSession.getSESSION());
-        thread.start();
         ConfigurableApplicationContext applicationContext = SpringApplication.run(MyJECSApplication.class, args);
         if (Config.starModel) {
             init(applicationContext);
