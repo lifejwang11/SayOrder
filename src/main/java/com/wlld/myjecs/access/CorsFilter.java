@@ -1,4 +1,4 @@
-package com.wlld.myjecs.controller;
+package com.wlld.myjecs.access;
 
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ public class CorsFilter implements Filter {
                 "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers",
-                "x-requested-with,content-type,tokenID");
+                "x-requested-with,content-type");
         chain.doFilter(req, res);
     }
 

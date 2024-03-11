@@ -30,8 +30,8 @@ public class AdminController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)//
     @ApiOperation("登录")
-    public Response login(@RequestBody MyAdmin myAdmin, HttpServletResponse request) {
-        return adminBusiness.login(myAdmin, request);
+    public Response login(@RequestBody MyAdmin myAdmin, HttpServletResponse response, HttpServletRequest request) {
+        return adminBusiness.login(myAdmin, response, request);
     }
 
     @RequestMapping(value = "/getInitMessage", method = RequestMethod.GET)//

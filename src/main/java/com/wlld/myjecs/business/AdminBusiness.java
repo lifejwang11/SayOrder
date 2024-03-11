@@ -1,13 +1,13 @@
 package com.wlld.myjecs.business;
 
-import com.wlld.myjecs.Session.WlldSession;
+import com.wlld.myjecs.access.SessionCreator;
 import com.wlld.myjecs.config.Config;
 import com.wlld.myjecs.config.ErrorCode;
+import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.mesEntity.AdminSentence;
 import com.wlld.myjecs.mesEntity.AgreeAdmin;
 import com.wlld.myjecs.mesEntity.MyAdmin;
 import com.wlld.myjecs.mesEntity.Response;
-import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.sqlEntity.Admin;
 import com.wlld.myjecs.sqlEntity.KeywordType;
 import com.wlld.myjecs.sqlEntity.MyTree;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +25,9 @@ import java.util.List;
 public class AdminBusiness {//训练管理业务
     @Autowired
     private SqlMapper sqlMapper;
+
+    @Autowired
+    private BusinessTools businessTools;
 
     @Transactional
     public Response saveUser(MyAdmin myAdmin) {
@@ -48,7 +50,8 @@ public class AdminBusiness {//训练管理业务
         Response response = new Response();
         List<MyTree> myTrees = sqlMapper.getMyTree();//所有分类
         List<KeywordType> keywordTypeList = sqlMapper.getKeyWordType();//关键词类别信息
-        int adminID = (int) WlldSession.getSESSION().getValue(request, "myID");
+//        int adminID = (int) WlldSession.getSESSION().getValue(request, "myID");
+        int adminID = SessionCreator.getAdmin();
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String myDate = simpleDateFormat.format(date);//今日时间
@@ -70,7 +73,7 @@ public class AdminBusiness {//训练管理业务
         Response response = new Response();
         int adminID = agreeAdmin.getId();
         boolean agree = agreeAdmin.isAgree();
-        if ((int) WlldSession.getSESSION().getValue(request, "myID") == -1) {
+        if (SessionCreator.getAdmin() == -1) {
             Admin admin = sqlMapper.getAdminByID(adminID);
             if (admin != null) {
                 if (agree) {//同意该用户
@@ -93,17 +96,18 @@ public class AdminBusiness {//训练管理业务
         return response;
     }
 
-    public Response login(MyAdmin myAdmin, HttpServletResponse request) {//用户登录
+    public Response login(MyAdmin myAdmin, HttpServletResponse rs, HttpServletRequest request) {//用户登录
         Response response = new Response();
         response.setResponseType(Config.loginRequest);
         if (myAdmin.getAccount().equals(Config.adminAccount) && myAdmin.getPass_word().equals(Config.adminPassWord)) {
-            WlldSession.getSESSION().setValue(request, "myID", -1);
+            // 设置session
+            businessTools.setSessionValue(request, -1);
             response.setRole(1);
         } else {
             Admin admin = sqlMapper.getAdmin(myAdmin);
             if (admin != null) {
                 response.setRole(2);
-                WlldSession.getSESSION().setValue(request, "myID", admin.getId());
+                businessTools.setSessionValue(request, admin.getId());
                 response.setError(ErrorCode.OK.getError());
                 response.setErrorMessage(ErrorCode.OK.getErrorMessage());
             } else {

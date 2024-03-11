@@ -1,11 +1,15 @@
 package com.wlld.myjecs.business;
 
-import com.wlld.myjecs.Session.WlldSession;
+import com.wlld.myjecs.access.SessionCreator;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
 import com.wlld.myjecs.config.ErrorCode;
 import com.wlld.myjecs.mapper.SqlMapper;
-import com.wlld.myjecs.mesEntity.*;
+import com.wlld.myjecs.mesEntity.KeywordTypeMessage;
+import com.wlld.myjecs.mesEntity.Response;
+import com.wlld.myjecs.mesEntity.SentenceTypeAndKeyword;
+import com.wlld.myjecs.mesEntity.SubmitSentence;
+import com.wlld.myjecs.mesEntity.UpKeyword;
 import com.wlld.myjecs.sqlEntity.KeywordType;
 import com.wlld.myjecs.sqlEntity.Keyword_sql;
 import com.wlld.myjecs.sqlEntity.MyTree;
@@ -14,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,7 +49,7 @@ public class DataBusiness {
             sentence.setWord(submitSentence.getWord());
             sentence.setType_id(submitSentence.getType_id());
             sentence.setDate(myDate);
-            sentence.setAdminID((int) WlldSession.getSESSION().getValue(res, "myID"));
+            sentence.setAdminID(SessionCreator.getAdmin());
             boolean success = false;
             int sentence_id = 0;
             if (Config.duplicateCheck) {//需要查重
@@ -94,7 +97,7 @@ public class DataBusiness {
     @Transactional
     public Response delSentence(HttpServletResponse res, int sentence_id) {
         Response response = new Response();
-        int adminID = (int) WlldSession.getSESSION().getValue(res, "myID");
+        int adminID = SessionCreator.getAdmin();
         sqlMapper.deleteSentenceByID(adminID, sentence_id);
         sqlMapper.deleteKeyWordSqlBySentenceID(sentence_id);
         response.setResultID(sentence_id);
@@ -107,7 +110,7 @@ public class DataBusiness {
     @Transactional
     public Response delKeywordType(HttpServletResponse request, int keyword_type_id) {
         Response response = new Response();
-        if ((int) WlldSession.getSESSION().getValue(request, "myID") == -1) {
+        if (SessionCreator.getAdmin() == -1) {
             KeywordType keywordType = sqlMapper.getKeyWordTypeByID(keyword_type_id);
             if (keywordType != null && keywordType.getType_number() < beanMangerOnly.sysConfig().getDelKeywordNubTh()) {
                 sqlMapper.deleteKeyWordSqlByType(keyword_type_id);
@@ -128,7 +131,7 @@ public class DataBusiness {
     @Transactional
     public Response delSentenceType(HttpServletResponse request, int type_id) {
         Response response = new Response();
-        if ((int) WlldSession.getSESSION().getValue(request, "myID") == -1) {
+        if (SessionCreator.getAdmin() == -1) {
             MyTree myTree = sqlMapper.getMyTreeByTypeID(type_id);
             response.setResponseType(Config.deleteSentenceType);
             if (myTree != null) {
@@ -160,7 +163,7 @@ public class DataBusiness {
     @Transactional
     public synchronized Response addSentenceType(HttpServletResponse request, SentenceTypeAndKeyword sentenceTypeAndKeyword) {
         Response response = new Response();
-        if ((int) WlldSession.getSESSION().getValue(request, "myID") == -1) {//管理员
+        if (SessionCreator.getAdmin() == -1) {//管理员
             String title = sentenceTypeAndKeyword.getTitle();//类别描述
             List<KeywordTypeMessage> keywordTypeMessages = sentenceTypeAndKeyword.getKeywordTypeMessages();
             MyTree myTree = new MyTree();
