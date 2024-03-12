@@ -13,6 +13,8 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
+    <!-- common.js -->
+    <script type="text/javascript" src="/js/common.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -42,9 +44,11 @@
                         if (response.error === 0) {//
                             switch (response.role) {
                                 case 1://管理员
+                                    window.globalRoleId = 1;
                                     window.location.href = "/api/to_admin";
                                     break;
                                 case 2://标注员
+                                    window.globalRoleId = 2;
                                     window.location.href = "/api/to_worker";
                                     break;
                             }

@@ -1,0 +1,43 @@
+logging:
+  level:
+    com:
+      kfit: DEBUG
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 1800
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    initial-size: 10
+    max-active: 20
+    max-idle: 8
+    min-idle: 8
+    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
+    username: root
+  thymeleaf:
+    cache: false
+    enabled: true
+    encoding: utf-8
+    mode: HTML
+    prefix: classpath:/wlTalk/
+    servlet:
+      content-type: text/html
+    suffix: .html
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/static/assets/
+# mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印日志文件 分等级的
+
+#pagehelper配置-分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
