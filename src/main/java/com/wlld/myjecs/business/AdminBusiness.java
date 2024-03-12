@@ -11,6 +11,7 @@ import com.wlld.myjecs.mesEntity.Response;
 import com.wlld.myjecs.sqlEntity.Admin;
 import com.wlld.myjecs.sqlEntity.KeywordType;
 import com.wlld.myjecs.sqlEntity.MyTree;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class AdminBusiness {//训练管理业务
     @Autowired
@@ -52,6 +54,7 @@ public class AdminBusiness {//训练管理业务
         List<KeywordType> keywordTypeList = sqlMapper.getKeyWordType();//关键词类别信息
 //        int adminID = (int) WlldSession.getSESSION().getValue(request, "myID");
         int adminID = SessionCreator.getAdmin();
+        log.info(">>> getInitMessage adminID={}", adminID);
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String myDate = simpleDateFormat.format(date);//今日时间

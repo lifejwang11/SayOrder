@@ -3,8 +3,16 @@ package com.wlld.myjecs.mapper;
 
 import com.wlld.myjecs.mesEntity.AdminSentence;
 import com.wlld.myjecs.mesEntity.MyAdmin;
-import com.wlld.myjecs.sqlEntity.*;
-import org.apache.ibatis.annotations.*;
+import com.wlld.myjecs.sqlEntity.Admin;
+import com.wlld.myjecs.sqlEntity.KeywordType;
+import com.wlld.myjecs.sqlEntity.Keyword_sql;
+import com.wlld.myjecs.sqlEntity.MyTree;
+import com.wlld.myjecs.sqlEntity.Sentence;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import org.wlld.entity.TalkBody;
 
