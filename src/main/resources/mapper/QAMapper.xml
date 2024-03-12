@@ -14,50 +14,8 @@
         question,id,answer
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from q_a
-        where 
+    <select id="findAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from q_a order by id desc
     </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from q_a
-        where 
-    </delete>
-    <insert id="insert">
-        insert into q_a
-        ( question,id,answer
-        )
-        values (#{question,jdbcType=VARCHAR},#{id,jdbcType=INTEGER},#{answer,jdbcType=VARCHAR}
-        )
-    </insert>
-    <insert id="insertSelective">
-        insert into q_a
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="question != null">question,</if>
-                <if test="id != null">id,</if>
-                <if test="answer != null">answer,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="question != null">#{question,jdbcType=VARCHAR},</if>
-                <if test="id != null">#{id,jdbcType=INTEGER},</if>
-                <if test="answer != null">#{answer,jdbcType=VARCHAR},</if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.wlld.myjecs.sqlEntity.Qa">
-        update q_a
-        <set>
-                <if test="question != null">
-                    question = #{question,jdbcType=VARCHAR},
-                </if>
-                <if test="id != null">
-                    id = #{id,jdbcType=INTEGER},
-                </if>
-                <if test="answer != null">
-                    answer = #{answer,jdbcType=VARCHAR},
-                </if>
-        </set>
-        where  
-    </update>
 </mapper>
