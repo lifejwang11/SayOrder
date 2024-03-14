@@ -1,9 +1,9 @@
 package com.wlld.myjecs.controller;
 
 import com.wlld.myjecs.business.DataBusiness;
-import com.wlld.myjecs.mesEntity.Response;
-import com.wlld.myjecs.mesEntity.SentenceTypeAndKeyword;
-import com.wlld.myjecs.mesEntity.SubmitSentence;
+import com.wlld.myjecs.entity.mes.Response;
+import com.wlld.myjecs.entity.mes.SentenceTypeAndKeyword;
+import com.wlld.myjecs.entity.mes.SubmitSentence;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

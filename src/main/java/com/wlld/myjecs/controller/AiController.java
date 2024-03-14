@@ -4,7 +4,7 @@ package com.wlld.myjecs.controller;
 import com.wlld.myjecs.business.AiBusiness;
 import com.wlld.myjecs.config.Config;
 import com.wlld.myjecs.config.ErrorCode;
-import com.wlld.myjecs.mesEntity.Response;
+import com.wlld.myjecs.entity.mes.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

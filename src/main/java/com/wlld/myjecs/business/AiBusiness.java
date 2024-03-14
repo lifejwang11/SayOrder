@@ -2,11 +2,11 @@ package com.wlld.myjecs.business;
 
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.ErrorCode;
-import com.wlld.myjecs.entity.KeyWord;
-import com.wlld.myjecs.mesEntity.Order;
-import com.wlld.myjecs.mesEntity.Response;
-import com.wlld.myjecs.mesEntity.Shop;
-import com.wlld.myjecs.sqlEntity.KeywordType;
+import com.wlld.myjecs.entity.business.KeyWord;
+import com.wlld.myjecs.entity.mes.Order;
+import com.wlld.myjecs.entity.mes.Response;
+import com.wlld.myjecs.entity.mes.Shop;
+import com.wlld.myjecs.entity.KeywordType;
 import com.wlld.myjecs.tools.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

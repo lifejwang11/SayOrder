@@ -1,13 +1,14 @@
 package com.wlld.myjecs.mapper;
 
 
-import com.wlld.myjecs.mesEntity.AdminSentence;
-import com.wlld.myjecs.mesEntity.MyAdmin;
-import com.wlld.myjecs.sqlEntity.Admin;
-import com.wlld.myjecs.sqlEntity.KeywordType;
-import com.wlld.myjecs.sqlEntity.Keyword_sql;
-import com.wlld.myjecs.sqlEntity.MyTree;
-import com.wlld.myjecs.sqlEntity.Sentence;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wlld.myjecs.entity.mes.AdminSentence;
+import com.wlld.myjecs.entity.mes.MyAdmin;
+import com.wlld.myjecs.entity.Admin;
+import com.wlld.myjecs.entity.KeywordType;
+import com.wlld.myjecs.entity.Keyword_sql;
+import com.wlld.myjecs.entity.MyTree;
+import com.wlld.myjecs.entity.Sentence;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,9 +19,8 @@ import org.wlld.entity.TalkBody;
 
 import java.util.List;
 
-@Repository
 @Mapper
-public interface SqlMapper {
+public interface SqlMapper{
     //展示分类的所有结构关系
     @Select("select sentence_id,word,type_id from sentence")
     List<Sentence> getModel();

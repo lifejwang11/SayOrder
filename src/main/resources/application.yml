@@ -1,0 +1,60 @@
+logging:
+  level:
+    com:
+      kfit: DEBUG
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 1800
+spring:
+  datasource:
+    dynamic:
+#      p6spy: true
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        master:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
+          username: root
+          password: Gov2020!
+          driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
+          hikari:
+            max-pool-size: 10                         #连接池的最大大小。这是可以同时打开的最大连接数
+            min-idle: 5                               #连接池的最小空闲连接数
+            connection-timeout: 20000                 #连接超时时间（毫秒）。如果在这个时间内无法建立连接，将会抛出异常。
+            idle-timeout: 180000                      #连接空闲超时时间（毫秒）。如果连接在空闲状态下超过这个时间，它可能会被关闭
+            initialization-fail-timeout: 60000        #如果初始化连接失败，等待多长时间后重试
+            connection-test-query: select 1           #心跳检查
+            max-lifetime: 1800000
+  thymeleaf:
+    cache: false
+    enabled: true
+    encoding: utf-8
+    mode: HTML
+    prefix: classpath:/wlTalk/
+    servlet:
+      content-type: text/html
+    suffix: .html
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/static/assets/
+  #解决高版本Springboot融合swagger2的问题，对应CustomWebMvcConfigurer.addResourceHandlers
+  #http://localhost:8080/doc.html
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false #关闭数据库映射到实体下划线自动转驼峰，mapper.xml配置映射关系
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    banner: false
+    db-config:
+#      idType: ASSIGN_ID  #全局雪花算法，需要定义为long类型才行
+      where-strategy: not_empty #全局where
+      insert-strategy: not_empty
+      update-strategy: not_null

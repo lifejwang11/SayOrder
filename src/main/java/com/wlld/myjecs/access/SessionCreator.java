@@ -2,7 +2,7 @@ package com.wlld.myjecs.access;
 
 import com.alibaba.fastjson.JSON;
 import com.wlld.myjecs.config.ErrorCode;
-import com.wlld.myjecs.mesEntity.Response;
+import com.wlld.myjecs.entity.mes.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 

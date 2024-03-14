@@ -2,9 +2,9 @@ package com.wlld.myjecs.bean;
 
 
 import com.wlld.myjecs.config.FreeWord;
-import com.wlld.myjecs.entity.AllKeyWords;
+import com.wlld.myjecs.entity.business.AllKeyWords;
 import com.wlld.myjecs.config.SysConfig;
-import com.wlld.myjecs.sqlEntity.KeywordType;
+import com.wlld.myjecs.entity.KeywordType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.wlld.config.SentenceConfig;
