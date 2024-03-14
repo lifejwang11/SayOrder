@@ -18,4 +18,14 @@
         select <include refid="Base_Column_List" />
         from q_a order by id desc
     </select>
+
+    <delete id="delById" parameterType="integer">
+        delete from q_a where  id=#{qaId}
+    </delete>
+    <insert id="insert">
+        insert into q_a
+        ( question,answer)
+        values (#{question,jdbcType=VARCHAR},#{answer,jdbcType=VARCHAR})
+    </insert>
+
 </mapper>

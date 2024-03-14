@@ -80,6 +80,13 @@
 			<artifactId>pagehelper-spring-boot-starter</artifactId>
 			<version>1.4.1</version>
 		</dependency>
+
+		<!-- mybatisPlus 核心库 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

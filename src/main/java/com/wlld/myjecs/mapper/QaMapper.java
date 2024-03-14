@@ -1,7 +1,9 @@
 package com.wlld.myjecs.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wlld.myjecs.sqlEntity.Qa;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * @Entity com.wlld.myjecs.sqlEntity.Qa
  */
 @Mapper
-public interface QaMapper {
+public interface QaMapper extends BaseMapper<Qa> {
 
     /**
      * 分页查询
@@ -21,4 +23,7 @@ public interface QaMapper {
      */
     List<Qa> findAll(Integer pageIndex, Integer pageSize);
 
+    void delById(@Param("qaId") Integer qaId);
+
+    int insert(Qa record);
 }

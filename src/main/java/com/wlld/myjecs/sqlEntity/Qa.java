@@ -1,6 +1,10 @@
 package com.wlld.myjecs.sqlEntity;
 
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -9,6 +13,7 @@ import lombok.Data;
  * @TableName q_a
  */
 @Data
+@TableName("q_a")
 public class Qa implements Serializable {
     /**
      * 问题
@@ -18,6 +23,7 @@ public class Qa implements Serializable {
     /**
      * 主键
      */
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**

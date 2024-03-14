@@ -27,4 +27,20 @@ public class QuestionService {
         List<Qa> all = qaMapper.findAll(pageIndex, pageSize);
         return new PageInfo<>(all);
     }
+
+    public void delById(Integer qaId) {
+        qaMapper.delById(qaId);
+    }
+
+    public void upById(Qa qa) {
+        qaMapper.updateById(qa);
+    }
+
+    public void insert(Qa qa) {
+        qaMapper.insert(qa);
+    }
+
+    public Qa selectById(Integer qaId) {
+        return qaMapper.selectById(qaId);
+    }
 }
