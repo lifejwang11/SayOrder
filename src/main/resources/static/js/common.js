@@ -1,0 +1,3 @@
+window.globalRoleId=0
+
+

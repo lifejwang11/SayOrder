@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!--suppress ALL--> <!-- 去掉红色下划线-->
+<html>
+<div th:fragment="page">
+    <style>
+        .page{
+            border: 1px solid blue;
+            margin-right: 5px;
+            padding: 3px 5px;
+        }
+        .page.active{
+            color: red;
+            border: 1px solid red;
+        }
+    </style>
+
+    <div style="float: left">
+        当前第<span th:text="${page.pageNum}"></span>页
+        总记录数<span th:text="${page.total}"></span>
+    </div>
+    <div style="float: right">
+        <a th:text="首页" th:if="${page.pageNum>1}" th:href="@{${path}}"></a>
+        <a th:text="上一页" th:if="${page.pageNum>1}" th:href="@{${path}+${page.pageNum-1}}"></a>
+        <a th:href="@{${path}+${i}}" th:each="i:${#numbers.sequence(1,page.pages)}" th:text="${i}"
+
+           th:class="${page.pageNum==i}? 'page active':'page'"></a>
+        <a th:text="下一页" th:if="${page.pageNum<page.pages}" th:href="@{${path}+${page.pageNum+1}}"></a>
+        <a th:text="尾页" th:if="${page.pageNum<page.pages}" th:href="@{${path}+${page.pages}}"></a>
+    </div>
+</div>
+</html>

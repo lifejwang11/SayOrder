@@ -7,21 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>超管端</title>
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css"
-        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
     <script>
-        window.onbeforeunload = function() {
-            localStorage.setItem( "session", JSON.stringify( window.sessvars) );
-        };
-
-        window.onload = function() {
-            window.sessvars = JSON.parse( localStorage.getItem( "session") || "{}" );;
-        };
-
         var orderID = 0;
         var myProduct = [];
         var click = false;
@@ -63,7 +58,7 @@
                             tr.append(oper);
                         }
                     }
-                    var btn = $("<button>删除分类</button>").attr("type", "button").attr("class", "btn btn-primary").attr("onclick", "mySubmit(" + type_id + ")");
+                    var btn = $("<button style='background-color: red'>删除分类</button>").attr("type", "button").attr("class", "btn btn-primary").attr("onclick", "mySubmit(" + type_id + ")");
                     var btd = $("<td></td>").append(btn);
                     tr.append(btd);
                     $("#orderMessage").append(tr);
@@ -172,7 +167,7 @@
                     "answer": myAnswer
                 }
                 myProduct.push(params);
-                if ($("#products").text() == '') {
+                if ($("#products").text() === '') {
                     $("#products").text(proText);
                 } else {
                     $("#products").text($("#products").text() + "," + proText)
@@ -213,60 +208,117 @@
     </script>
 </head>
 
-<body style="overflow-x: hidden;">
-    <div class="row">
-        <div class="col-md-8">
-            <table class="table  table-hover" id="orderMessage">
-                <caption style="text-align: center;">
-                    <h3>分类列表 <span class="label label-default">刷新更新</span></h3>
-                </caption>
-            </table>
-        </div>
-        <div class="col-md-4">
-            <h3 for="basic-url" style="text-align: center;">添加语义分类:</h3>
-            <div class="panel panel-default">
-                <div class="panel-body" id="products"></div>
-            </div>
-            <div class="input-group input-group-lg" style="margin-top: 20px;">
-                <span class="input-group-addon">语句分类：</span>
-                <input type="text" placeholder="添加语句分类描述" class="form-control" id="mySentence"
-                    aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group input-group-lg" style="margin-top: 20px;">
-                <span class="input-group-addon">关键词添加：</span>
-                <input type="text" placeholder="添加关键词描述" class="form-control" id="mykeyword"
-                    aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group input-group-lg" style="margin-top: 20px;">
-                <span class="input-group-addon">缺失回复：</span>
-                <input type="text" placeholder="该关键词缺失回复" class="form-control" id="myAnswer"
-                    aria-describedby="basic-addon1">
-            </div>
-            <div class="btn-group btn-group-justified" role="group" style="margin-top: 20px;border-radius: 5px;">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-success" onclick="addProduct()">添加关键词</button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-danger" onclick="delProduct()">删除</button>
-                </div>
-            </div>
-            <div class="btn-group btn-group-justified" role="group" style="margin-top: 20px;border-radius: 5px;">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" onclick="submit()">提交新的语句分类</button>
+<body class="sb-nav-fixed" style="overflow-x: hidden;">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <!-- Navbar Brand-->
+    <a class="navbar-brand ps-3" href="index.html">Say Order</a>
+    <!-- Sidebar Toggle-->
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+            class="fas fa-bars"></i></button>
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-6 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+               aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#!">Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+
+<div id="layoutSidenav">
+    <!-- 侧边栏-->
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <a class="nav-link" href="/api/to_admin">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        语句分类
+                    </a>
+                    <a class="nav-link" href="/question/getPage">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Q&A
+                    </a>
                 </div>
             </div>
-            <table class="table  table-hover" id="accountMessage">
-                <caption style="text-align: center;">
-                    <h3>账号申请 <span class="label label-default">刷新更新</span></h3>
-                </caption>
-                <tr>
-                    <td>id</td>
-                    <td>姓名</td>
-                    <td>是否通过</td>
-                </tr>
-            </table>
-        </div>
+        </nav>
     </div>
+
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">语句分类</h1>
+                <div class="row">
+                    <div class="col-md-7" style="background-color: aliceblue">
+                        <table class="table  table-hover" id="orderMessage">
+                            <caption style="text-align: center;">
+                                <h3>分类列表 <span class="label label-default">刷新更新</span></h3>
+                            </caption>
+                        </table>
+                    </div>
+                    <div class="col-md-5">
+                        <h3 for="basic-url" style="text-align: center;">添加语义分类:</h3>
+                        <div class="panel panel-default">
+                            <div class="panel-body" id="products"></div>
+                        </div>
+                        <div class="input-group input-group-lg" style="margin-top: 20px;">
+                            <span class="input-group-addon">语句分类：</span>
+                            <input type="text" placeholder="添加语句分类描述" class="form-control" id="mySentence"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group input-group-lg" style="margin-top: 20px;">
+                            <span class="input-group-addon">关键词添加：</span>
+                            <input type="text" placeholder="添加关键词描述" class="form-control" id="mykeyword"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group input-group-lg" style="margin-top: 20px;">
+                            <span class="input-group-addon">缺失回复：</span>
+                            <input type="text" placeholder="该关键词缺失回复" class="form-control" id="myAnswer"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                        <div class="btn-group btn-group-justified" role="group"
+                             style="margin-top: 20px;border-radius: 5px;">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-success" onclick="addProduct()">添加关键词</button>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-danger" onclick="delProduct()">删除</button>
+                            </div>
+                        </div>
+                        <div class="btn-group btn-group-justified" role="group"
+                             style="margin-top: 20px;border-radius: 5px;">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-primary" onclick="submit()">提交新的语句分类</button>
+                            </div>
+                        </div>
+                        <table class="table  table-hover" id="accountMessage">
+                            <caption style="text-align: center;">
+                                <h3>账号申请 <span class="label label-default">刷新更新</span></h3>
+                            </caption>
+                            <tr>
+                                <td>id</td>
+                                <td>姓名</td>
+                                <td>是否通过</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+            crossorigin="anonymous"></script>
+    <script src="/js/datatables-simple-demo.js"></script>
 </body>
 
 </html>

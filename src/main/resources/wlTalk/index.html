@@ -13,6 +13,8 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
+    <!-- common.js -->
+    <script type="text/javascript" src="/js/common.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -42,9 +44,11 @@
                         if (response.error === 0) {//
                             switch (response.role) {
                                 case 1://管理员
+                                    window.globalRoleId = 1;
                                     window.location.href = "/api/to_admin";
                                     break;
                                 case 2://标注员
+                                    window.globalRoleId = 2;
                                     window.location.href = "/api/to_worker";
                                     break;
                             }
@@ -91,37 +95,39 @@
 
 <body style="overflow-x: hidden;">
     <div class="jumbotron" style="padding-left: 5%;">
-        <h1>SayOrder</h1>
-        <p>SayOrder——基于easyAI开源引擎的智能客服管理系统</p>
+        <div class="container">
+            <h1>SayOrder</h1>
+            <p>SayOrder——基于easyAI开源引擎的智能客服管理系统</p>
+        </div>
     </div>
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4" style="border:1px solid rgb(92, 91, 91);border-radius: 15px;padding: 1%;">
-            <div class="alert alert-success" role="alert" id="success">账号申请成功，请等待超管审核通过后再次登录！</div>
-            <div class="alert alert-danger" role="alert" id="fail">账号申请失败！</div>
-            <h3 for="basic-url" style="text-align: center;">注册/登录</h3>
-            <div class="input-group input-group-lg" style="margin-top: 20px;">
-                <span class="input-group-addon" id="basic-addon1">账号:</span>
-                <input type="text" class="form-control" id="account" aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group input-group-lg" style="margin-top: 20px;">
-                <span class="input-group-addon" id="basic-addon1">密码:</span>
-                <input type="password" class="form-control" id="passWord" aria-describedby="basic-addon2">
-            </div>
-            <div class="input-group input-group-lg" style="margin-top: 20px;">
-                <span class="input-group-addon" id="basic-addon1">姓名:</span>
-                <input type="text" class="form-control" id="name" aria-describedby="basic-addon2">
-            </div>
-            <div class="btn-group btn-group-justified" role="group" style="margin-top: 20px;border-radius: 5px;">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" onclick="myLogin()">登录</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2" style="border:1px solid rgb(92, 91, 91);border-radius: 15px;padding: 1%;">
+                <div class="alert alert-success" role="alert" id="success">账号申请成功，请等待超管审核通过后再次登录！</div>
+                <div class="alert alert-danger" role="alert" id="fail">账号申请失败！</div>
+                <h3 for="basic-url" style="text-align: center;">注册/登录</h3>
+                <div class="input-group input-group-lg" style="margin-top: 20px;">
+                    <span class="input-group-addon" id="basic-addon1">账号:</span>
+                    <input type="text" class="form-control" id="account" aria-describedby="basic-addon1">
                 </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default" onclick="mySubmit()">注册</button>
+                <div class="input-group input-group-lg" style="margin-top: 20px;">
+                    <span class="input-group-addon" id="basic-addon1">密码:</span>
+                    <input type="password" class="form-control" id="passWord" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group input-group-lg" style="margin-top: 20px;">
+                    <span class="input-group-addon" id="basic-addon1">姓名:</span>
+                    <input type="text" class="form-control" id="name" aria-describedby="basic-addon2">
+                </div>
+                <div class="btn-group btn-group-justified" role="group" style="margin-top: 20px;border-radius: 5px;">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" onclick="myLogin()">登录</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" onclick="mySubmit()">注册</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4"></div>
     </div>
 </body>
 
