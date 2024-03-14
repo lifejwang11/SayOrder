@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlld.myjecs.mapper.MyTreeMapper">
+
+    <resultMap id="BaseResultMap" type="com.wlld.myjecs.entity.MyTree">
+            <id property="type_id" column="type_id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="sentence_nub" column="sentence_nub" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        type_id,title,sentence_nub
+    </sql>
+</mapper>
