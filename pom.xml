@@ -15,7 +15,7 @@
 	</properties>
 	<groupId>com.wlld</groupId>
 	<artifactId>sayOrder</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<name>sayOrder</name>
 	<description>sayOrder</description>
 	<dependencies>
