@@ -23,40 +23,40 @@ import java.time.LocalDateTime;
 public class QaVueController {
     private final QAService qaService;
 
-    private LambdaQueryWrapper<Qa> buildQuery(Qa smsTemplate) {
+    private LambdaQueryWrapper<Qa> buildQuery(Qa qa) {
         LambdaQueryWrapper<Qa> query = new LambdaQueryWrapper<>();
         return query;
     }
 
     @ApiOperation(value = "列表查询", notes = "列表查询")
     @GetMapping({"/list"})
-    public Response list(Qa smsTemplate) {
-        return Response.ok(qaService.list(buildQuery(smsTemplate)));
+    public Response list(Qa qa) {
+        return Response.ok(qaService.list(buildQuery(qa)));
     }
 
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @GetMapping({"/page"})
-    public Response page(Page page, Qa smsTemplate) {
-        return Response.ok(qaService.page(page, buildQuery(smsTemplate)));
+    public Response page(Page page, Qa qa) {
+        return Response.ok(qaService.page(page, buildQuery(qa)));
     }
 
     @GetMapping({"/find"})
-    public Response getById(Qa smsTemplate) {
-        return Response.ok(qaService.getById(smsTemplate.getId()));
+    public Response getById(Qa qa) {
+        return Response.ok(qaService.getById(qa.getId()));
     }
 
     @PostMapping({"/save"})
-    public Response save(@RequestBody Qa smsTemplate) {
-        log.info("保存管理员:" + JSON.toJSONString(smsTemplate));
+    public Response save(@RequestBody Qa qa) {
+        log.info("保存管理员:" + JSON.toJSONString(qa));
         LocalDateTime now = LocalDateTime.now();
         LambdaQueryWrapper<Qa> chainWrapper = new LambdaQueryWrapper<>();
-        Qa exist = qaService.getOne(chainWrapper.eq(Qa::getId, smsTemplate.getId()));
+        Qa exist = qaService.getOne(chainWrapper.eq(Qa::getId, qa.getId()));
         if (exist != null) {
-            qaService.updateById(smsTemplate);
+            qaService.updateById(qa);
         } else {
-            qaService.save(smsTemplate);
+            qaService.save(qa);
         }
-        return Response.ok(smsTemplate);
+        return Response.ok(qa);
     }
 
     @ApiOperation(value = "通过id删除", notes = "通过id删除")
