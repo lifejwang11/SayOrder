@@ -27,9 +27,9 @@ public class SayOrderApplication {
 
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(SayOrderApplication.class, args);
-//        if (Config.starModel) {
-//            init(applicationContext);
-//        }
+        if (Config.starModel) {
+            init(applicationContext);
+        }
     }
 
     private static void init(ConfigurableApplicationContext applicationContext) throws Exception {//初始化启动配置

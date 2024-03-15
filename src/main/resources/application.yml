@@ -18,7 +18,7 @@ spring:
           type: com.zaxxer.hikari.HikariDataSource
           url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
           username: root
-          password: Gov2020!
+          password: 123456
           driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
           hikari:
             max-pool-size: 10                         #连接池的最大大小。这是可以同时打开的最大连接数

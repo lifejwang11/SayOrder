@@ -1,4 +1,4 @@
-package com.wlld.myjecs.sqlEntity;
+package com.wlld.myjecs.entity;
 
 import java.io.Serializable;
 

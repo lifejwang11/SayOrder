@@ -1,7 +1,7 @@
 package com.wlld.myjecs.mapper;
 
-import com.wlld.myjecs.entity.Qa;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wlld.myjecs.entity.Qa;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
