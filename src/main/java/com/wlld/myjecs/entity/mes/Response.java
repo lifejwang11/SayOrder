@@ -1,5 +1,6 @@
 package com.wlld.myjecs.entity.mes;
 
+import com.wlld.myjecs.config.ErrorCode;
 import com.wlld.myjecs.entity.Admin;
 import com.wlld.myjecs.entity.KeywordType;
 import com.wlld.myjecs.entity.MyTree;
@@ -19,7 +20,8 @@ import java.util.List;
 @Getter
 @Setter
 @ApiModel
-public class Response {
+public class Response<T> {
+    private T data;
     @ApiModelProperty(value = "错误码", example = "1")
     private int error;
     @ApiModelProperty(value = "错误信息", example = "通讯异常")
@@ -42,4 +44,28 @@ public class Response {
     private List<AdminSentence> adminSentenceList;
     @ApiModelProperty(value = "回复语句")
     private String answer;
+
+    public static <T> Response<T> ok(String errorMessage, T data) {
+        Response<T> res = new Response<>();
+        res.error = ErrorCode.OK.getError();
+        res.errorMessage = errorMessage;
+        res.data = data;
+        return res;
+    }
+
+    public static <T> Response<T> ok(T data) {
+        return ok(null, data);
+    }
+
+    public static <T> Response<T> fail(int error, String errorMessage, T data) {
+        Response<T> res = new Response<>();
+        res.error = ErrorCode.OK.getError();
+        res.errorMessage = errorMessage;
+        res.data = data;
+        return res;
+    }
+
+    public static <T> Response<T> fail(int error, String errorMessage) {
+        return fail(error, errorMessage, null);
+    }
 }
