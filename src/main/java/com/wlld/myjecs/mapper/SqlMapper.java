@@ -63,7 +63,7 @@ public interface SqlMapper{
     List<AdminSentence> getMySentenceByID(@Param("adminID")int adminID, @Param("date")String date);
 
     @Select("select * from admin where account=#{account}")
-    Admin getAdminByAccount(String account);
+    Admin getAdminByAccount(@Param("account")String account);
 
     @Select("select * from admin where account=#{account} and pass_word=#{pass_word} and pass=1")
     Admin getAdmin(MyAdmin myAdmin);
@@ -72,53 +72,53 @@ public interface SqlMapper{
     List<MyTree> getMyTree();
 
     @Select("select * from my_tree where type_id=#{type_id} ")
-    MyTree getMyTreeByTypeID(int type_id);
+    MyTree getMyTreeByTypeID(@Param("type_id")int type_id);
 
     @Select("select * from keyword_type")
     List<KeywordType> getKeyWordType();
 
     @Select("select * from keyword_type where type_id=#{type_id}")
-    List<KeywordType> getKeyWordTypeByTypeID(int type_id);
+    List<KeywordType> getKeyWordTypeByTypeID(@Param("type_id")int type_id);
 
     @Select("select * from keyword_type where keyword_type_id=#{keyword_type_id}")
-    KeywordType getKeyWordTypeByID(int keyword_type_id);
+    KeywordType getKeyWordTypeByID(@Param("keyword_type_id")int keyword_type_id);
 
     @Select("select * from admin where pass=0")
     List<Admin> getAdminToPass();
 
     @Select("select * from admin where id=#{id}")
-    Admin getAdminByID(int id);
+    Admin getAdminByID(@Param("id")int id);
 
     @Update("update my_tree set sentence_nub=#{sentence_nub} where type_id=#{type_id}")
-    void updateSentenceNubByTypeID(int type_id, int sentence_nub);
+    void updateSentenceNubByTypeID(@Param("type_id") int type_id,@Param("sentence_nub")  int sentence_nub);
 
     @Update("update admin set pass=1 where id=#{id}")
-    void agreeAdminPass(int id);
+    void agreeAdminPass(@Param("id") int id);
 
     @Update("update keyword_type set type_number=#{type_number} where keyword_type_id=#{keyword_type_id}")
-    void updateKeywordTypeNumberByID(int type_number, int keyword_type_id);
+    void updateKeywordTypeNumberByID(@Param("type_number") int type_number, @Param("keyword_type_id") int keyword_type_id);
 
     @Delete("delete from admin where id = #{id}")
-    void deleteAdmin(int id);
+    void deleteAdmin(@Param("id")int id);
 
     @Delete("delete from keyword_sql where keyword_type_id=#{keyword_type_id}")
-    void deleteKeyWordSqlByType(int keyword_type_id);
+    void deleteKeyWordSqlByType(@Param("keyword_type_id")int keyword_type_id);
 
     @Delete("delete from keyword_sql where sentence_id=#{sentence_id}")
-    void deleteKeyWordSqlBySentenceID(int sentence_id);
+    void deleteKeyWordSqlBySentenceID(@Param("sentence_id")int sentence_id);
 
     @Delete("delete from keyword_type where type_id= #{type_id}")
-    void deleteKeyWordTypeByID(int type_id);
+    void deleteKeyWordTypeByID(@Param("type_id")int type_id);
 
     @Delete("delete from keyword_type where keyword_type_id= #{keyword_type_id}")
-    void deleteKeyWordTypeByKey(int keyword_type_id);
+    void deleteKeyWordTypeByKey(@Param("keyword_type_id")int keyword_type_id);
 
     @Delete("delete from sentence where type_id =#{type_id}")
-    void deleteSentenceByTypeID(int type_id);
+    void deleteSentenceByTypeID(@Param("type_id")int type_id);
 
     @Delete("delete from my_tree where type_id=#{type_id}")
-    void delMyTreeByID(int type_id);
+    void delMyTreeByID(@Param("type_id")int type_id);
 
     @Delete("delete from sentence where sentence_id=#{sentence_id} and adminID=#{adminID}")
-    void deleteSentenceByID(int adminID, int sentence_id);
+    void deleteSentenceByID(@Param("adminID")int adminID, @Param("sentence_id")int sentence_id);
 }
