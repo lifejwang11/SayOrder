@@ -49,8 +49,10 @@ spring:
 
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: false #关闭数据库映射到实体下划线自动转驼峰，mapper.xml配置映射关系
-  mapper-locations: classpath:/mapper/*Mapper.xml
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #    兼容历史sql代码，后期优化
+    map-underscore-to-camel-case: false
+  mapper-locations: classpath:mapper/*.xml
   global-config:
     banner: false
     db-config:

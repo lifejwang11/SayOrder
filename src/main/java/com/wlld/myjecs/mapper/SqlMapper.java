@@ -12,6 +12,7 @@ import com.wlld.myjecs.entity.Sentence;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -59,7 +60,7 @@ public interface SqlMapper{
     String different(Sentence sentence);
 
     @Select("select sentence_id,word,type_id from sentence where date=#{date} and adminID=#{adminID}")
-    List<AdminSentence> getMySentenceByID(int adminID, String date);
+    List<AdminSentence> getMySentenceByID(@Param("adminID")int adminID, @Param("date")String date);
 
     @Select("select * from admin where account=#{account}")
     Admin getAdminByAccount(String account);
