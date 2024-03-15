@@ -59,7 +59,7 @@ public class Response<T> {
 
     public static <T> Response<T> fail(int error, String errorMessage, T data) {
         Response<T> res = new Response<>();
-        res.error = ErrorCode.OK.getError();
+        res.error = error;
         res.errorMessage = errorMessage;
         res.data = data;
         return res;
