@@ -60,3 +60,10 @@ mybatis-plus:
       where-strategy: not_empty #全局where
       insert-strategy: not_empty
       update-strategy: not_null
+
+#pagehelper配置-分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
