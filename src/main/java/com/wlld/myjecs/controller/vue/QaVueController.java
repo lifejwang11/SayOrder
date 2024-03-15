@@ -1,4 +1,4 @@
-package com.wlld.myjecs.controller;
+package com.wlld.myjecs.controller.vue;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
