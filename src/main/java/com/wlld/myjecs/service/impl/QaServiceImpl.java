@@ -2,7 +2,7 @@ package com.wlld.myjecs.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wlld.myjecs.entity.Qa;
-import com.wlld.myjecs.service.QAService;
+import com.wlld.myjecs.service.QaService;
 import com.wlld.myjecs.mapper.QaMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 * @createDate 2024-03-14 10:31:22
 */
 @Service
-public class QAServiceImpl extends ServiceImpl<QaMapper, Qa>
-    implements QAService{
+public class QaServiceImpl extends ServiceImpl<QaMapper, Qa>
+    implements QaService {
 
 }
 

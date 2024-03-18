@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlld.myjecs.entity.Qa;
 import com.wlld.myjecs.entity.mes.Response;
-import com.wlld.myjecs.service.QAService;
+import com.wlld.myjecs.service.QaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @RequestMapping({"/qa/vue"})
 @Api(value = "config", tags = {"问题管理-vue"})
 public class QaVueController {
-    private final QAService qaService;
+    private final QaService qaService;
 
     private LambdaQueryWrapper<Qa> buildQuery(Qa qa) {
         LambdaQueryWrapper<Qa> query = new LambdaQueryWrapper<>();
