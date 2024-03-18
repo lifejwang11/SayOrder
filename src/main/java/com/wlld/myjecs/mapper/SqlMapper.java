@@ -1,12 +1,11 @@
 package com.wlld.myjecs.mapper;
 
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wlld.myjecs.entity.mes.AdminSentence;
 import com.wlld.myjecs.entity.mes.MyAdmin;
 import com.wlld.myjecs.entity.Admin;
 import com.wlld.myjecs.entity.KeywordType;
-import com.wlld.myjecs.entity.Keyword_sql;
+import com.wlld.myjecs.entity.KeywordSql;
 import com.wlld.myjecs.entity.MyTree;
 import com.wlld.myjecs.entity.Sentence;
 import org.apache.ibatis.annotations.Delete;
@@ -15,7 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.stereotype.Repository;
 import org.wlld.entity.TalkBody;
 
 import java.util.List;
@@ -33,7 +31,7 @@ public interface SqlMapper{
     List<KeywordType> getKeywordType();
 
     @Select("select * from keyword_sql")
-    List<Keyword_sql> getKeywordSql();
+    List<KeywordSql> getKeywordSql();
 
     @Insert("insert into admin (account,pass_word,pass,name) values (#{account},#{pass_word},0,#{name})")
     void saveUser(MyAdmin myAdmin);
@@ -45,7 +43,7 @@ public interface SqlMapper{
     int sentenceMaxID();
 
     @Insert("insert into keyword_sql (sentence_id,keyword,keyword_type_id) values (#{sentence_id},#{keyword},#{keyword_type_id})")
-    void saveKeyword(Keyword_sql keywordSql);
+    void saveKeyword(KeywordSql keywordSql);
 
     @Insert("insert into my_tree (title,sentence_nub) values (#{title},0)")
     void saveMyTree(MyTree myTree);

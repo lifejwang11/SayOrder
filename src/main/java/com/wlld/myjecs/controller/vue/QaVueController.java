@@ -28,12 +28,6 @@ public class QaVueController {
         return query;
     }
 
-    @ApiOperation(value = "列表查询", notes = "列表查询")
-    @GetMapping({"/list"})
-    public Response list(Qa qa) {
-        return Response.ok(qaService.list(buildQuery(qa)));
-    }
-
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @GetMapping({"/page"})
     public Response page(Page page, Qa qa) {

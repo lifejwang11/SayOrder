@@ -7,7 +7,7 @@ import com.wlld.myjecs.entity.business.MyKeywordStudy;
 import com.wlld.myjecs.entity.business.MySentence;
 import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.entity.KeywordType;
-import com.wlld.myjecs.entity.Keyword_sql;
+import com.wlld.myjecs.entity.KeywordSql;
 import com.wlld.myjecs.entity.MyTree;
 import com.wlld.myjecs.entity.Sentence;
 import org.springframework.boot.SpringApplication;
@@ -56,7 +56,7 @@ public class SayOrderApplication {
         if (needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();
             List<Sentence> sentencesList = sql.getModel();
-            List<Keyword_sql> keywordSqlList = sql.getKeywordSql();
+            List<KeywordSql> keywordSqlList = sql.getKeywordSql();
             for (Sentence sentence : sentencesList) {
                 MySentence mySentence = new MySentence();
                 mySentence.setType_id(sentence.getType_id());
@@ -64,7 +64,7 @@ public class SayOrderApplication {
                 sentences.add(mySentence);
                 sentenceMap.put(sentence.getSentence_id(), mySentence);
             }
-            for (Keyword_sql keywordSql : keywordSqlList) {
+            for (KeywordSql keywordSql : keywordSqlList) {
                 MyKeywordStudy myKeywordStudy = new MyKeywordStudy();
                 myKeywordStudy.setKeyword(keywordSql.getKeyword());
                 myKeywordStudy.setKeyword_type_id(keywordSql.getKeyword_type_id());

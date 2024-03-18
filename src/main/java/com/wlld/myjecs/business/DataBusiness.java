@@ -11,7 +11,7 @@ import com.wlld.myjecs.entity.mes.SentenceTypeAndKeyword;
 import com.wlld.myjecs.entity.mes.SubmitSentence;
 import com.wlld.myjecs.entity.mes.UpKeyword;
 import com.wlld.myjecs.entity.KeywordType;
-import com.wlld.myjecs.entity.Keyword_sql;
+import com.wlld.myjecs.entity.KeywordSql;
 import com.wlld.myjecs.entity.MyTree;
 import com.wlld.myjecs.entity.Sentence;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +78,7 @@ public class DataBusiness {
                     KeywordType keywordType = sqlMapper.getKeyWordTypeByID(upKeyword.getKeyword_type_id());
                     if (keywordType != null) {
                         int keywordNumber = keywordType.getType_number();
-                        Keyword_sql keywordSql = new Keyword_sql();
+                        KeywordSql keywordSql = new KeywordSql();
                         keywordSql.setSentence_id(sentence_id);
                         keywordSql.setKeyword(upKeyword.getKeyword());
                         keywordSql.setKeyword_type_id(upKeyword.getKeyword_type_id());

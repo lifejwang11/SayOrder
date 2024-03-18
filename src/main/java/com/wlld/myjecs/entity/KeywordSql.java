@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Keyword_sql {
+public class KeywordSql {
     private int id;//该关键词id
     private int sentence_id;//该关键词对应的语句id
     private String keyword;//关键词内容

@@ -1,10 +1,13 @@
 package com.wlld.myjecs.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +20,7 @@ public class MyTree {
     private String title;//名称
     @ApiModelProperty(value = "样本条目数", example = "0")
     private int sentence_nub;
+
+    @TableField(exist = false)
+    private List<KeywordType> types;
 }

@@ -1,7 +1,7 @@
 package com.wlld.myjecs.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.wlld.myjecs.entity.Keyword_sql;
+import com.wlld.myjecs.entity.KeywordSql;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @Entity com.wlld.myjecs.entity.KeywordSql
 */
 @Mapper
-public interface KeywordSqlMapper extends BaseMapper<Keyword_sql> {
+public interface KeywordSqlMapper extends BaseMapper<KeywordSql> {
 
 }
 
