@@ -54,7 +54,7 @@ public class QaVueController {
     }
 
     @ApiOperation(value = "通过id删除", notes = "通过id删除")
-    @DeleteMapping({"/delete"})
+    @GetMapping({"/delete"})
     public Response delete(Integer[] ids) {
         qaService.removeBatchByIds(CollUtil.newArrayList(ids));
         return Response.ok(null);

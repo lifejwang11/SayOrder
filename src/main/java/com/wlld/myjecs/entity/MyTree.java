@@ -1,6 +1,7 @@
 package com.wlld.myjecs.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,6 +16,7 @@ import java.util.List;
 @TableName("my_tree")
 public class MyTree {
     @ApiModelProperty(value = "类别id", example = "2")
+    @TableId
     private int type_id;//类别id
     @ApiModelProperty(value = "类别名称", example = "餐饮")
     private String title;//名称

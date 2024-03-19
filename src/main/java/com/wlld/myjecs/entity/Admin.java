@@ -1,11 +1,13 @@
 package com.wlld.myjecs.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class Admin {
+    @TableId
     private int id;//id
     private String account;//账号
     private String pass_word;//密码

@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping({"/tree/vue"})
-@Api(value = "config", tags = {"问题管理-vue"})
+@Api(value = "config", tags = {"语义类别管理-vue"})
 public class MyTreeVueController {
     private final MyTreeService myTreeService;
     private final KeywordSqlService keywordSqlService;
@@ -39,6 +39,11 @@ public class MyTreeVueController {
     private LambdaQueryWrapper<MyTree> buildQuery(TreeQuery tree) {
         LambdaQueryWrapper<MyTree> query = new LambdaQueryWrapper<>();
         return query;
+    }
+    @ApiOperation(value = "分页查询", notes = "分页查询")
+    @GetMapping({"/list"})
+    public Response list() {
+        return Response.ok(myTreeService.list());
     }
 
     @ApiOperation(value = "分页查询", notes = "分页查询")
