@@ -25,4 +25,5 @@ public class MyTree {
 
     @TableField(exist = false)
     private List<KeywordType> types;
+
 }

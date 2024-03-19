@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlld.myjecs.entity.MyTree;
 import com.wlld.myjecs.entity.qo.TreeQuery;
+import com.wlld.myjecs.entity.vo.TreeVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @Mapper
 public interface MyTreeMapper extends BaseMapper<MyTree> {
     IPage<MyTree> pageTree(Page<MyTree> page, @Param("tree") TreeQuery query);
+    List<TreeVo> groupTree();
 }
 
 

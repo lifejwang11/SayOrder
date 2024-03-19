@@ -40,12 +40,16 @@ public class MyTreeVueController {
         LambdaQueryWrapper<MyTree> query = new LambdaQueryWrapper<>();
         return query;
     }
-    @ApiOperation(value = "分页查询", notes = "分页查询")
+    @ApiOperation(value = "列表", notes = "列表")
     @GetMapping({"/list"})
     public Response list() {
         return Response.ok(myTreeService.list());
     }
-
+    @ApiOperation(value = "语义类别及对应关键词分组树")
+    @GetMapping({"/groupTree"})
+    public Response groupTree() {
+        return Response.ok(myTreeMapper.groupTree());
+    }
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @GetMapping({"/page"})
     public Response page(Page<MyTree> page, TreeQuery query) {
