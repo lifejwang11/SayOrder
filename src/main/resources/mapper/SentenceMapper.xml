@@ -36,8 +36,11 @@
         FROM sentence s
         left join keyword_sql k ON s.sentence_id = k.sentence_id
         <where>
-            <if test="null != query.keyword and '' != query.keyword">k.keyword like concat(concat('%',#{query.keyword}),'%')</if>
+            <if test="null != query.keyword and '' != query.keyword">k.keyword like
+                concat(concat('%',#{query.keyword}),'%')
+            </if>
         </where>
+        order by s.sentence_id desc
     </select>
 
 </mapper>

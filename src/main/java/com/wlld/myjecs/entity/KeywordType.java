@@ -1,5 +1,6 @@
 package com.wlld.myjecs.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @ApiModel
 public class KeywordType {
     @ApiModelProperty(value = "该关键词类型id", example = "1")
-    @TableId
+    @TableId(type = IdType.AUTO)
     private int keyword_type_id;//该关键词类型id
     @ApiModelProperty(value = "该关键词类型对应得语句类别", example = "1")
     private int type_id;//该关键词类型对应得语句类别

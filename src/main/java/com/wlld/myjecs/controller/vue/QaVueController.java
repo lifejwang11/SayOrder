@@ -1,6 +1,7 @@
 package com.wlld.myjecs.controller.vue;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,6 +26,9 @@ public class QaVueController {
 
     private LambdaQueryWrapper<Qa> buildQuery(Qa qa) {
         LambdaQueryWrapper<Qa> query = new LambdaQueryWrapper<>();
+        query.like(StrUtil.isNotBlank(qa.getAnswer()), Qa::getAnswer, qa.getAnswer());
+        query.like(StrUtil.isNotBlank(qa.getQuestion()), Qa::getQuestion, qa.getQuestion());
+        query.orderByDesc(Qa::getId);
         return query;
     }
 
