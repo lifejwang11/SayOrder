@@ -56,6 +56,7 @@ public class SessionCreator implements HandlerInterceptor {//会话
         response.setContentType("application/json; charset=utf-8");
 
         Response res = new Response();
+        res.setError(ErrorCode.InvalidLogin.getError());
         res.setErrorMessage(ErrorCode.InvalidLogin.getErrorMessage());
         // 1、使用Fastjson（默认过滤null值）
         response.getWriter()
