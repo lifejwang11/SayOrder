@@ -10,6 +10,7 @@ import com.wlld.myjecs.entity.KeywordType;
 import com.wlld.myjecs.entity.KeywordSql;
 import com.wlld.myjecs.entity.MyTree;
 import com.wlld.myjecs.entity.Sentence;
+import com.wlld.myjecs.service.WebSocketService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -27,6 +28,8 @@ public class SayOrderApplication {
 
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(SayOrderApplication.class, args);
+        //创建websocket实例
+        WebSocketService.setApplicationContext(applicationContext);
         if (Config.starModel) {
             init(applicationContext);
         }
