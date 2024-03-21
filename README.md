@@ -7,8 +7,10 @@
 * 本项目是依赖easyAi引擎衍生应用，以easyAi高性能廉价部署的思路，可在cpu上无压力高效运行，开包即用。功能持续扩展，敬请期待。
 * 本项目永久免费商用，如果能对您生产和学习有帮助请给作者一个star，这会非常鼓励我。
 * 若有想扩充的功能或技术交流请进群提意见，加微信交流群：thenk008
-* 项目依赖easyAi下载链接：https://gitee.com/dromara/easyAi
+* 项目依赖easyAi下载链接：https://gitee.com/dromara/easyAi (gitee)  https://github.com/lifejwang11/easyAi (github)
 * 管理后台登陆地址:http://localhost:8080/
+### github同步链接
+https://github.com/lifejwang11/SayOrder
 ## 开发者常见疑问整理
 > 问：为什么 /ai/myTalk 有时候返回结果不是我想要的？
 >>——这是因为SQL脚本里，作者提供用来演示语句生成的训练样本数量太少，只有不到二十条，只能用作教学演示，会出现不好的回复也是很正常的。若生产使用请扩充自己的训练样本库！
