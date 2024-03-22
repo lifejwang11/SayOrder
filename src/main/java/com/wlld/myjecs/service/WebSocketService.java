@@ -1,12 +1,16 @@
 package com.wlld.myjecs.service;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.wlld.myjecs.business.AiBusiness;
+import com.wlld.myjecs.entity.mes.Response;
+import com.wlld.myjecs.entity.mes.Shop;
+import com.wlld.myjecs.entity.qo.SocketMessage;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +21,8 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,7 +36,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class WebSocketService {
     private static ApplicationContext applicationContext;
-
     public static void setApplicationContext(ApplicationContext context) {
         applicationContext = context;
     }
@@ -55,7 +60,12 @@ public class WebSocketService {
         addOnlineCount();
         log.info("用户连接：{}，当前在线人数为：{}", name, getOnlineCount());
         try {
-            sendMessage("进入聊天室成功");
+            SocketMessage<Object> msg = SocketMessage.builder()
+                    .data(getOnlineCount())
+                    .name(SocketMessage.AI)
+                    .type(SocketMessage.INIT)
+                    .build();
+            sendMessage(JSONUtil.toJsonStr(msg));
         } catch (IOException e) {
             log.error("用户：{},连接失败！！", name);
         }
@@ -73,20 +83,50 @@ public class WebSocketService {
 
 
     @OnMessage
-    public void onMessage(String message) {
-        log.info("用户消息：{},报文：{}", name, message);
-        if (StrUtil.isNotBlank(message)) {
-            log.info(message);
-            JSONObject jsonObject = JSON.parseObject(message);
-            jsonObject.put("name", this.name);
+    public void onMessage(String message) throws Exception {
+        SocketMessage socketMessage = JSONUtil.toBean(message, SocketMessage.class);
+        AiBusiness business = applicationContext.getBean(AiBusiness.class);
+        String content = socketMessage.getContent();
+        String type = socketMessage.getType();
+        String name = socketMessage.getName();
+        LocalDateTime now = LocalDateTime.now();
+        String datatime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("用户消息：{},报文：{}", name, content);
+        if (StrUtil.isNotBlank(content)) {
             CLIENT.forEach((u, m) -> {
-                if (name.contains(u)) {
-                    return;
-                }
                 try {
-                    m.sendMessage(jsonObject.toJSONString());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    if (u.equals(name)) {
+                        if (SocketMessage.TALK.equals(type)) {
+                            Response response = business.myTalk(content);
+                            SocketMessage<Object> msg = SocketMessage.builder()
+                                    .data(business.myTalk(content))
+                                    .datetime(datatime)
+                                    .content(response.getAnswer())
+                                    .name(SocketMessage.AI)
+                                    .type(SocketMessage.TALK)
+                                    .build();
+                            m.sendMessage(JSONUtil.toJsonStr(msg));
+                        } else if (SocketMessage.SEMANTICS.equals(type)) {
+                            Response response = business.talk(content);
+                            SocketMessage<Object> msg = SocketMessage.builder()
+                                    .data(business.talk(content))
+                                    .datetime(datatime)
+                                    .name(SocketMessage.AI)
+                                    .type(SocketMessage.SEMANTICS)
+                                    .build();
+                            Shop shop = response.getShop();
+                            if (shop != null) {
+                                if (CollUtil.isNotEmpty(shop.getOrders())) {
+                                    msg.setOrders(shop.getOrders());
+                                }else{
+                                    msg.setContent(shop.getAnswer());
+                                }
+                            }
+                            m.sendMessage(JSONUtil.toJsonStr(msg));
+                        }
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             });
         }
