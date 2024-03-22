@@ -126,7 +126,16 @@ public class WebSocketService {
                         }
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    SocketMessage<Object> msg = SocketMessage.builder()
+                            .data("模型异常或未启动")
+                            .name(SocketMessage.AI)
+                            .type(SocketMessage.ERROR)
+                            .build();
+                    try {
+                        m.sendMessage(JSONUtil.toJsonStr(msg));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             });
         }

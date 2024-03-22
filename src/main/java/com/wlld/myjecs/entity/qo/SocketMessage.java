@@ -17,6 +17,7 @@ import java.util.List;
 public class SocketMessage<T> {
     public static final String AI = "AI";
     public static final String INIT = "init";//初始化
+    public static final String ERROR = "error";//初始化
     public static final String TALK = "talk";//对话
     public static final String SEMANTICS = "semantics";//语义
     private T data;
