@@ -1,5 +1,9 @@
 package com.wlld.myjecs;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
@@ -10,6 +14,7 @@ import com.wlld.myjecs.entity.KeywordType;
 import com.wlld.myjecs.entity.KeywordSql;
 import com.wlld.myjecs.entity.MyTree;
 import com.wlld.myjecs.entity.Sentence;
+import com.wlld.myjecs.service.SentenceConfigService;
 import com.wlld.myjecs.service.WebSocketService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,11 +36,18 @@ public class SayOrderApplication {
         //创建websocket实例
         WebSocketService.setApplicationContext(applicationContext);
         if (Config.starModel) {
-            init(applicationContext);
+            init(applicationContext,false);
         }
     }
 
-    private static void init(ConfigurableApplicationContext applicationContext) throws Exception {//初始化启动配置
+    /**
+     *
+     * @param applicationContext
+     * @param isDb 是否使用数据库的配置
+     * @throws Exception
+     */
+
+    public static void init(ConfigurableApplicationContext applicationContext,boolean isDb) throws Exception {//初始化启动配置
         List<MySentence> sentences = new ArrayList<>();
         BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
         SqlMapper sql = applicationContext.getBean(SqlMapper.class);
@@ -54,6 +66,13 @@ public class SayOrderApplication {
         }
         SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
         sentenceConfig.setTypeNub(trees.size());
+        if (isDb) {
+            SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
+            LambdaQueryWrapper<com.wlld.myjecs.entity.SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
+            chainWrapper.eq(com.wlld.myjecs.entity.SentenceConfig::getStatus, "1");
+            com.wlld.myjecs.entity.SentenceConfig config = sentenceConfigService.getOne(chainWrapper);
+            BeanUtil.copyProperties(config, sentenceConfig);
+        }
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
         if (needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习

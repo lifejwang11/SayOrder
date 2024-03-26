@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlld.myjecs.mapper.SentenceConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.wlld.myjecs.entity.SentenceConfig">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="typeNub" column="type_nub" jdbcType="INTEGER"/>
+            <result property="wordVectorDimension" column="word_vector_dimension" jdbcType="INTEGER"/>
+            <result property="qaWordVectorDimension" column="qa_word_Vector_dimension" jdbcType="INTEGER"/>
+            <result property="maxWordLength" column="max_word_length" jdbcType="INTEGER"/>
+            <result property="maxAnswerLength" column="max_answer_length" jdbcType="INTEGER"/>
+            <result property="keyWordNerveDeep" column="key_word_nerve_deep" jdbcType="INTEGER"/>
+            <result property="times" column="times" jdbcType="INTEGER"/>
+            <result property="showLog" column="show_log" jdbcType="TINYINT"/>
+            <result property="param" column="param" jdbcType="DOUBLE"/>
+            <result property="minLength" column="min_length" jdbcType="INTEGER"/>
+            <result property="trustPowerTh" column="trust_power_th" jdbcType="DOUBLE"/>
+            <result property="sentenceTrustPowerTh" column="sentence_trust_power_th" jdbcType="DOUBLE"/>
+            <result property="weStudyPoint" column="we_study_point" jdbcType="DOUBLE"/>
+            <result property="weLparam" column="we_lparam" jdbcType="DOUBLE"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+            <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,remark,
+        type_nub,word_vector_dimension,qa_word_Vector_dimension,
+        max_word_length,max_answer_length,key_word_nerve_deep,
+        times,show_log,param,
+        min_length,trust_power_th,sentence_trust_power_th,
+        we_study_point,we_lparam,status,
+        created_time,updated_time
+    </sql>
+</mapper>
