@@ -93,14 +93,14 @@ public class SentenceConfigVueController {
         // 创建一个异步任务
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
             if (SocketMessage.TALK.equals(socketMessage.getType())) {
-                log.info("开始训练对话");
                 Config.TALK_DOING = true;
                 initTalk();
+                log.info("训练对话完成");
                 return Config.TALK_DOING;
             } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
-                log.info("开始训练语义");
                 Config.SEMANTICS_DOING = true;
                 initSemantics();
+                log.info("训练语义完成");
                 return Config.SEMANTICS_DOING;
             }
             return false;
@@ -128,8 +128,8 @@ public class SentenceConfigVueController {
         SqlMapper sql = applicationContext.getBean(SqlMapper.class);
         List<MyTree> trees = sql.getMyTree();
         org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-        sentenceConfig.setTypeNub(trees.size());
         BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
+        sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         List<TalkBody> talkBodies = null;
         boolean needTalk = AssertTools.needTalkSql();
@@ -173,8 +173,8 @@ public class SentenceConfigVueController {
             }
         }
         org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-        sentenceConfig.setTypeNub(trees.size());
         BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
+        sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
         if (AssertTools.needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
