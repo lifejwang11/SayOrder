@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wlld.myjecs.SayOrderApplication;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
@@ -24,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.wlld.entity.TalkBody;
@@ -94,17 +92,17 @@ public class SentenceConfigVueController {
     public Response init(SocketMessage socketMessage) {
         // 创建一个异步任务
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-                if (SocketMessage.TALK.equals(socketMessage.getType())) {
-                    log.info("开始训练对话");
-                    Config.TALK_DOING = true;
-                    initTalk();
-                    return Config.TALK_DOING;
-                } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
-                    log.info("开始训练语义");
-                    Config.SEMANTICS_DOING = true;
-                    initSemantics();
-                    return Config.SEMANTICS_DOING;
-                }
+            if (SocketMessage.TALK.equals(socketMessage.getType())) {
+                log.info("开始训练对话");
+                Config.TALK_DOING = true;
+                initTalk();
+                return Config.TALK_DOING;
+            } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
+                log.info("开始训练语义");
+                Config.SEMANTICS_DOING = true;
+                initSemantics();
+                return Config.SEMANTICS_DOING;
+            }
             return false;
         });
         return Response.ok(null);
@@ -128,6 +126,11 @@ public class SentenceConfigVueController {
     public void initTalk() {
         BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
         SqlMapper sql = applicationContext.getBean(SqlMapper.class);
+        List<MyTree> trees = sql.getMyTree();
+        org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+        sentenceConfig.setTypeNub(trees.size());
+        BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
+        beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         List<TalkBody> talkBodies = null;
         boolean needTalk = AssertTools.needTalkSql();
         if (needTalk) {
@@ -171,11 +174,7 @@ public class SentenceConfigVueController {
         }
         org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
         sentenceConfig.setTypeNub(trees.size());
-        SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
-        LambdaQueryWrapper<com.wlld.myjecs.entity.SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
-        chainWrapper.eq(com.wlld.myjecs.entity.SentenceConfig::getStatus, "1");
-        com.wlld.myjecs.entity.SentenceConfig config = sentenceConfigService.getOne(chainWrapper);
-        BeanUtil.copyProperties(config, sentenceConfig);
+        BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
         if (AssertTools.needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
@@ -203,5 +202,12 @@ public class SentenceConfigVueController {
         }
         applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
         Config.SEMANTICS_DOING = false;
+    }
+
+    private com.wlld.myjecs.entity.SentenceConfig getDbConfig() {
+        SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
+        LambdaQueryWrapper<com.wlld.myjecs.entity.SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
+        chainWrapper.eq(com.wlld.myjecs.entity.SentenceConfig::getStatus, "1");
+        return sentenceConfigService.getOne(chainWrapper);
     }
 }

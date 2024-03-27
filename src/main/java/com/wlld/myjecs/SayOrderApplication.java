@@ -31,7 +31,7 @@ public class SayOrderApplication {
         //创建websocket实例
         WebSocketService.setApplicationContext(applicationContext);
         if (Config.starModel) {
-            init(applicationContext);
+//            init(applicationContext);
         }
     }
 
