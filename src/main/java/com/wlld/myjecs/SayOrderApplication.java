@@ -1,28 +1,23 @@
 package com.wlld.myjecs;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
+import com.wlld.myjecs.entity.KeywordSql;
+import com.wlld.myjecs.entity.KeywordType;
+import com.wlld.myjecs.entity.MyTree;
+import com.wlld.myjecs.entity.Sentence;
 import com.wlld.myjecs.entity.business.MyKeywordStudy;
 import com.wlld.myjecs.entity.business.MySentence;
 import com.wlld.myjecs.mapper.SqlMapper;
-import com.wlld.myjecs.entity.KeywordType;
-import com.wlld.myjecs.entity.KeywordSql;
-import com.wlld.myjecs.entity.MyTree;
-import com.wlld.myjecs.entity.Sentence;
-import com.wlld.myjecs.service.SentenceConfigService;
 import com.wlld.myjecs.service.WebSocketService;
+import com.wlld.myjecs.tools.AssertTools;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.wlld.config.SentenceConfig;
 import org.wlld.entity.TalkBody;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,18 +31,16 @@ public class SayOrderApplication {
         //创建websocket实例
         WebSocketService.setApplicationContext(applicationContext);
         if (Config.starModel) {
-            init(applicationContext,false);
+            init(applicationContext);
         }
     }
 
     /**
-     *
      * @param applicationContext
-     * @param isDb 是否使用数据库的配置
      * @throws Exception
      */
 
-    public static void init(ConfigurableApplicationContext applicationContext,boolean isDb) throws Exception {//初始化启动配置
+    public static void init(ConfigurableApplicationContext applicationContext) throws Exception {//初始化启动配置
         List<MySentence> sentences = new ArrayList<>();
         BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
         SqlMapper sql = applicationContext.getBean(SqlMapper.class);
@@ -66,16 +59,9 @@ public class SayOrderApplication {
         }
         SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
         sentenceConfig.setTypeNub(trees.size());
-        if (isDb) {
-            SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
-            LambdaQueryWrapper<com.wlld.myjecs.entity.SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
-            chainWrapper.eq(com.wlld.myjecs.entity.SentenceConfig::getStatus, "1");
-            com.wlld.myjecs.entity.SentenceConfig config = sentenceConfigService.getOne(chainWrapper);
-            BeanUtil.copyProperties(config, sentenceConfig);
-        }
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
-        if (needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
+        if (AssertTools.needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();
             List<Sentence> sentencesList = sql.getModel();
             List<KeywordSql> keywordSqlList = sql.getKeywordSql();
@@ -100,7 +86,7 @@ public class SayOrderApplication {
         }
         applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
         List<TalkBody> talkBodies = null;
-        boolean needTalk = needTalkSql();
+        boolean needTalk = AssertTools.needTalkSql();
         if (needTalk) {
             talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
             for (int i = 0; i < talkBodies.size(); i++) {
@@ -120,26 +106,4 @@ public class SayOrderApplication {
         System.out.println("完成初始化");
     }
 
-    private static boolean needTalkSql() {
-        boolean isNeedSReadSql = true;
-        File file1 = new File(Config.wordUrl);//词嵌入
-        File file2 = new File(Config.talkUrl);//语句模型
-        if (file1.exists() && file2.exists()) {
-            isNeedSReadSql = false;
-        }
-        return isNeedSReadSql;
-    }
-
-    private static boolean needReadSql() {
-        boolean isNeedSReadSql = true;
-        File file1 = new File(Config.Word2VecModelUrl);//词嵌入
-        File file2 = new File(Config.SentenceModelUrl);//语句模型
-        File file3 = new File(Config.onlyKeyWord);//关键词敏感性
-        File file4 = new File(Config.KeyWordModelUrl);//关键词捕捉
-        File file5 = new File(Config.keyWordIndex);//关键词
-        if (file1.exists() && file2.exists() && file3.exists() && file4.exists() && file5.exists()) {
-            isNeedSReadSql = false;
-        }
-        return isNeedSReadSql;
-    }
 }
