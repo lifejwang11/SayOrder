@@ -3,7 +3,7 @@ package com.wlld.myjecs.business;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wlld.myjecs.mapper.QaMapper;
-import com.wlld.myjecs.sqlEntity.Qa;
+import com.wlld.myjecs.entity.Qa;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

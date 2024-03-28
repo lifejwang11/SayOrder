@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlld.myjecs.mapper.MyTreeMapper">
+
+    <resultMap id="BaseResultMap" type="com.wlld.myjecs.entity.MyTree">
+        <id property="type_id" column="type_id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="sentence_nub" column="sentence_nub" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        type_id
+        ,title,sentence_nub
+    </sql>
+    <resultMap id="treeMapKeyword" type="com.wlld.myjecs.entity.MyTree">
+        <id property="type_id" column="type_id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="sentence_nub" column="sentence_nub" jdbcType="INTEGER"/>
+        <collection property="types" ofType="com.wlld.myjecs.entity.KeywordType">
+            <result property="keyword_type_id" column="keyword_type_id"/>
+            <result property="type_id" column="type_id"/>
+            <result property="keyword_mes" column="keyword_mes"/>
+            <result property="answer" column="answer"/>
+            <result property="type_number" column="type_number"/>
+        </collection>
+    </resultMap>
+    <select id="pageTree" resultMap="treeMapKeyword" parameterType="com.wlld.myjecs.entity.qo.TreeQuery">
+        SELECT *
+        FROM my_tree t
+        left join keyword_type k ON t.type_id = k.type_id
+        <where>
+            <if test="null != tree.title and '' != tree.title">t.title like concat(concat('%',#{tree.title}),'%')</if>
+            <if test="null != tree.keyword_mes and '' != tree.keyword_mes">k.keyword_mes like
+                concat(concat('%',#{tree.keyword_mes}),'%')
+            </if>
+        </where>
+
+    </select>
+    <resultMap id="groupTreeKeyword" type="com.wlld.myjecs.entity.vo.TreeVo">
+        <id property="id" column="type_id" jdbcType="INTEGER"/>
+        <result property="name" column="title" jdbcType="VARCHAR"/>
+        <collection property="children" ofType="com.wlld.myjecs.entity.vo.TreeVo">
+            <result property="id" column="keyword_type_id"/>
+            <result property="name" column="keyword_mes"/>
+        </collection>
+    </resultMap>
+    <select id="groupTree" resultMap="groupTreeKeyword">
+        SELECT *
+        FROM my_tree t
+                 left join keyword_type k ON t.type_id = k.type_id
+    </select>
+</mapper>

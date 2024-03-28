@@ -1,7 +1,7 @@
 package com.wlld.myjecs.bean;
 
-import com.wlld.myjecs.mesEntity.Response;
-import com.wlld.myjecs.mesEntity.Shop;
+import com.wlld.myjecs.entity.mes.Response;
+import com.wlld.myjecs.entity.mes.Shop;
 import com.wlld.myjecs.tools.TalkTools;
 import com.wlld.myjecs.tools.Tools;
 import org.springframework.context.annotation.Bean;

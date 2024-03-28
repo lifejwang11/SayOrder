@@ -20,4 +20,6 @@ public class Config {//配置文件 "/usr/local/depends/
     public static final int addSentenceType = 5;//添加语句类别
     public static final int delSentence = 6;//删除语句
     public static boolean start = false;//模型是否准备好了
+    public static boolean TALK_DOING = false;//对话模型是否在训练中
+    public static boolean SEMANTICS_DOING = false;//语义模型是否在训练中
 }

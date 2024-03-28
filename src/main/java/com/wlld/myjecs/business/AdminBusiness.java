@@ -1,16 +1,17 @@
 package com.wlld.myjecs.business;
 
+import cn.hutool.core.util.DesensitizedUtil;
 import com.wlld.myjecs.access.SessionCreator;
 import com.wlld.myjecs.config.Config;
 import com.wlld.myjecs.config.ErrorCode;
 import com.wlld.myjecs.mapper.SqlMapper;
-import com.wlld.myjecs.mesEntity.AdminSentence;
-import com.wlld.myjecs.mesEntity.AgreeAdmin;
-import com.wlld.myjecs.mesEntity.MyAdmin;
-import com.wlld.myjecs.mesEntity.Response;
-import com.wlld.myjecs.sqlEntity.Admin;
-import com.wlld.myjecs.sqlEntity.KeywordType;
-import com.wlld.myjecs.sqlEntity.MyTree;
+import com.wlld.myjecs.entity.mes.AdminSentence;
+import com.wlld.myjecs.entity.mes.AgreeAdmin;
+import com.wlld.myjecs.entity.mes.MyAdmin;
+import com.wlld.myjecs.entity.mes.Response;
+import com.wlld.myjecs.entity.Admin;
+import com.wlld.myjecs.entity.KeywordType;
+import com.wlld.myjecs.entity.MyTree;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,9 +103,12 @@ public class AdminBusiness {//训练管理业务
     public Response login(MyAdmin myAdmin, HttpServletResponse rs, HttpServletRequest request) {//用户登录
         Response response = new Response();
         response.setResponseType(Config.loginRequest);
+        //设置登录id
         if (myAdmin.getAccount().equals(Config.adminAccount) && myAdmin.getPass_word().equals(Config.adminPassWord)) {
             // 设置session
             businessTools.setSessionValue(request, -1);
+            myAdmin.setPass_word(DesensitizedUtil.password(myAdmin.getPass_word()));
+            response.setData(myAdmin);
             response.setRole(1);
         } else {
             Admin admin = sqlMapper.getAdmin(myAdmin);
@@ -113,6 +117,8 @@ public class AdminBusiness {//训练管理业务
                 businessTools.setSessionValue(request, admin.getId());
                 response.setError(ErrorCode.OK.getError());
                 response.setErrorMessage(ErrorCode.OK.getErrorMessage());
+                myAdmin.setPass_word(DesensitizedUtil.password(myAdmin.getPass_word()));
+                response.setData(admin);
             } else {
                 response.setError(ErrorCode.NotPower.getError());
                 response.setErrorMessage(ErrorCode.NotPower.getErrorMessage());

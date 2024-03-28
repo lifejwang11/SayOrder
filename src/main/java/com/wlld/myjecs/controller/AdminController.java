@@ -1,9 +1,9 @@
 package com.wlld.myjecs.controller;
 
 import com.wlld.myjecs.business.AdminBusiness;
-import com.wlld.myjecs.mesEntity.AgreeAdmin;
-import com.wlld.myjecs.mesEntity.MyAdmin;
-import com.wlld.myjecs.mesEntity.Response;
+import com.wlld.myjecs.entity.mes.AgreeAdmin;
+import com.wlld.myjecs.entity.mes.MyAdmin;
+import com.wlld.myjecs.entity.mes.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

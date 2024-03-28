@@ -1,8 +1,8 @@
 package com.wlld.myjecs.business;
 
 import com.wlld.myjecs.mapper.SqlMapper;
-import com.wlld.myjecs.mesEntity.UpKeyword;
-import com.wlld.myjecs.sqlEntity.MyTree;
+import com.wlld.myjecs.entity.mes.UpKeyword;
+import com.wlld.myjecs.entity.MyTree;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

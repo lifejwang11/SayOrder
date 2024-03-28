@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlld.myjecs.mapper.SentenceMapper">
+
+    <resultMap id="BaseResultMap" type="com.wlld.myjecs.entity.Sentence">
+        <id property="sentence_id" column="sentence_id" jdbcType="INTEGER"/>
+        <result property="type_id" column="type_id" jdbcType="INTEGER"/>
+        <result property="word" column="word" jdbcType="VARCHAR"/>
+        <result property="date" column="date" jdbcType="VARCHAR"/>
+        <result property="adminID" column="adminID" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        type_id
+        ,title,sentence_nub
+    </sql>
+
+    <resultMap id="sentenceToSql" type="com.wlld.myjecs.entity.Sentence">
+        <id property="sentence_id" column="sentence_id" jdbcType="INTEGER"/>
+        <result property="type_id" column="type_id" jdbcType="INTEGER"/>
+        <result property="word" column="word" jdbcType="VARCHAR"/>
+        <result property="date" column="date" jdbcType="VARCHAR"/>
+        <result property="adminID" column="adminID" jdbcType="INTEGER"/>
+        <collection property="sqls" ofType="com.wlld.myjecs.entity.KeywordSql">
+            <result property="id" column="id"/>
+            <result property="keyword" column="keyword"/>
+            <result property="sentence_id" column="sentence_id"/>
+            <result property="keyword_type_id" column="keyword_type_id"/>
+        </collection>
+    </resultMap>
+
+    <select id="pageSentence" resultMap="sentenceToSql" parameterType="com.wlld.myjecs.entity.KeywordSql">
+        SELECT *
+        FROM sentence s
+        left join keyword_sql k ON s.sentence_id = k.sentence_id
+        <where>
+            <if test="null != query.keyword and '' != query.keyword">k.keyword like
+                concat(concat('%',#{query.keyword}),'%')
+            </if>
+        </where>
+        order by s.sentence_id desc
+    </select>
+
+</mapper>

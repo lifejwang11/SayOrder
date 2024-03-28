@@ -2,7 +2,7 @@ package com.wlld.myjecs.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wlld.myjecs.business.QuestionService;
-import com.wlld.myjecs.sqlEntity.Qa;
+import com.wlld.myjecs.entity.Qa;
 import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

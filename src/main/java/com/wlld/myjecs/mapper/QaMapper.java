@@ -1,7 +1,7 @@
 package com.wlld.myjecs.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.wlld.myjecs.sqlEntity.Qa;
+import com.wlld.myjecs.entity.Qa;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,5 +25,6 @@ public interface QaMapper extends BaseMapper<Qa> {
 
     void delById(@Param("qaId") Integer qaId);
 
+    @Override
     int insert(Qa record);
 }

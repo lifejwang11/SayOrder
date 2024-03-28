@@ -2,7 +2,7 @@ package com.wlld.myjecs.access;
 
 import com.alibaba.fastjson.JSON;
 import com.wlld.myjecs.config.ErrorCode;
-import com.wlld.myjecs.mesEntity.Response;
+import com.wlld.myjecs.entity.mes.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -56,6 +56,7 @@ public class SessionCreator implements HandlerInterceptor {//会话
         response.setContentType("application/json; charset=utf-8");
 
         Response res = new Response();
+        res.setError(ErrorCode.InvalidLogin.getError());
         res.setErrorMessage(ErrorCode.InvalidLogin.getErrorMessage());
         // 1、使用Fastjson（默认过滤null值）
         response.getWriter()
