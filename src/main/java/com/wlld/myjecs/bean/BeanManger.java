@@ -1,5 +1,6 @@
 package com.wlld.myjecs.bean;
 
+import com.wlld.myjecs.config.SayOrderConfig;
 import com.wlld.myjecs.entity.mes.Response;
 import com.wlld.myjecs.entity.mes.Shop;
 import com.wlld.myjecs.tools.TalkTools;
@@ -28,12 +29,12 @@ public class BeanManger {
     }
 
     @Bean
-    public Tools tools() {
-        return new Tools();
+    public Tools tools(SayOrderConfig sayOrderConfig) {
+        return new Tools(sayOrderConfig);
     }
 
     @Bean
-    public TalkTools talkTools() {
-        return new TalkTools();
+    public TalkTools talkTools(SayOrderConfig sayOrderConfig) {
+        return new TalkTools(sayOrderConfig);
     }
 }

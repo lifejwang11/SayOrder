@@ -140,6 +140,12 @@ public class SentenceConfig implements Serializable {
     private String status;
 
     /**
+     * 模型存放目录
+     */
+    @TableField(value = "base_dir")
+    private String baseDir;
+
+    /**
      * 创建时间
      */
     @TableField(value = "created_time",fill = FieldFill.INSERT)

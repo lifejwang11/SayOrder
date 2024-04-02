@@ -2,6 +2,7 @@ package com.wlld.myjecs.controller.vue;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
+import com.wlld.myjecs.config.SayOrderConfig;
 import com.wlld.myjecs.entity.*;
 import com.wlld.myjecs.entity.business.MyKeywordStudy;
 import com.wlld.myjecs.entity.business.MySentence;
@@ -17,6 +19,8 @@ import com.wlld.myjecs.entity.qo.SocketMessage;
 import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.service.SentenceConfigService;
 import com.wlld.myjecs.tools.AssertTools;
+import com.wlld.myjecs.tools.TalkTools;
+import com.wlld.myjecs.tools.Tools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +46,7 @@ import java.util.concurrent.CompletableFuture;
 public class SentenceConfigVueController {
     private final SentenceConfigService sentenceConfigService;
     private final ConfigurableApplicationContext applicationContext;
+    private final SayOrderConfig sayOrderConfig;
 
     private LambdaQueryWrapper<SentenceConfig> buildQuery(SentenceConfig sentenceConfig) {
         LambdaQueryWrapper<SentenceConfig> query = new LambdaQueryWrapper<>();
@@ -87,20 +92,58 @@ public class SentenceConfigVueController {
     }
 
     @ApiOperation(value = "训练模型")
+    @GetMapping({"/deleteModel"})
+    @SneakyThrows
+    public Response deleteModel(SocketMessage socketMessage) {
+        SentenceConfig dbConfig = getDbConfig();
+        if (StrUtil.isBlank(dbConfig.getBaseDir())) {
+            //数据库不存在则设置yml中的
+            dbConfig.setBaseDir(sayOrderConfig.getBaseDir());
+        }
+        SayOrderConfig config = SayOrderConfig.builder().baseDir(dbConfig.getBaseDir()).build();
+        if (SocketMessage.TALK.equals(socketMessage.getType())) {
+            AssertTools.deleteTalk(config);
+        } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
+            AssertTools.deleteSemantics(config);
+        }
+        return Response.ok(null);
+    }
+
+    @ApiOperation(value = "训练模型")
     @GetMapping({"/init"})
     @SneakyThrows
     public Response init(SocketMessage socketMessage) {
+        SentenceConfig dbConfig = getDbConfig();
+        if (StrUtil.isBlank(dbConfig.getBaseDir())) {
+            //数据库不存在则设置yml中的
+            dbConfig.setBaseDir(sayOrderConfig.getBaseDir());
+        }
+        SayOrderConfig config = SayOrderConfig.builder().baseDir(dbConfig.getBaseDir()).build();
+        if (SocketMessage.TALK.equals(socketMessage.getType())) {
+            if (!AssertTools.needTalkSql(config)) {
+                return Response.fail(500, "模型已经训练过了，如果需要重新训练请先删除对话模型");
+            }
+        } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
+            if (!AssertTools.needReadSql(config)) {
+                return Response.fail(500, "模型已经训练过了，如果需要重新训练请先删除语义模型");
+            }
+        }
         // 创建一个异步任务
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
             if (SocketMessage.TALK.equals(socketMessage.getType())) {
                 Config.TALK_DOING = true;
-                initTalk();
                 log.info("训练对话完成");
+                long start = System.currentTimeMillis();
+                initTalk(dbConfig, config);
+                long end = System.currentTimeMillis();
+                log.info("训练对话完成,耗时：{}", (end - start) / 1000);
                 return Config.TALK_DOING;
             } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
                 Config.SEMANTICS_DOING = true;
-                initSemantics();
-                log.info("训练语义完成");
+                long start = System.currentTimeMillis();
+                initSemantics(dbConfig, config);
+                long end = System.currentTimeMillis();
+                log.info("训练语义完成,耗时：{}", (end - start) / 1000);
                 return Config.SEMANTICS_DOING;
             }
             return false;
@@ -123,16 +166,16 @@ public class SentenceConfigVueController {
      * 初始化对话
      */
     @SneakyThrows
-    public void initTalk() {
+    public void initTalk(com.wlld.myjecs.entity.SentenceConfig dbConfig, SayOrderConfig config) {
         BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
         SqlMapper sql = applicationContext.getBean(SqlMapper.class);
         List<MyTree> trees = sql.getMyTree();
         org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-        BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
+        BeanUtil.copyProperties(dbConfig, sentenceConfig);
         sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         List<TalkBody> talkBodies = null;
-        boolean needTalk = AssertTools.needTalkSql();
+        boolean needTalk = AssertTools.needTalkSql(config);
         if (needTalk) {
             talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
             for (int i = 0; i < talkBodies.size(); i++) {
@@ -146,7 +189,9 @@ public class SentenceConfigVueController {
             }
         }
         if (!needTalk || !talkBodies.isEmpty()) {
-            applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
+            TalkTools tools = applicationContext.getBean(TalkTools.class);
+            tools.setSayOrderConfig(config);
+            tools.initSemantics(beanMangerOnly, talkBodies);
         }
         Config.TALK_DOING = false;
     }
@@ -155,7 +200,7 @@ public class SentenceConfigVueController {
      * 初始化语义分类
      */
     @SneakyThrows
-    public void initSemantics() {
+    public void initSemantics(com.wlld.myjecs.entity.SentenceConfig dbConfig, SayOrderConfig config) {
         List<MySentence> sentences = new ArrayList<>();
         BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
         SqlMapper sql = applicationContext.getBean(SqlMapper.class);
@@ -173,11 +218,12 @@ public class SentenceConfigVueController {
             }
         }
         org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-        BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
+        BeanUtil.copyProperties(dbConfig, sentenceConfig);
         sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
-        if (AssertTools.needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
+        if (AssertTools.needReadSql(config) || Config.selfTest) {
+            //若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();
             List<Sentence> sentencesList = sql.getModel();
             List<KeywordSql> keywordSqlList = sql.getKeywordSql();
@@ -200,7 +246,10 @@ public class SentenceConfigVueController {
                 }
             }
         }
-        applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
+
+        Tools tools = applicationContext.getBean(Tools.class);
+        tools.setSayOrderConfig(config);
+        tools.initSemantics(beanMangerOnly, sentences, Config.selfTest);
         Config.SEMANTICS_DOING = false;
     }
 
