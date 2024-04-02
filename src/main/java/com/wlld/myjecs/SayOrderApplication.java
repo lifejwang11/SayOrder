@@ -3,6 +3,7 @@ package com.wlld.myjecs;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
+import com.wlld.myjecs.config.SayOrderConfig;
 import com.wlld.myjecs.entity.KeywordSql;
 import com.wlld.myjecs.entity.KeywordType;
 import com.wlld.myjecs.entity.MyTree;
@@ -14,6 +15,7 @@ import com.wlld.myjecs.service.WebSocketService;
 import com.wlld.myjecs.tools.AssertTools;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.wlld.config.SentenceConfig;
 import org.wlld.entity.TalkBody;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
+@EnableConfigurationProperties(value = {SayOrderConfig.class})
 public class SayOrderApplication {
 
     public static void main(String[] args) throws Exception {
@@ -61,7 +64,8 @@ public class SayOrderApplication {
         sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
-        if (AssertTools.needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
+        SayOrderConfig sayOrderConfig = applicationContext.getBean(SayOrderConfig.class);
+        if (AssertTools.needReadSql(sayOrderConfig) || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();
             List<Sentence> sentencesList = sql.getModel();
             List<KeywordSql> keywordSqlList = sql.getKeywordSql();
@@ -84,9 +88,9 @@ public class SayOrderApplication {
                 }
             }
         }
-        applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
+        applicationContext.getBean(BeanManger.class).tools(sayOrderConfig).initSemantics(beanMangerOnly, sentences, Config.selfTest);
         List<TalkBody> talkBodies = null;
-        boolean needTalk = AssertTools.needTalkSql();
+        boolean needTalk = AssertTools.needTalkSql(sayOrderConfig);
         if (needTalk) {
             talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
             for (int i = 0; i < talkBodies.size(); i++) {
@@ -100,7 +104,7 @@ public class SayOrderApplication {
             }
         }
         if (!needTalk || !talkBodies.isEmpty()) {
-            applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
+            applicationContext.getBean(BeanManger.class).talkTools(applicationContext.getBean(SayOrderConfig.class)).initSemantics(beanMangerOnly, talkBodies);
         }
         Config.start = true;
         System.out.println("完成初始化");

@@ -10,7 +10,7 @@ server:
 spring:
   datasource:
     dynamic:
-#      p6spy: true
+      p6spy: true
       primary: master #设置默认的数据源或者数据源组,默认值即为master
       strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
       datasource:
@@ -49,7 +49,8 @@ spring:
 
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 不开启mybatis日志（日志太多了）。使用spy进行记录
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     #    兼容历史sql代码，后期优化
     map-underscore-to-camel-case: false
   mapper-locations: classpath:mapper/*.xml
@@ -67,3 +68,6 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+
+say-order:
+  base-dir: D:\testModel\
