@@ -105,6 +105,9 @@ public class SentenceConfigVueController {
     @SneakyThrows
     public Response deleteModel(SocketMessage socketMessage) {
         SentenceConfig dbConfig = sentenceConfigService.getConfig();
+        if (dbConfig == null) {
+            return Response.fail(500,"配置不存在");
+        }
         if (StrUtil.isBlank(dbConfig.getBaseDir())) {
             //数据库不存在则设置yml中的
             dbConfig.setBaseDir(sayOrderConfig.getBaseDir());
@@ -123,6 +126,9 @@ public class SentenceConfigVueController {
     @SneakyThrows
     public Response init(SocketMessage socketMessage) {
         SentenceConfig dbConfig = sentenceConfigService.getConfig();
+        if (dbConfig == null) {
+            return Response.fail(500,"配置不存在");
+        }
         if (!AssertTools.checkPathValid(dbConfig.getBaseDir())) {
             //数据库不存在则设置yml中的
             dbConfig.setBaseDir(sayOrderConfig.getBaseDir());
@@ -138,23 +144,21 @@ public class SentenceConfigVueController {
             }
         }
         // 创建一个异步任务
-        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
             if (SocketMessage.TALK.equals(socketMessage.getType())) {
                 Config.TALK_DOING = true;
                 long start = System.currentTimeMillis();
                 initTalk(config);
                 long end = System.currentTimeMillis();
                 log.info("训练对话完成,耗时：{}s", (end - start) / 1000);
-                return Config.TALK_DOING;
             } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
                 Config.SEMANTICS_DOING = true;
                 long start = System.currentTimeMillis();
                 initSemantics(config);
                 long end = System.currentTimeMillis();
                 log.info("训练语义完成,耗时：{}s", (end - start) / 1000);
-                return Config.SEMANTICS_DOING;
             }
-            return false;
+            return null;
         });
         return Response.ok(null);
     }
