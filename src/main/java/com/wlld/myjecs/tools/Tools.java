@@ -9,6 +9,7 @@ import com.wlld.myjecs.config.SayOrderConfig;
 import com.wlld.myjecs.entity.business.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.wlld.entity.KeyWordForSentence;
 import org.wlld.entity.SentenceModel;
 import org.wlld.entity.WordTwoVectorModel;
@@ -27,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
+@Slf4j
 public class Tools {
     @Getter
     @Setter
@@ -120,7 +121,7 @@ public class Tools {
                 List<KeyWordForSentence> keyWordForSentenceList = new ArrayList<>();
                 CatchKeyWord catchKeyWord = new CatchKeyWord();
                 catchKeyWordMap.put(key, catchKeyWord);//TODO 吃内存
-                System.out.println("key:" + key);
+                log.info("key:" + key);
                 for (KeySentence sentence : sentenceList) {
                     KeyWordForSentence keyWordForSentence = new KeyWordForSentence();
                     keyWordForSentence.setSentence(sentence.getWord());
@@ -214,7 +215,7 @@ public class Tools {
                 right++;
             }
             double point = (double) right / (double) t;
-            System.out.println("准确率:" + point + ",检测数量:" + t);
+            log.info("准确率:" + point + ",检测数量:" + t);
         }
     }
 
@@ -245,6 +246,7 @@ public class Tools {
     }
 
     private boolean initWordEmbedding(BeanMangerOnly beanMangerOnly, List<MySentence> sentences) throws Exception {//初始化词嵌入模型
+        log.info("基本路径：{}",sayOrderConfig.getBaseDir());
         File file = new File(sayOrderConfig.getBaseDir() + Config.Word2VecModelUrl); //创建文件
         WordEmbedding wordEmbedding = beanMangerOnly.getWordEmbedding();
         boolean isStudy = false;

@@ -132,18 +132,17 @@ public class SentenceConfigVueController {
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
             if (SocketMessage.TALK.equals(socketMessage.getType())) {
                 Config.TALK_DOING = true;
-                log.info("训练对话完成");
                 long start = System.currentTimeMillis();
                 initTalk(dbConfig, config);
                 long end = System.currentTimeMillis();
-                log.info("训练对话完成,耗时：{}", (end - start) / 1000);
+                log.info("训练对话完成,耗时：{}s", (end - start) / 1000);
                 return Config.TALK_DOING;
             } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
                 Config.SEMANTICS_DOING = true;
                 long start = System.currentTimeMillis();
                 initSemantics(dbConfig, config);
                 long end = System.currentTimeMillis();
-                log.info("训练语义完成,耗时：{}", (end - start) / 1000);
+                log.info("训练语义完成,耗时：{}s", (end - start) / 1000);
                 return Config.SEMANTICS_DOING;
             }
             return false;

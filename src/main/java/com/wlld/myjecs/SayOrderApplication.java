@@ -1,5 +1,7 @@
 package com.wlld.myjecs;
 
+import cn.hutool.core.io.FileUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
@@ -11,8 +13,10 @@ import com.wlld.myjecs.entity.Sentence;
 import com.wlld.myjecs.entity.business.MyKeywordStudy;
 import com.wlld.myjecs.entity.business.MySentence;
 import com.wlld.myjecs.mapper.SqlMapper;
+import com.wlld.myjecs.service.SentenceConfigService;
 import com.wlld.myjecs.service.WebSocketService;
 import com.wlld.myjecs.tools.AssertTools;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,6 +31,7 @@ import java.util.Map;
 
 @SpringBootApplication
 @EnableConfigurationProperties(value = {SayOrderConfig.class})
+@Slf4j
 public class SayOrderApplication {
 
     public static void main(String[] args) throws Exception {
@@ -65,6 +70,13 @@ public class SayOrderApplication {
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
         SayOrderConfig sayOrderConfig = applicationContext.getBean(SayOrderConfig.class);
+        SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
+        LambdaQueryWrapper<com.wlld.myjecs.entity.SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
+        chainWrapper.eq(com.wlld.myjecs.entity.SentenceConfig::getStatus, "1");
+        com.wlld.myjecs.entity.SentenceConfig dbConfig = sentenceConfigService.getOne(chainWrapper);
+        if (dbConfig != null) {
+            sayOrderConfig.setBaseDir(dbConfig.getBaseDir());
+        }
         if (AssertTools.needReadSql(sayOrderConfig) || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();
             List<Sentence> sentencesList = sql.getModel();
@@ -107,7 +119,7 @@ public class SayOrderApplication {
             applicationContext.getBean(BeanManger.class).talkTools(applicationContext.getBean(SayOrderConfig.class)).initSemantics(beanMangerOnly, talkBodies);
         }
         Config.start = true;
-        System.out.println("完成初始化");
+        log.info("完成初始化");
     }
 
 }
