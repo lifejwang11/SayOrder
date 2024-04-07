@@ -97,6 +97,7 @@ public class WebSocketService {
                 try {
                     if (u.equals(name)) {
                         if (SocketMessage.TALK.equals(type)) {
+                            log.info("AI对话");
                             Response response = business.myTalk(content);
                             SocketMessage<Object> msg = SocketMessage.builder()
                                     .data(business.myTalk(content))
@@ -117,8 +118,11 @@ public class WebSocketService {
                             Shop shop = response.getShop();
                             if (shop != null) {
                                 if (CollUtil.isNotEmpty(shop.getOrders())) {
+                                    log.info("AI回复语义订单");
                                     msg.setOrders(shop.getOrders());
+                                    msg.setOrderFlag("Y");
                                 }else{
+                                    log.info("AI继续追问");
                                     msg.setContent(shop.getAnswer());
                                 }
                             }

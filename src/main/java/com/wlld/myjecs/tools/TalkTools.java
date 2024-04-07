@@ -7,6 +7,7 @@ import com.wlld.myjecs.config.Config;
 import com.wlld.myjecs.config.SayOrderConfig;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.wlld.entity.CreatorModel;
 import org.wlld.entity.SentenceModel;
 import org.wlld.entity.TalkBody;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
+@Slf4j
 public class TalkTools {
     @Getter
     @Setter
@@ -58,6 +59,7 @@ public class TalkTools {
     }
 
     private void initCustomServer(boolean isStudy, BeanMangerOnly beanMangerOnly, List<TalkBody> sentences) throws Exception {
+        log.info("基本路径：{}",sayOrderConfig.getBaseDir());
         File file = new File(sayOrderConfig.getBaseDir() + Config.talkUrl); //创建文件
         CustomManager customManager = beanMangerOnly.getCustomManager();
         customManager.init();
@@ -71,6 +73,7 @@ public class TalkTools {
     }
 
     private boolean initWordEmbedding(BeanMangerOnly beanMangerOnly, List<TalkBody> sentences) throws Exception {//初始化词嵌入模型
+
         File file = new File(sayOrderConfig.getBaseDir() + Config.wordUrl); //创建文件
         WordEmbedding wordEmbedding = beanMangerOnly.getEmbedding();
         wordEmbedding.setConfig(beanMangerOnly.getConfig());

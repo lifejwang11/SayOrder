@@ -1,6 +1,8 @@
 package com.wlld.myjecs.tools;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SnowflakeIdWorker {
     private static final long twepoch = 1665538671144L;
     private static final long workerIdBits = 12L;
@@ -20,7 +22,7 @@ public class SnowflakeIdWorker {
 
     private SnowflakeIdWorker(long workerId, long datacenterId) {
         if (workerId > maxWorkerId || workerId < 0) {
-            System.out.println("maxWorkerId:" + maxWorkerId);
+            log.info("maxWorkerId:" + maxWorkerId);
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
         if (datacenterId > maxDatacenterId || datacenterId < 0) {
