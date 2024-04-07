@@ -71,11 +71,12 @@ public class SayOrderApplication {
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
         SayOrderConfig sayOrderConfig = applicationContext.getBean(SayOrderConfig.class);
         SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
-        LambdaQueryWrapper<com.wlld.myjecs.entity.SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
-        chainWrapper.eq(com.wlld.myjecs.entity.SentenceConfig::getStatus, "1");
-        com.wlld.myjecs.entity.SentenceConfig dbConfig = sentenceConfigService.getOne(chainWrapper);
+        com.wlld.myjecs.entity.SentenceConfig dbConfig = sentenceConfigService.getConfig();
         if (dbConfig != null) {
-            sayOrderConfig.setBaseDir(dbConfig.getBaseDir());
+            //检查路径合法性
+            if (AssertTools.checkPathValid(dbConfig.getBaseDir())) {
+                sayOrderConfig.setBaseDir(dbConfig.getBaseDir());
+            }
         }
         if (AssertTools.needReadSql(sayOrderConfig) || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();
@@ -116,7 +117,7 @@ public class SayOrderApplication {
             }
         }
         if (!needTalk || !talkBodies.isEmpty()) {
-            applicationContext.getBean(BeanManger.class).talkTools(applicationContext.getBean(SayOrderConfig.class)).initSemantics(beanMangerOnly, talkBodies);
+            applicationContext.getBean(BeanManger.class).talkTools(sayOrderConfig).initSemantics(beanMangerOnly, talkBodies);
         }
         Config.start = true;
         log.info("完成初始化");
