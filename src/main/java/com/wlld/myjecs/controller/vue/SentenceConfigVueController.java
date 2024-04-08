@@ -198,6 +198,8 @@ public class SentenceConfigVueController {
         if (!needTalk || !talkBodies.isEmpty()) {
             TalkTools tools = applicationContext.getBean(TalkTools.class);
             tools.setSayOrderConfig(config);
+            org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+            beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
             tools.initSemantics(beanMangerOnly, talkBodies);
         }
         Config.TALK_DOING = false;
@@ -224,7 +226,10 @@ public class SentenceConfigVueController {
                 kts.put(typeID, k);
             }
         }
-        beanMangerOnly.getRRNerveManager().init(beanMangerOnly.getConfig());
+        org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+        sentenceConfig.setTypeNub(trees.size());
+        beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
+        beanMangerOnly.getRRNerveManager().init(sentenceConfig);
         if (AssertTools.needReadSql(config) || Config.selfTest) {
             //若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();

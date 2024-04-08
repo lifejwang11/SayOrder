@@ -21,7 +21,7 @@
             <result property="trustPowerTh" column="trust_power_th" jdbcType="DOUBLE"/>
             <result property="sentenceTrustPowerTh" column="sentence_trust_power_th" jdbcType="DOUBLE"/>
             <result property="weStudyPoint" column="we_study_point" jdbcType="DOUBLE"/>
-            <result property="weLparam" column="we_lparam" jdbcType="DOUBLE"/>
+            <result property="weLParam" column="we_lparam" jdbcType="DOUBLE"/>
             <result property="status" column="status" jdbcType="CHAR"/>
             <result property="baseDir" column="base_dir" jdbcType="VARCHAR"/>
             <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>

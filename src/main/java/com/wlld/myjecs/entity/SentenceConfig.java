@@ -131,7 +131,7 @@ public class SentenceConfig implements Serializable {
      *
      */
     @TableField(value = "we_lparam")
-    private Double weLparam;
+    private Double weLParam;
 
     /**
      * 状态（1使用 0未使用）
