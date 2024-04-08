@@ -1,7 +1,5 @@
 package com.wlld.myjecs;
 
-import cn.hutool.core.io.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
