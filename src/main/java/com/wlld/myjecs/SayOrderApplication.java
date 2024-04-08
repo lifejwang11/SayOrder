@@ -101,6 +101,8 @@ public class SayOrderApplication {
                 }
             }
         }
+        Config.TALK_DOING = true;
+        Config.SEMANTICS_DOING = true;
         applicationContext.getBean(BeanManger.class).tools(sayOrderConfig).initSemantics(beanMangerOnly, sentences, Config.selfTest);
         List<TalkBody> talkBodies = null;
         boolean needTalk = AssertTools.needTalkSql(sayOrderConfig);
@@ -120,6 +122,8 @@ public class SayOrderApplication {
             applicationContext.getBean(BeanManger.class).talkTools(sayOrderConfig).initSemantics(beanMangerOnly, talkBodies);
         }
         Config.start = true;
+        Config.TALK_DOING = false;
+        Config.SEMANTICS_DOING = false;
         log.info("完成初始化");
     }
 
