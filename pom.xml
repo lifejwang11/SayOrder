@@ -32,6 +32,8 @@
         <maven-plugin.version>3.8.1</maven-plugin.version>
         <!-- pagehelper -->
         <pagehelper.version>1.4.1</pagehelper.version>
+        <!-- fastjson -->
+        <fastjson.version>1.2.83</fastjson.version>
 
     </properties>
 
@@ -89,7 +91,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.83</version>
+            <version>${fastjson.version}</version>
         </dependency>
         <!--		lombok-->
         <dependency>
