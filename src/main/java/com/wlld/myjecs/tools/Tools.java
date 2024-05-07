@@ -1,6 +1,7 @@
 package com.wlld.myjecs.tools;
 
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -51,7 +52,7 @@ public class Tools {
                 String word = sentence.getWord();
                 for (MyKeywordStudy myKeywordStudy : myKeywordStudyList) {
                     int keyword_type_id = myKeywordStudy.getKeyword_type_id();//关键词id
-                    if (haveKeyWords.containsKey(keyword_type_id) && MapUtil.isNotEmpty(keyWordForSentenceMap)) {
+                    if (haveKeyWords.containsKey(keyword_type_id)) {
                         keyWordForSentenceList = keyWordForSentenceMap.get(keyword_type_id);
                     } else {
                         keyWordForSentenceList = new ArrayList<>();
