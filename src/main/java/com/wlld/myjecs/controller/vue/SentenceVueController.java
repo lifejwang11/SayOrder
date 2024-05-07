@@ -14,6 +14,7 @@ import com.wlld.myjecs.entity.Sentence;
 import com.wlld.myjecs.entity.mes.Response;
 import com.wlld.myjecs.entity.qo.SentenceVO;
 import com.wlld.myjecs.mapper.SentenceMapper;
+import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.service.KeywordSqlService;
 import com.wlld.myjecs.service.KeywordTypeService;
 import com.wlld.myjecs.service.MyTreeService;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 @Api(value = "config", tags = {"语句管理-vue"})
 public class SentenceVueController {
     private final SentenceService sentenceService;
+    private final SqlMapper sqlMapper;
     private final KeywordSqlService keywordSqlService;
     private final MyTreeService myTreeService;
     private final KeywordTypeService keywordTypeService;
@@ -74,6 +76,11 @@ public class SentenceVueController {
             toSave.setDate(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE));
             toSave.setType_id(sentence.getType_id());
             toSave.setWord(sentence.getWord());
+            //语句查重
+            if (sqlMapper.different(toSave) != null) {
+                return Response.fail(500, "语句重复");
+            }
+            //保存语句
             boolean success = sentenceService.save(toSave);
             int sentenceId = toSave.getSentence_id();
             Dict keyword = sentence.getKeyword();
@@ -91,8 +98,8 @@ public class SentenceVueController {
                 keywordTypeService.update(new LambdaUpdateWrapper<KeywordType>()
                         .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` + %s", column, column,1))
                         .eq(KeywordType::getKeyword_type_id, keywordId));
-                keywordSqlService.remove(new LambdaQueryWrapper<KeywordSql>().eq(KeywordSql::getKeyword_type_id, keywordId));
             }
+            //批量保存keywordSql
             keywordSqlService.saveBatch(toSaveSql);
             //自增操作（更新分类对应语句数）
             String column = LambdaUtil.getFieldName(MyTree::getSentence_nub);
@@ -119,7 +126,7 @@ public class SentenceVueController {
                     .eq(KeywordType::getKeyword_type_id, id));
             keywordSqlService.remove(new LambdaQueryWrapper<KeywordSql>().eq(KeywordSql::getKeyword_type_id, id));
         });
-        //更新分类对应语句数
+        //更新语义分类对应语句数
         typeIds.forEach(id -> {
             String column = LambdaUtil.getFieldName(MyTree::getSentence_nub);
             //自减操作
