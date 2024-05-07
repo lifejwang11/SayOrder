@@ -115,8 +115,10 @@ public class SentenceConfigVueController {
         SayOrderConfig config = SayOrderConfig.builder().baseDir(dbConfig.getBaseDir()).build();
         if (SocketMessage.TALK.equals(socketMessage.getType())) {
             AssertTools.deleteTalk(config);
+            Config.TALK_DOING = false;
         } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
             AssertTools.deleteSemantics(config);
+            Config.SEMANTICS_DOING = false;
         }
         return Response.ok(null);
     }
