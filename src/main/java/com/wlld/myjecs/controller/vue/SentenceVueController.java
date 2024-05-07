@@ -89,6 +89,7 @@ public class SentenceVueController {
             for (int i = 0; i < keywordIds.size(); i++) {
                 Integer keywordId = keywordIds.get(i);
                 KeywordSql keywordSql = new KeywordSql();
+                keywordSql.setId(null);
                 keywordSql.setKeyword_type_id(keywordId);
                 keywordSql.setKeyword((String) keyword.get("keyword" + i));
                 keywordSql.setSentence_id(sentenceId);
@@ -124,7 +125,9 @@ public class SentenceVueController {
             keywordTypeService.update(new LambdaUpdateWrapper<KeywordType>()
                     .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - 1", column, column))
                     .eq(KeywordType::getKeyword_type_id, id));
-            keywordSqlService.remove(new LambdaQueryWrapper<KeywordSql>().eq(KeywordSql::getKeyword_type_id, id));
+        });
+        ids.forEach(id->{
+            keywordSqlService.remove(new LambdaQueryWrapper<KeywordSql>().eq(KeywordSql::getSentence_id, id));
         });
         //更新语义分类对应语句数
         typeIds.forEach(id -> {
