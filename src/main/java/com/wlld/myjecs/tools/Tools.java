@@ -54,6 +54,9 @@ public class Tools {
                     int keyword_type_id = myKeywordStudy.getKeyword_type_id();//关键词id
                     if (haveKeyWords.containsKey(keyword_type_id)) {
                         keyWordForSentenceList = keyWordForSentenceMap.get(keyword_type_id);
+                        if (keyWordForSentenceList == null) {
+                            keyWordForSentenceList = new ArrayList<>();
+                        }
                     } else {
                         keyWordForSentenceList = new ArrayList<>();
                         keyWordForSentenceMap.put(keyword_type_id, keyWordForSentenceList);

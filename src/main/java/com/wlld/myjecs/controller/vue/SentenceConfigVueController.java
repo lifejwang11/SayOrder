@@ -206,7 +206,7 @@ public class SentenceConfigVueController {
                 tools.initSemantics(beanMangerOnly, talkBodies);
             }
         } catch (Exception e) {
-            log.error("训练异常,异常信息：{}", e.getMessage());
+            log.error("训练异常,异常信息：{}", e.toString());
         }finally {
             Config.TALK_DOING = false;
         }
@@ -266,7 +266,7 @@ public class SentenceConfigVueController {
             tools.setSayOrderConfig(config);
             tools.initSemantics(beanMangerOnly, sentences, Config.selfTest);
         } catch (Exception e) {
-            log.error("训练异常,异常信息：{}", e.getMessage());
+            log.error("训练异常,异常信息：{}", e.toString());
         }finally {
             Config.SEMANTICS_DOING = false;
 
