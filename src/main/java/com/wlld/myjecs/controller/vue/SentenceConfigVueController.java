@@ -181,85 +181,95 @@ public class SentenceConfigVueController {
      */
     @SneakyThrows
     public void initTalk(SayOrderConfig config) {
-        BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
-        SqlMapper sql = applicationContext.getBean(SqlMapper.class);
-        List<TalkBody> talkBodies = null;
-        boolean needTalk = AssertTools.needTalkSql(config);
-        if (needTalk) {
-            talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
-            for (int i = 0; i < talkBodies.size(); i++) {
-                TalkBody talkBody = talkBodies.get(i);
-                String answer = talkBody.getAnswer();
-                String question = talkBody.getQuestion();
-                if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
-                    talkBodies.remove(i);
-                    i--;
+        try {
+            BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
+            SqlMapper sql = applicationContext.getBean(SqlMapper.class);
+            List<TalkBody> talkBodies = null;
+            boolean needTalk = AssertTools.needTalkSql(config);
+            if (needTalk) {
+                talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
+                for (int i = 0; i < talkBodies.size(); i++) {
+                    TalkBody talkBody = talkBodies.get(i);
+                    String answer = talkBody.getAnswer();
+                    String question = talkBody.getQuestion();
+                    if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
+                        talkBodies.remove(i);
+                        i--;
+                    }
                 }
             }
+            if (!needTalk || !talkBodies.isEmpty()) {
+                TalkTools tools = applicationContext.getBean(TalkTools.class);
+                tools.setSayOrderConfig(config);
+                org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+                beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
+                tools.initSemantics(beanMangerOnly, talkBodies);
+            }
+        } catch (Exception e) {
+            log.error("训练异常,异常信息：{}", e.getMessage());
+        }finally {
+            Config.TALK_DOING = false;
         }
-        if (!needTalk || !talkBodies.isEmpty()) {
-            TalkTools tools = applicationContext.getBean(TalkTools.class);
-            tools.setSayOrderConfig(config);
-            org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-            beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
-            tools.initSemantics(beanMangerOnly, talkBodies);
-        }
-        Config.TALK_DOING = false;
     }
 
     /**
      * 初始化语义分类
      */
-    @SneakyThrows
     public void initSemantics(SayOrderConfig config) {
-        List<MySentence> sentences = new ArrayList<>();
-        BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
-        SqlMapper sql = applicationContext.getBean(SqlMapper.class);
-        List<MyTree> trees = sql.getMyTree();
-        List<KeywordType> keywordTypeList = sql.getKeywordType();
-        Map<Integer, List<KeywordType>> kts = beanMangerOnly.getKeyTypes();
-        for (KeywordType keywordType : keywordTypeList) {
-            int typeID = keywordType.getType_id();
-            if (kts.containsKey(typeID)) {
-                kts.get(typeID).add(keywordType);
-            } else {
-                List<KeywordType> k = new ArrayList<>();
-                k.add(keywordType);
-                kts.put(typeID, k);
-            }
-        }
-        org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-        sentenceConfig.setTypeNub(trees.size());
-        beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
-        beanMangerOnly.getRRNerveManager().init(sentenceConfig);
-        if (AssertTools.needReadSql(config) || Config.selfTest) {
-            //若模型文件不存在则读取数据表重新进行学习
-            Map<Integer, MySentence> sentenceMap = new HashMap<>();
-            List<Sentence> sentencesList = sql.getModel();
-            List<KeywordSql> keywordSqlList = sql.getKeywordSql();
-            for (Sentence sentence : sentencesList) {
-                MySentence mySentence = new MySentence();
-                mySentence.setType_id(sentence.getType_id());
-                mySentence.setWord(sentence.getWord());
-                sentences.add(mySentence);
-                sentenceMap.put(sentence.getSentence_id(), mySentence);
-            }
-            for (KeywordSql keywordSql : keywordSqlList) {
-                MyKeywordStudy myKeywordStudy = new MyKeywordStudy();
-                myKeywordStudy.setKeyword(keywordSql.getKeyword());
-                myKeywordStudy.setKeyword_type_id(keywordSql.getKeyword_type_id());
-                int sentence_id = keywordSql.getSentence_id();
-                if (sentenceMap.containsKey(sentence_id)) {
-                    sentenceMap.get(sentence_id).getMyKeywordStudyList().add(myKeywordStudy);
+        try {
+            List<MySentence> sentences = new ArrayList<>();
+            BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
+            SqlMapper sql = applicationContext.getBean(SqlMapper.class);
+            List<MyTree> trees = sql.getMyTree();
+            List<KeywordType> keywordTypeList = sql.getKeywordType();
+            Map<Integer, List<KeywordType>> kts = beanMangerOnly.getKeyTypes();
+            for (KeywordType keywordType : keywordTypeList) {
+                int typeID = keywordType.getType_id();
+                if (kts.containsKey(typeID)) {
+                    kts.get(typeID).add(keywordType);
                 } else {
-                    throw new Exception("关键词表 keyword_sql sentence_id:" + sentence_id + ",无法在sentence表找到对应的语句 sentence_id:" + sentence_id);
+                    List<KeywordType> k = new ArrayList<>();
+                    k.add(keywordType);
+                    kts.put(typeID, k);
                 }
             }
-        }
+            org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+            sentenceConfig.setTypeNub(trees.size());
+            beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
+            beanMangerOnly.getRRNerveManager().init(sentenceConfig);
+            if (AssertTools.needReadSql(config) || Config.selfTest) {
+                //若模型文件不存在则读取数据表重新进行学习
+                Map<Integer, MySentence> sentenceMap = new HashMap<>();
+                List<Sentence> sentencesList = sql.getModel();
+                List<KeywordSql> keywordSqlList = sql.getKeywordSql();
+                for (Sentence sentence : sentencesList) {
+                    MySentence mySentence = new MySentence();
+                    mySentence.setType_id(sentence.getType_id());
+                    mySentence.setWord(sentence.getWord());
+                    sentences.add(mySentence);
+                    sentenceMap.put(sentence.getSentence_id(), mySentence);
+                }
+                for (KeywordSql keywordSql : keywordSqlList) {
+                    MyKeywordStudy myKeywordStudy = new MyKeywordStudy();
+                    myKeywordStudy.setKeyword(keywordSql.getKeyword());
+                    myKeywordStudy.setKeyword_type_id(keywordSql.getKeyword_type_id());
+                    int sentence_id = keywordSql.getSentence_id();
+                    if (sentenceMap.containsKey(sentence_id)) {
+                        sentenceMap.get(sentence_id).getMyKeywordStudyList().add(myKeywordStudy);
+                    } else {
+                        throw new Exception("关键词表 keyword_sql sentence_id:" + sentence_id + ",无法在sentence表找到对应的语句 sentence_id:" + sentence_id);
+                    }
+                }
+            }
 
-        Tools tools = applicationContext.getBean(Tools.class);
-        tools.setSayOrderConfig(config);
-        tools.initSemantics(beanMangerOnly, sentences, Config.selfTest);
-        Config.SEMANTICS_DOING = false;
+            Tools tools = applicationContext.getBean(Tools.class);
+            tools.setSayOrderConfig(config);
+            tools.initSemantics(beanMangerOnly, sentences, Config.selfTest);
+        } catch (Exception e) {
+            log.error("训练异常,异常信息：{}", e.getMessage());
+        }finally {
+            Config.SEMANTICS_DOING = false;
+
+        }
     }
 }
