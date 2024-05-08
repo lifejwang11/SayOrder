@@ -30,6 +30,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.wlld.entity.TalkBody;
+import org.wlld.naturalLanguage.languageCreator.CatchKeyWord;
 import org.wlld.naturalLanguage.word.MyKeyWord;
 
 import java.time.LocalDateTime;
@@ -49,6 +50,8 @@ public class SentenceConfigVueController {
     private final ConfigurableApplicationContext applicationContext;
     private final SayOrderConfig sayOrderConfig;
     private final Map<Integer, MyKeyWord> myKeyWordCache;
+    private final Map<Integer, List<KeywordType>> keywordTypeCache;
+    private final Map<Integer, CatchKeyWord>  catchKeyWordCache;
 
     private LambdaQueryWrapper<SentenceConfig> buildQuery(SentenceConfig sentenceConfig) {
         LambdaQueryWrapper<SentenceConfig> query = new LambdaQueryWrapper<>();
@@ -119,10 +122,13 @@ public class SentenceConfigVueController {
             AssertTools.deleteTalk(config);
             Config.TALK_DOING = false;
         } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
-            //删除模型文件
+            //删除语义模型文件
             AssertTools.deleteSemantics(config);
-            //删除模型缓存
+            //删除语义模型缓存
             myKeyWordCache.clear();
+            keywordTypeCache.clear();
+            catchKeyWordCache.clear();
+            //删除模型将模型状态修改为已完成
             Config.SEMANTICS_DOING = false;
         }
         return Response.ok(null);

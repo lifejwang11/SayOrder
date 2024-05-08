@@ -42,7 +42,7 @@ public class Tools {
 
     private void haveKeyWord(BeanMangerOnly beanMangerOnly, List<MySentence> sentences, boolean init) throws Exception {
         File file = new File(sayOrderConfig.getBaseDir() + Config.onlyKeyWord); //创建文件
-        Map<Integer, MyKeyWord> haveKeyWords = beanMangerOnly.myKeyWordCache();
+        Map<Integer, MyKeyWord> haveKeyWords = beanMangerOnly.getMyKeyWord();
         if (!file.exists() || init) {//模型文件不存在重新学习
             Map<Integer, List<KeyWordForSentence>> keyWordForSentenceMap = new HashMap<>();
             for (MySentence sentence : sentences) {

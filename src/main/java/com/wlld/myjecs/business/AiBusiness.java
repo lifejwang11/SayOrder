@@ -39,7 +39,7 @@ public class AiBusiness {
         if (word != null && word.replace(" ", "").length() > 1) {
             Map<Integer, List<KeywordType>> kts = beanMangerOnly.getKeyTypes();//关键词模型与语义类别映射关系
             Map<Integer, CatchKeyWord> catchKeyWordMap = beanMangerOnly.catchKeyWord();//关键词抓取模型
-            Map<Integer, MyKeyWord> myKeyWordMap = beanMangerOnly.myKeyWordCache();//关键词嗅探模型
+            Map<Integer, MyKeyWord> myKeyWordMap = beanMangerOnly.getMyKeyWord();//关键词嗅探模型
             long eventId = SnowflakeIdWorker.get().nextId();//保证线程安全
             Shop shop = new Shop();//协议
             RRNerveManager rrNerveManager = beanMangerOnly.getRRNerveManager();//语言模型
