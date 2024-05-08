@@ -71,6 +71,7 @@ public class KeywordTypeVueController {
         if (exist != null) {
             keywordTypeService.updateById(keywordType);
         } else {
+            keywordType.setType_number(0);
             keywordTypeService.save(keywordType);
         }
         return Response.ok(keywordType);
@@ -81,8 +82,6 @@ public class KeywordTypeVueController {
     public Response delete(Integer[] ids) {
         //逻辑只包含单个ID删除逻辑。多个需要重构
         List<Integer> ktIds = CollUtil.newArrayList(ids);
-        //删除关键词
-        keywordTypeService.removeBatchByIds(ktIds);
         LambdaQueryWrapper<KeywordSql> sqlQuery = new LambdaQueryWrapper<>();
         sqlQuery.in(KeywordSql::getKeyword_type_id, ids);
         List<KeywordSql> sqlList = keywordSqlService.list(sqlQuery);
@@ -102,10 +101,12 @@ public class KeywordTypeVueController {
             LambdaQueryWrapper<KeywordType> typeQuery = new LambdaQueryWrapper<>();
             List<KeywordType> types = keywordTypeService.list(typeQuery);
             myTreeService.update(new LambdaUpdateWrapper<MyTree>()
-                    .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - `%s`", column, column, size))
+                    .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - %s", column, column, size))
                     .eq(MyTree::getType_id, types.get(0).getType_id()).gt(MyTree::getSentence_nub, size - 1))
             ;
         }
+        //删除关键词
+        keywordTypeService.removeBatchByIds(ktIds);
         //删除语句与关键词的关联
         keywordSqlService.remove(sqlQuery);
         return Response.ok(null);
