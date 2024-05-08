@@ -13,4 +13,5 @@ public class KeywordSql {
     private Integer sentence_id;//该关键词对应的语句id
     private String keyword;//关键词内容
     private Integer keyword_type_id;//该关键词类型id
+    private Integer type_id;//该关键词类型id
 }
