@@ -30,6 +30,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.wlld.entity.TalkBody;
+import org.wlld.naturalLanguage.word.MyKeyWord;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class SentenceConfigVueController {
     private final SentenceConfigService sentenceConfigService;
     private final ConfigurableApplicationContext applicationContext;
     private final SayOrderConfig sayOrderConfig;
+    private final Map<Integer, MyKeyWord> myKeyWordCache;
 
     private LambdaQueryWrapper<SentenceConfig> buildQuery(SentenceConfig sentenceConfig) {
         LambdaQueryWrapper<SentenceConfig> query = new LambdaQueryWrapper<>();
@@ -117,7 +119,10 @@ public class SentenceConfigVueController {
             AssertTools.deleteTalk(config);
             Config.TALK_DOING = false;
         } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
+            //删除模型文件
             AssertTools.deleteSemantics(config);
+            //删除模型缓存
+            myKeyWordCache.clear();
             Config.SEMANTICS_DOING = false;
         }
         return Response.ok(null);

@@ -93,7 +93,7 @@ public class BeanMangerOnly {//需要单例的类
     }
 
     @Bean
-    public Map<Integer, MyKeyWord> getMyKeyWord() {//关键词敏感性嗅探
+    public Map<Integer, MyKeyWord> myKeyWordCache() {//关键词敏感性嗅探
         // return new MyKeyWord(getConfig(), getWordEmbedding());
         return new HashMap<>();
     }
