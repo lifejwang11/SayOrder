@@ -48,7 +48,7 @@ public class KeywordTypeVueController {
     @GetMapping({"/list"})
     public Response list(KeywordType keywordType) {
         return Response.ok(keywordTypeService.list(new LambdaQueryWrapper<KeywordType>()
-                .eq(KeywordType::getType_id, keywordType.getType_id())));
+                .eq(keywordType.getType_id() != null, KeywordType::getType_id, keywordType.getType_id())));
     }
 
     @ApiOperation(value = "分页查询", notes = "分页查询")

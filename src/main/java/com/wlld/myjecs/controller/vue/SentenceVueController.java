@@ -47,6 +47,7 @@ public class SentenceVueController {
 
     private LambdaQueryWrapper<Sentence> buildQuery(Sentence sentence) {
         LambdaQueryWrapper<Sentence> query = new LambdaQueryWrapper<>();
+        query.eq(sentence.getType_id() != null, Sentence::getType_id, sentence.getType_id());
         return query;
     }
 
