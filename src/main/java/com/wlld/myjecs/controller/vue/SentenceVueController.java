@@ -1,5 +1,6 @@
 package com.wlld.myjecs.controller.vue;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.lang.func.LambdaUtil;
 import cn.hutool.core.util.StrUtil;
@@ -80,11 +81,17 @@ public class SentenceVueController {
             if (sqlMapper.different(toSave) != null) {
                 return Response.fail(500, "语句重复");
             }
+            Dict keyword = sentence.getKeyword();
+            List<Integer> keywordIds = sentence.getKeywordIds();
+            if (CollUtil.isEmpty(keywordIds)) {
+                return Response.fail(500, "请选择子分类");
+            }
+            if (keyword.isEmpty()) {
+                return Response.fail(500, "请填写子分类对应的关键字");
+            }
             //保存语句
             boolean success = sentenceService.save(toSave);
             int sentenceId = toSave.getSentence_id();
-            Dict keyword = sentence.getKeyword();
-            List<Integer> keywordIds = sentence.getKeywordIds();
             List<KeywordSql> toSaveSql = new ArrayList<>();
             for (int i = 0; i < keywordIds.size(); i++) {
                 Integer keywordId = keywordIds.get(i);
@@ -124,7 +131,7 @@ public class SentenceVueController {
             //自减操作
             keywordTypeService.update(new LambdaUpdateWrapper<KeywordType>()
                     .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - 1", column, column))
-                    .eq(KeywordType::getKeyword_type_id, id));
+                    .eq(KeywordType::getKeyword_type_id, id).gt(KeywordType::getType_number, 0));
         });
         ids.forEach(id->{
             keywordSqlService.remove(new LambdaQueryWrapper<KeywordSql>().eq(KeywordSql::getSentence_id, id));
@@ -135,7 +142,8 @@ public class SentenceVueController {
             //自减操作
             myTreeService.update(new LambdaUpdateWrapper<MyTree>()
                     .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - 1", column, column))
-                    .eq(MyTree::getType_id, id));
+                    .eq(MyTree::getType_id, id).gt(MyTree::getSentence_nub, 0))
+            ;
         });
         return Response.ok(null);
     }
