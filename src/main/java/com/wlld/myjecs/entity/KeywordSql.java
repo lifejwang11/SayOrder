@@ -16,4 +16,6 @@ public class KeywordSql {
     private Integer keyword_type_id;//该关键词类型id
     @TableField(exist = false)
     private Integer type_id;//该关键词类型id
+    @TableField(exist = false)
+    private String keywordTypeIds;//该关键词类型id
 }
