@@ -25,6 +25,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -131,10 +132,16 @@ public class WebSocketService {
                                     msg.setOrders(orders);
                                     msg.setOrderFlag("Y");
                                     KeywordSql keywordSql = new KeywordSql();
-                                    // todo 关键字模糊查询语句
                                     List<Integer> ktIds = orders.stream().map(Order::getKeyword_type_id).collect(Collectors.toList());
+                                    List<String> keywords = new ArrayList<>();
+                                    orders.forEach(o -> keywords.addAll(o.getKeyWords()));
                                     List<Sentence> sentences = sentenceService.listByOrders(keywordSql, ktIds);
-                                    List<String> orderList = sentences.stream().map(Sentence::getWord).collect(Collectors.toList());
+                                    List<String> orderList = new ArrayList<>();
+                                    sentences.forEach(sentence ->{
+                                        if (keywords.stream().anyMatch(k -> sentence.getWord().contains(k))) {
+                                            orderList.add(sentence.getWord());
+                                        }
+                                    });
                                     if (CollUtil.isNotEmpty(orderList)) {
                                         msg.setContent(CollUtil.join(orderList, ","));
                                     } else {
