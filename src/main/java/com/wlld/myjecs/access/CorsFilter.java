@@ -1,6 +1,5 @@
 package com.wlld.myjecs.access;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,7 +13,6 @@ import java.io.IOException;
  * @Description
  */
 @Component
-@Slf4j
 public class CorsFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -24,7 +22,7 @@ public class CorsFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res,
                          FilterChain chain) throws IOException, ServletException {
-        //log.info("*********************************过滤器被使用**************************");
+        //System.out.println("*********************************过滤器被使用**************************");
         HttpServletResponse response = (HttpServletResponse) res;
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");

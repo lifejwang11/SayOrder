@@ -3,7 +3,6 @@ package com.wlld.myjecs;
 import com.wlld.myjecs.bean.BeanManger;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
-import com.wlld.myjecs.config.SayOrderConfig;
 import com.wlld.myjecs.entity.KeywordSql;
 import com.wlld.myjecs.entity.KeywordType;
 import com.wlld.myjecs.entity.MyTree;
@@ -11,13 +10,10 @@ import com.wlld.myjecs.entity.Sentence;
 import com.wlld.myjecs.entity.business.MyKeywordStudy;
 import com.wlld.myjecs.entity.business.MySentence;
 import com.wlld.myjecs.mapper.SqlMapper;
-import com.wlld.myjecs.service.SentenceConfigService;
 import com.wlld.myjecs.service.WebSocketService;
 import com.wlld.myjecs.tools.AssertTools;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.wlld.config.SentenceConfig;
 import org.wlld.entity.TalkBody;
@@ -28,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
-@EnableConfigurationProperties(value = {SayOrderConfig.class})
-@Slf4j
 public class SayOrderApplication {
 
     public static void main(String[] args) throws Exception {
@@ -67,16 +61,7 @@ public class SayOrderApplication {
         sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         beanMangerOnly.getRRNerveManager().init(sentenceConfig);
-        SayOrderConfig sayOrderConfig = applicationContext.getBean(SayOrderConfig.class);
-        SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
-        com.wlld.myjecs.entity.SentenceConfig dbConfig = sentenceConfigService.getConfig();
-        if (dbConfig != null) {
-            //检查路径合法性
-            if (AssertTools.checkPathValid(dbConfig.getBaseDir())) {
-                sayOrderConfig.setBaseDir(dbConfig.getBaseDir());
-            }
-        }
-        if (AssertTools.needReadSql(sayOrderConfig) || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
+        if (AssertTools.needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
             Map<Integer, MySentence> sentenceMap = new HashMap<>();
             List<Sentence> sentencesList = sql.getModel();
             List<KeywordSql> keywordSqlList = sql.getKeywordSql();
@@ -99,11 +84,9 @@ public class SayOrderApplication {
                 }
             }
         }
-        Config.TALK_DOING = true;
-        Config.SEMANTICS_DOING = true;
-        applicationContext.getBean(BeanManger.class).tools(sayOrderConfig).initSemantics(beanMangerOnly, sentences, Config.selfTest);
+        applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
         List<TalkBody> talkBodies = null;
-        boolean needTalk = AssertTools.needTalkSql(sayOrderConfig);
+        boolean needTalk = AssertTools.needTalkSql();
         if (needTalk) {
             talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
             for (int i = 0; i < talkBodies.size(); i++) {
@@ -117,12 +100,10 @@ public class SayOrderApplication {
             }
         }
         if (!needTalk || !talkBodies.isEmpty()) {
-            applicationContext.getBean(BeanManger.class).talkTools(sayOrderConfig).initSemantics(beanMangerOnly, talkBodies);
+            applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
         }
         Config.start = true;
-        Config.TALK_DOING = false;
-        Config.SEMANTICS_DOING = false;
-        log.info("完成初始化");
+        System.out.println("完成初始化");
     }
 
 }

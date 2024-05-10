@@ -131,19 +131,13 @@ public class SentenceConfig implements Serializable {
      *
      */
     @TableField(value = "we_lparam")
-    private Double weLParam;
+    private Double weLparam;
 
     /**
      * 状态（1使用 0未使用）
      */
     @TableField(value = "status")
     private String status;
-
-    /**
-     * 模型存放目录
-     */
-    @TableField(value = "base_dir")
-    private String baseDir;
 
     /**
      * 创建时间

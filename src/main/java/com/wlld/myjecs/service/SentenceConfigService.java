@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-03-25 18:14:09
 */
 public interface SentenceConfigService extends IService<SentenceConfig> {
-    SentenceConfig getConfig();
+
 }

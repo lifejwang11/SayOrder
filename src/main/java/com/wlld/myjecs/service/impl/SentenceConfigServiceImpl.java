@@ -1,11 +1,9 @@
 package com.wlld.myjecs.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wlld.myjecs.entity.SentenceConfig;
 import com.wlld.myjecs.service.SentenceConfigService;
 import com.wlld.myjecs.mapper.SentenceConfigMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,15 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SentenceConfigServiceImpl extends ServiceImpl<SentenceConfigMapper, SentenceConfig>
     implements SentenceConfigService{
-    @Autowired
-    private SentenceConfigMapper sentenceConfigMapper;
 
-    @Override
-    public SentenceConfig getConfig() {
-        LambdaQueryWrapper<SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
-        chainWrapper.eq(SentenceConfig::getStatus, "1");
-        return sentenceConfigMapper.selectOne(chainWrapper);
-    }
 }
 
 
