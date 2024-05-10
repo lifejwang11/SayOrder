@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.IPage;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
 import com.wlld.myjecs.config.SayOrderConfig;
@@ -61,7 +62,7 @@ public class SentenceConfigVueController {
 
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @GetMapping({"/page"})
-    public Response page(Page page, SentenceConfig sentenceConfig) {
+    public Response<Page<SentenceConfig>> page(Page<SentenceConfig> page, SentenceConfig sentenceConfig) {
         return Response.ok(sentenceConfigService.page(page, buildQuery(sentenceConfig)));
     }
 

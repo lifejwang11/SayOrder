@@ -86,24 +86,25 @@ public class KeywordTypeVueController {
         sqlQuery.in(KeywordSql::getKeyword_type_id, ids);
         List<KeywordSql> sqlList = keywordSqlService.list(sqlQuery);
         List<Integer> sentenceIds = sqlList.stream().map(KeywordSql::getSentence_id).distinct().collect(Collectors.toList());
-
-        LambdaQueryWrapper<KeywordSql> assertSqlQuery = new LambdaQueryWrapper<>();
-        assertSqlQuery.in(KeywordSql::getSentence_id, sentenceIds);
-        List<KeywordSql> assertSqlList = keywordSqlService.list(assertSqlQuery);
-        Map<Integer, List<KeywordSql>> groupKt = assertSqlList.stream().collect(Collectors.groupingBy(KeywordSql::getKeyword_type_id));
-        //语句只关联一个关键词的情况下执行下述逻辑
-        if (groupKt.size() == 1) {
-            //删除对应关键词对应的所有语句
-            sentenceService.removeBatchByIds(sentenceIds);
-            //自减操作（更新分类对应语句数）
-            int size = sentenceIds.size();
-            String column = LambdaUtil.getFieldName(MyTree::getSentence_nub);
-            LambdaQueryWrapper<KeywordType> typeQuery = new LambdaQueryWrapper<>();
-            List<KeywordType> types = keywordTypeService.list(typeQuery);
-            myTreeService.update(new LambdaUpdateWrapper<MyTree>()
-                    .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - %s", column, column, size))
-                    .eq(MyTree::getType_id, types.get(0).getType_id()).gt(MyTree::getSentence_nub, size - 1))
-            ;
+        if (CollUtil.isNotEmpty(sentenceIds)) {
+            LambdaQueryWrapper<KeywordSql> assertSqlQuery = new LambdaQueryWrapper<>();
+            assertSqlQuery.in(KeywordSql::getSentence_id, sentenceIds);
+            List<KeywordSql> assertSqlList = keywordSqlService.list(assertSqlQuery);
+            Map<Integer, List<KeywordSql>> groupKt = assertSqlList.stream().collect(Collectors.groupingBy(KeywordSql::getKeyword_type_id));
+            //语句只关联一个关键词的情况下执行下述逻辑
+            if (groupKt.size() == 1) {
+                //删除对应关键词对应的所有语句
+                sentenceService.removeBatchByIds(sentenceIds);
+                //自减操作（更新分类对应语句数）
+                int size = sentenceIds.size();
+                String column = LambdaUtil.getFieldName(MyTree::getSentence_nub);
+                LambdaQueryWrapper<KeywordType> typeQuery = new LambdaQueryWrapper<>();
+                List<KeywordType> types = keywordTypeService.list(typeQuery);
+                myTreeService.update(new LambdaUpdateWrapper<MyTree>()
+                        .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - %s", column, column, size))
+                        .eq(MyTree::getType_id, types.get(0).getType_id()).gt(MyTree::getSentence_nub, size - 1))
+                ;
+            }
         }
         //删除关键词
         keywordTypeService.removeBatchByIds(ktIds);
