@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -105,7 +106,7 @@ public class SentenceVueController {
                 //自增操作（更新关键词类别对应的语句数）
                 String column = LambdaUtil.getFieldName(KeywordType::getType_number);
                 keywordTypeService.update(new LambdaUpdateWrapper<KeywordType>()
-                        .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` + %s", column, column,1))
+                        .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` + %s", column, column, 1))
                         .eq(KeywordType::getKeyword_type_id, keywordId));
             }
             //批量保存keywordSql
@@ -122,30 +123,34 @@ public class SentenceVueController {
     @ApiOperation(value = "通过id删除", notes = "通过id删除")
     @GetMapping({"/delete"})
     public Response delete(@RequestParam("ids") List<Integer> ids) {
-        List<Integer> keywordTypeIds = keywordSqlService.list(new LambdaQueryWrapper<KeywordSql>().in(KeywordSql::getSentence_id, ids)).stream().map(KeywordSql::getKeyword_type_id).distinct().collect(Collectors.toList());
-        List<Integer> typeIds = sentenceService.list(new LambdaQueryWrapper<Sentence>().in(Sentence::getSentence_id, ids)).stream().map(Sentence::getType_id).distinct().collect(Collectors.toList());
-        //批量删除语句
-        sentenceService.removeBatchByIds(ids);
-        //更新关键词对应语句数、删除keyword_sql
-        keywordTypeIds.forEach(id -> {
+        Map<Integer, List<Sentence>> typeSentences = sentenceService.list(new LambdaQueryWrapper<Sentence>().in(Sentence::getSentence_id, ids)).stream().collect(Collectors.groupingBy(Sentence::getType_id));
+        Map<Integer, List<KeywordSql>> ktSentences = keywordSqlService.list(new LambdaQueryWrapper<KeywordSql>().in(KeywordSql::getSentence_id, ids)).stream().collect(Collectors.groupingBy(KeywordSql::getKeyword_type_id));
+        //更新关键词对应语句数
+        for (Map.Entry<Integer, List<KeywordSql>> entry : ktSentences.entrySet()) {
+            Integer id = entry.getKey();
+            Integer size = entry.getValue().size();
             String column = LambdaUtil.getFieldName(KeywordType::getType_number);
             //自减操作
             keywordTypeService.update(new LambdaUpdateWrapper<KeywordType>()
-                    .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - 1", column, column))
-                    .eq(KeywordType::getKeyword_type_id, id).gt(KeywordType::getType_number, 0));
-        });
-        ids.forEach(id->{
-            keywordSqlService.remove(new LambdaQueryWrapper<KeywordSql>().eq(KeywordSql::getSentence_id, id));
-        });
+                    .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - %s", column, column,size))
+                    .eq(KeywordType::getKeyword_type_id, id).gt(KeywordType::getType_number, size-1));
+        }
         //更新语义分类对应语句数
-        typeIds.forEach(id -> {
+        for (Map.Entry<Integer, List<Sentence>> entry : typeSentences.entrySet()) {
+            Integer id = entry.getKey();
+            Integer size = entry.getValue().size();
             String column = LambdaUtil.getFieldName(MyTree::getSentence_nub);
             //自减操作
             myTreeService.update(new LambdaUpdateWrapper<MyTree>()
-                    .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - 1", column, column))
-                    .eq(MyTree::getType_id, id).gt(MyTree::getSentence_nub, 0))
-            ;
+                    .setSql(StrUtil.isNotBlank(column), String.format("`%s` = `%s` - %s", column, column,size))
+                    .eq(MyTree::getType_id, id).gt(MyTree::getSentence_nub, size-1));
+        }
+        //删除keyword_sql
+        ids.forEach(id -> {
+            keywordSqlService.remove(new LambdaQueryWrapper<KeywordSql>().eq(KeywordSql::getSentence_id, id));
         });
+        //批量删除语句
+        sentenceService.removeBatchByIds(ids);
         return Response.ok(null);
     }
 }
