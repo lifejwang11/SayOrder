@@ -2,13 +2,15 @@ package com.wlld.myjecs.controller.vue;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wlld.myjecs.bean.BeanManger;
+import com.github.pagehelper.IPage;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
+import com.wlld.myjecs.config.SayOrderConfig;
 import com.wlld.myjecs.entity.*;
 import com.wlld.myjecs.entity.business.MyKeywordStudy;
 import com.wlld.myjecs.entity.business.MySentence;
@@ -17,6 +19,9 @@ import com.wlld.myjecs.entity.qo.SocketMessage;
 import com.wlld.myjecs.mapper.SqlMapper;
 import com.wlld.myjecs.service.SentenceConfigService;
 import com.wlld.myjecs.tools.AssertTools;
+import com.wlld.myjecs.tools.TalkTools;
+import com.wlld.myjecs.tools.ThreadLocalCache;
+import com.wlld.myjecs.tools.Tools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +31,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.wlld.entity.TalkBody;
+import org.wlld.naturalLanguage.languageCreator.CatchKeyWord;
+import org.wlld.naturalLanguage.word.MyKeyWord;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,6 +49,10 @@ import java.util.concurrent.CompletableFuture;
 public class SentenceConfigVueController {
     private final SentenceConfigService sentenceConfigService;
     private final ConfigurableApplicationContext applicationContext;
+    private final SayOrderConfig sayOrderConfig;
+    private final Map<Integer, MyKeyWord> myKeyWordCache;
+    private final Map<Integer, List<KeywordType>> keywordTypeCache;
+    private final Map<Integer, CatchKeyWord>  catchKeyWordCache;
 
     private LambdaQueryWrapper<SentenceConfig> buildQuery(SentenceConfig sentenceConfig) {
         LambdaQueryWrapper<SentenceConfig> query = new LambdaQueryWrapper<>();
@@ -51,7 +62,7 @@ public class SentenceConfigVueController {
 
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @GetMapping({"/page"})
-    public Response page(Page page, SentenceConfig sentenceConfig) {
+    public Response<Page<SentenceConfig>> page(Page<SentenceConfig> page, SentenceConfig sentenceConfig) {
         return Response.ok(sentenceConfigService.page(page, buildQuery(sentenceConfig)));
     }
 
@@ -61,6 +72,13 @@ public class SentenceConfigVueController {
         sentenceConfigService.update(query.set(SentenceConfig::getStatus, 1).eq(sentenceConfig.getId() != null, SentenceConfig::getId, sentenceConfig.getId()));
         LambdaUpdateWrapper<SentenceConfig> query1 = new LambdaUpdateWrapper<>();
         sentenceConfigService.update(query1.set(SentenceConfig::getStatus, 0).ne(sentenceConfig.getId() != null, SentenceConfig::getId, sentenceConfig.getId()));
+        SentenceConfig dbConfig = sentenceConfigService.getConfig();
+        if (dbConfig != null) {
+            org.wlld.config.SentenceConfig config = new org.wlld.config.SentenceConfig();
+            BeanUtil.copyProperties(dbConfig, config);
+            //使用替换模型更新缓存
+            ThreadLocalCache.setConfig(config);
+        }
         return Response.ok(null);
     }
 
@@ -83,6 +101,37 @@ public class SentenceConfigVueController {
     @GetMapping({"/delete"})
     public Response delete(Integer[] ids) {
         sentenceConfigService.removeBatchByIds(CollUtil.newArrayList(ids));
+        //删除模型刷新缓存
+        ThreadLocalCache.setConfig(null);
+        return Response.ok(null);
+    }
+
+    @ApiOperation(value = "删除模型文件")
+    @GetMapping({"/deleteModel"})
+    @SneakyThrows
+    public Response deleteModel(SocketMessage socketMessage) {
+        SentenceConfig dbConfig = sentenceConfigService.getConfig();
+        if (dbConfig == null) {
+            return Response.fail(500,"配置不存在");
+        }
+        if (StrUtil.isBlank(dbConfig.getBaseDir())) {
+            //数据库不存在则设置yml中的
+            dbConfig.setBaseDir(sayOrderConfig.getBaseDir());
+        }
+        SayOrderConfig config = SayOrderConfig.builder().baseDir(dbConfig.getBaseDir()).build();
+        if (SocketMessage.TALK.equals(socketMessage.getType())) {
+            AssertTools.deleteTalk(config);
+            Config.TALK_DOING = false;
+        } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
+            //删除语义模型文件
+            AssertTools.deleteSemantics(config);
+            //删除语义模型缓存
+            myKeyWordCache.clear();
+            keywordTypeCache.clear();
+            catchKeyWordCache.clear();
+            //删除模型将模型状态修改为已完成
+            Config.SEMANTICS_DOING = false;
+        }
         return Response.ok(null);
     }
 
@@ -90,20 +139,40 @@ public class SentenceConfigVueController {
     @GetMapping({"/init"})
     @SneakyThrows
     public Response init(SocketMessage socketMessage) {
+        SentenceConfig dbConfig = sentenceConfigService.getConfig();
+        if (dbConfig == null) {
+            return Response.fail(500,"配置不存在");
+        }
+        if (!AssertTools.checkPathValid(dbConfig.getBaseDir())) {
+            //数据库不存在则设置yml中的
+            dbConfig.setBaseDir(sayOrderConfig.getBaseDir());
+        }
+        SayOrderConfig config = SayOrderConfig.builder().baseDir(dbConfig.getBaseDir()).build();
+        if (SocketMessage.TALK.equals(socketMessage.getType())) {
+            if (!AssertTools.needTalkSql(config)) {
+                return Response.fail(500, "模型已经训练过了，如果需要重新训练请先删除对话模型");
+            }
+        } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
+            if (!AssertTools.needReadSql(config)) {
+                return Response.fail(500, "模型已经训练过了，如果需要重新训练请先删除语义模型");
+            }
+        }
         // 创建一个异步任务
-        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
             if (SocketMessage.TALK.equals(socketMessage.getType())) {
                 Config.TALK_DOING = true;
-                initTalk();
-                log.info("训练对话完成");
-                return Config.TALK_DOING;
+                long start = System.currentTimeMillis();
+                initTalk(config);
+                long end = System.currentTimeMillis();
+                log.info("训练对话完成,耗时：{}s", (end - start) / 1000);
             } else if (SocketMessage.SEMANTICS.equals(socketMessage.getType())) {
                 Config.SEMANTICS_DOING = true;
-                initSemantics();
-                log.info("训练语义完成");
-                return Config.SEMANTICS_DOING;
+                long start = System.currentTimeMillis();
+                initSemantics(config);
+                long end = System.currentTimeMillis();
+                log.info("训练语义完成,耗时：{}s", (end - start) / 1000);
             }
-            return false;
+            return null;
         });
         return Response.ok(null);
     }
@@ -123,91 +192,96 @@ public class SentenceConfigVueController {
      * 初始化对话
      */
     @SneakyThrows
-    public void initTalk() {
-        BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
-        SqlMapper sql = applicationContext.getBean(SqlMapper.class);
-        List<MyTree> trees = sql.getMyTree();
-        org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-        BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
-        sentenceConfig.setTypeNub(trees.size());
-        beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
-        List<TalkBody> talkBodies = null;
-        boolean needTalk = AssertTools.needTalkSql();
-        if (needTalk) {
-            talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
-            for (int i = 0; i < talkBodies.size(); i++) {
-                TalkBody talkBody = talkBodies.get(i);
-                String answer = talkBody.getAnswer();
-                String question = talkBody.getQuestion();
-                if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
-                    talkBodies.remove(i);
-                    i--;
+    public void initTalk(SayOrderConfig config) {
+        try {
+            BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
+            SqlMapper sql = applicationContext.getBean(SqlMapper.class);
+            List<TalkBody> talkBodies = null;
+            boolean needTalk = AssertTools.needTalkSql(config);
+            if (needTalk) {
+                talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
+                for (int i = 0; i < talkBodies.size(); i++) {
+                    TalkBody talkBody = talkBodies.get(i);
+                    String answer = talkBody.getAnswer();
+                    String question = talkBody.getQuestion();
+                    if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
+                        talkBodies.remove(i);
+                        i--;
+                    }
                 }
             }
+            if (!needTalk || !talkBodies.isEmpty()) {
+                TalkTools tools = applicationContext.getBean(TalkTools.class);
+                tools.setSayOrderConfig(config);
+                org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+                beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
+                tools.initSemantics(beanMangerOnly, talkBodies);
+            }
+        } catch (Exception e) {
+            log.error("训练异常,异常信息：{}", e.toString());
+        }finally {
+            Config.TALK_DOING = false;
         }
-        if (!needTalk || !talkBodies.isEmpty()) {
-            applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
-        }
-        Config.TALK_DOING = false;
     }
 
     /**
      * 初始化语义分类
      */
-    @SneakyThrows
-    public void initSemantics() {
-        List<MySentence> sentences = new ArrayList<>();
-        BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
-        SqlMapper sql = applicationContext.getBean(SqlMapper.class);
-        List<MyTree> trees = sql.getMyTree();
-        List<KeywordType> keywordTypeList = sql.getKeywordType();
-        Map<Integer, List<KeywordType>> kts = beanMangerOnly.getKeyTypes();
-        for (KeywordType keywordType : keywordTypeList) {
-            int typeID = keywordType.getType_id();
-            if (kts.containsKey(typeID)) {
-                kts.get(typeID).add(keywordType);
-            } else {
-                List<KeywordType> k = new ArrayList<>();
-                k.add(keywordType);
-                kts.put(typeID, k);
-            }
-        }
-        org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
-        BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
-        sentenceConfig.setTypeNub(trees.size());
-        beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
-        beanMangerOnly.getRRNerveManager().init(sentenceConfig);
-        if (AssertTools.needReadSql() || Config.selfTest) {//若模型文件不存在则读取数据表重新进行学习
-            Map<Integer, MySentence> sentenceMap = new HashMap<>();
-            List<Sentence> sentencesList = sql.getModel();
-            List<KeywordSql> keywordSqlList = sql.getKeywordSql();
-            for (Sentence sentence : sentencesList) {
-                MySentence mySentence = new MySentence();
-                mySentence.setType_id(sentence.getType_id());
-                mySentence.setWord(sentence.getWord());
-                sentences.add(mySentence);
-                sentenceMap.put(sentence.getSentence_id(), mySentence);
-            }
-            for (KeywordSql keywordSql : keywordSqlList) {
-                MyKeywordStudy myKeywordStudy = new MyKeywordStudy();
-                myKeywordStudy.setKeyword(keywordSql.getKeyword());
-                myKeywordStudy.setKeyword_type_id(keywordSql.getKeyword_type_id());
-                int sentence_id = keywordSql.getSentence_id();
-                if (sentenceMap.containsKey(sentence_id)) {
-                    sentenceMap.get(sentence_id).getMyKeywordStudyList().add(myKeywordStudy);
+    public void initSemantics(SayOrderConfig config) {
+        try {
+            List<MySentence> sentences = new ArrayList<>();
+            BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
+            SqlMapper sql = applicationContext.getBean(SqlMapper.class);
+            List<MyTree> trees = sql.getMyTree();
+            List<KeywordType> keywordTypeList = sql.getKeywordType();
+            Map<Integer, List<KeywordType>> kts = beanMangerOnly.getKeyTypes();
+            for (KeywordType keywordType : keywordTypeList) {
+                int typeID = keywordType.getType_id();
+                if (kts.containsKey(typeID)) {
+                    kts.get(typeID).add(keywordType);
                 } else {
-                    throw new Exception("关键词表 keyword_sql sentence_id:" + sentence_id + ",无法在sentence表找到对应的语句 sentence_id:" + sentence_id);
+                    List<KeywordType> k = new ArrayList<>();
+                    k.add(keywordType);
+                    kts.put(typeID, k);
                 }
             }
-        }
-        applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
-        Config.SEMANTICS_DOING = false;
-    }
+            org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+            sentenceConfig.setTypeNub(trees.size());
+            beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
+            beanMangerOnly.getRRNerveManager().init(sentenceConfig);
+            if (AssertTools.needReadSql(config) || Config.selfTest) {
+                //若模型文件不存在则读取数据表重新进行学习
+                Map<Integer, MySentence> sentenceMap = new HashMap<>();
+                List<Sentence> sentencesList = sql.getModel();
+                List<KeywordSql> keywordSqlList = sql.getKeywordSql();
+                for (Sentence sentence : sentencesList) {
+                    MySentence mySentence = new MySentence();
+                    mySentence.setType_id(sentence.getType_id());
+                    mySentence.setWord(sentence.getWord());
+                    sentences.add(mySentence);
+                    sentenceMap.put(sentence.getSentence_id(), mySentence);
+                }
+                for (KeywordSql keywordSql : keywordSqlList) {
+                    MyKeywordStudy myKeywordStudy = new MyKeywordStudy();
+                    myKeywordStudy.setKeyword(keywordSql.getKeyword());
+                    myKeywordStudy.setKeyword_type_id(keywordSql.getKeyword_type_id());
+                    int sentence_id = keywordSql.getSentence_id();
+                    if (sentenceMap.containsKey(sentence_id)) {
+                        sentenceMap.get(sentence_id).getMyKeywordStudyList().add(myKeywordStudy);
+                    } else {
+                        throw new Exception("关键词表 keyword_sql sentence_id:" + sentence_id + ",无法在sentence表找到对应的语句 sentence_id:" + sentence_id);
+                    }
+                }
+            }
 
-    private com.wlld.myjecs.entity.SentenceConfig getDbConfig() {
-        SentenceConfigService sentenceConfigService = applicationContext.getBean(SentenceConfigService.class);
-        LambdaQueryWrapper<com.wlld.myjecs.entity.SentenceConfig> chainWrapper = new LambdaQueryWrapper<>();
-        chainWrapper.eq(com.wlld.myjecs.entity.SentenceConfig::getStatus, "1");
-        return sentenceConfigService.getOne(chainWrapper);
+            Tools tools = applicationContext.getBean(Tools.class);
+            tools.setSayOrderConfig(config);
+            tools.initSemantics(beanMangerOnly, sentences, Config.selfTest);
+        } catch (Exception e) {
+            log.error("训练异常,异常信息：{}", e.toString());
+        }finally {
+            Config.SEMANTICS_DOING = false;
+
+        }
     }
 }

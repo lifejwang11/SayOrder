@@ -36,11 +36,40 @@
         FROM sentence s
         left join keyword_sql k ON s.sentence_id = k.sentence_id
         <where>
-            <if test="null != query.keyword and '' != query.keyword">k.keyword like
-                concat(concat('%',#{query.keyword}),'%')
+            <if test="null != query.keyword and '' != query.keyword">
+                AND k.keyword like concat(concat('%',#{query.keyword}),'%')
+            </if>
+            <if test="null != query.keyword_type_id and '' != query.keyword_type_id">
+                AND k.keyword_type_id =#{query.keyword_type_id}
+            </if>
+            <if test="null != query.type_id and '' != query.type_id">
+                AND s.type_id =#{query.type_id}
             </if>
         </where>
         order by s.sentence_id desc
     </select>
-
+    <select id="listByKeyWord" resultMap="sentenceToSql" parameterType="com.wlld.myjecs.entity.KeywordSql">
+        SELECT *
+        FROM keyword_sql k
+        left join sentence s ON s.sentence_id = k.sentence_id
+        <where>
+            <if test="null != keyword and '' != keyword">
+                AND k.keyword =#{keyword}
+            </if>
+        </where>
+    </select>
+    <select id="listByOrders" resultMap="sentenceToSql" parameterType="com.wlld.myjecs.entity.KeywordSql">
+        SELECT *
+        FROM keyword_sql k
+        left join sentence s ON s.sentence_id = k.sentence_id
+        <where>
+<!--            <if test="null != keyword_type_id and '' != keyword_type_id">-->
+<!--                AND k.keyword_type_id in (#{keywordTypeIds})-->
+<!--            </if>-->
+            AND k.keyword_type_id in
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
 </mapper>

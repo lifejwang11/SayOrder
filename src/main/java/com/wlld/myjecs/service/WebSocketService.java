@@ -4,13 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.wlld.myjecs.business.AiBusiness;
+import com.wlld.myjecs.entity.KeywordSql;
+import com.wlld.myjecs.entity.Sentence;
+import com.wlld.myjecs.entity.mes.Order;
 import com.wlld.myjecs.entity.mes.Response;
 import com.wlld.myjecs.entity.mes.Shop;
 import com.wlld.myjecs.entity.qo.SocketMessage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +25,11 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author Admin
@@ -36,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class WebSocketService {
     private static ApplicationContext applicationContext;
+
     public static void setApplicationContext(ApplicationContext context) {
         applicationContext = context;
     }
@@ -97,6 +103,7 @@ public class WebSocketService {
                 try {
                     if (u.equals(name)) {
                         if (SocketMessage.TALK.equals(type)) {
+                            log.info("AI对话");
                             Response response = business.myTalk(content);
                             SocketMessage<Object> msg = SocketMessage.builder()
                                     .data(business.myTalk(content))
@@ -107,6 +114,7 @@ public class WebSocketService {
                                     .build();
                             m.sendMessage(JSONUtil.toJsonStr(msg));
                         } else if (SocketMessage.SEMANTICS.equals(type)) {
+                            SentenceService sentenceService = applicationContext.getBean(SentenceService.class);
                             Response response = business.talk(content);
                             SocketMessage<Object> msg = SocketMessage.builder()
                                     .data(business.talk(content))
@@ -116,9 +124,44 @@ public class WebSocketService {
                                     .build();
                             Shop shop = response.getShop();
                             if (shop != null) {
-                                if (CollUtil.isNotEmpty(shop.getOrders())) {
-                                    msg.setOrders(shop.getOrders());
-                                }else{
+                                List<Order> orders = shop.getOrders();
+                                String keyword = shop.getKeyword();
+                                if (CollUtil.isNotEmpty(orders)) {
+                                    //语义订单
+                                    log.info("AI回复语义订单");
+                                    msg.setOrders(orders);
+                                    msg.setOrderFlag("Y");
+                                    KeywordSql keywordSql = new KeywordSql();
+                                    List<Integer> ktIds = orders.stream().map(Order::getKeyword_type_id).collect(Collectors.toList());
+                                    List<String> keywords = new ArrayList<>();
+                                    orders.forEach(o -> keywords.addAll(o.getKeyWords()));
+                                    List<Sentence> sentences = sentenceService.listByOrders(keywordSql, ktIds);
+                                    List<String> orderList = new ArrayList<>();
+                                    sentences.forEach(sentence ->{
+                                        if (keywords.stream().anyMatch(k -> sentence.getWord().contains(k))) {
+                                            orderList.add(sentence.getWord());
+                                        }
+                                    });
+                                    if (CollUtil.isNotEmpty(orderList)) {
+                                        msg.setContent(CollUtil.join(orderList, ","));
+                                    } else {
+                                        msg.setContent("");
+                                    }
+                                } else if (StrUtil.isNotBlank(keyword)) {
+                                    //关键字
+                                    log.info("AI回复语义订单关键字");
+                                    msg.setOrderFlag("Y");
+                                    KeywordSql keywordSql = new KeywordSql();
+                                    keywordSql.setKeyword(keyword);
+                                    List<Sentence> sentences = sentenceService.listByKeyWord(keywordSql);
+                                    List<String> orderList = sentences.stream().map(Sentence::getWord).collect(Collectors.toList());
+                                    if (CollUtil.isNotEmpty(orderList)) {
+                                        msg.setContent(CollUtil.join(orderList, ","));
+                                    } else {
+                                        msg.setContent("");
+                                    }
+                                } else {
+                                    log.info("AI继续追问");
                                     msg.setContent(shop.getAnswer());
                                 }
                             }

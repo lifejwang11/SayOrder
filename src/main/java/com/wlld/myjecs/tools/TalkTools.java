@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
+import com.wlld.myjecs.config.SayOrderConfig;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.wlld.entity.CreatorModel;
 import org.wlld.entity.SentenceModel;
 import org.wlld.entity.TalkBody;
@@ -22,7 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 public class TalkTools {
+    @Getter
+    @Setter
+    private SayOrderConfig sayOrderConfig;
+
+    public TalkTools(SayOrderConfig sayOrderConfig) {
+        this.sayOrderConfig = sayOrderConfig;
+    }
+
     public void initSemantics(BeanMangerOnly beanMangerOnly, List<TalkBody> sentences) throws Exception {
         List<TalkBody> sen = null;
         if (sentences != null) {
@@ -46,7 +59,8 @@ public class TalkTools {
     }
 
     private void initCustomServer(boolean isStudy, BeanMangerOnly beanMangerOnly, List<TalkBody> sentences) throws Exception {
-        File file = new File(Config.talkUrl); //创建文件
+        log.info("基本路径：{}",sayOrderConfig.getBaseDir());
+        File file = new File(sayOrderConfig.getBaseDir() + Config.talkUrl); //创建文件
         CustomManager customManager = beanMangerOnly.getCustomManager();
         customManager.init();
         if (file.exists() && !isStudy) {//读模型
@@ -54,12 +68,13 @@ public class TalkTools {
         } else if (sentences != null && !sentences.isEmpty()) {//训练
             CreatorModel creatorModel = customManager.study(sentences, 1);
             String model = JSON.toJSONString(creatorModel);
-            writeModel(model, Config.talkUrl);
+            writeModel(model, sayOrderConfig.getBaseDir() + Config.talkUrl);
         }
     }
 
     private boolean initWordEmbedding(BeanMangerOnly beanMangerOnly, List<TalkBody> sentences) throws Exception {//初始化词嵌入模型
-        File file = new File(Config.wordUrl); //创建文件
+
+        File file = new File(sayOrderConfig.getBaseDir() + Config.wordUrl); //创建文件
         WordEmbedding wordEmbedding = beanMangerOnly.getEmbedding();
         wordEmbedding.setConfig(beanMangerOnly.getConfig());
         boolean isStudy = false;
@@ -75,20 +90,20 @@ public class TalkTools {
             wordEmbedding.init(sentenceModel, beanMangerOnly.getConfig().getQaWordVectorDimension());
             WordTwoVectorModel wordTwoVectorModel = wordEmbedding.start();//词向量开始学习
             String model = JSON.toJSONString(wordTwoVectorModel);
-            writeModel(model, Config.wordUrl);
+            writeModel(model, sayOrderConfig.getBaseDir() + Config.wordUrl);
         }
         return isStudy;
     }
 
 
     private WordTwoVectorModel readWord2VecModel() {
-        File file = new File(Config.wordUrl);
+        File file = new File(sayOrderConfig.getBaseDir() + Config.wordUrl);
         String a = readPaper(file);
         return JSONObject.parseObject(a, WordTwoVectorModel.class);
     }
 
     private CreatorModel readCreatorModel() {
-        File file = new File(Config.talkUrl);
+        File file = new File(sayOrderConfig.getBaseDir() + Config.talkUrl);
         String a = readPaper(file);
         return JSONObject.parseObject(a, CreatorModel.class);
     }

@@ -21,8 +21,9 @@
             <result property="trustPowerTh" column="trust_power_th" jdbcType="DOUBLE"/>
             <result property="sentenceTrustPowerTh" column="sentence_trust_power_th" jdbcType="DOUBLE"/>
             <result property="weStudyPoint" column="we_study_point" jdbcType="DOUBLE"/>
-            <result property="weLparam" column="we_lparam" jdbcType="DOUBLE"/>
+            <result property="weLParam" column="we_lparam" jdbcType="DOUBLE"/>
             <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="baseDir" column="base_dir" jdbcType="VARCHAR"/>
             <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
             <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -33,7 +34,7 @@
         max_word_length,max_answer_length,key_word_nerve_deep,
         times,show_log,param,
         min_length,trust_power_th,sentence_trust_power_th,
-        we_study_point,we_lparam,status,
+        we_study_point,we_lparam,status,base_dir,
         created_time,updated_time
     </sql>
 </mapper>

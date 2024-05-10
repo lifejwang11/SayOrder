@@ -23,6 +23,11 @@ public class SocketMessage<T> {
     private T data;
     //语义订单或者对话 TALK or SEMANTICS
     private String type;
+    /**
+     * 回答是否是订单 (Y是N否),用于前端标记显示
+     */
+    private String orderFlag;
+
     private String content;
     //ai or user
     private String name;

@@ -18,11 +18,11 @@ import java.util.List;
 public class MyTree {
     @ApiModelProperty(value = "类别id", example = "2")
     @TableId(type = IdType.AUTO)
-    private int type_id;//类别id
+    private Integer type_id;//类别id
     @ApiModelProperty(value = "类别名称", example = "餐饮")
     private String title;//名称
     @ApiModelProperty(value = "样本条目数", example = "0")
-    private int sentence_nub;
+    private Integer sentence_nub;
 
     @TableField(exist = false)
     private List<KeywordType> types;

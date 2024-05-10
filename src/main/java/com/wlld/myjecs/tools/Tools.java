@@ -1,11 +1,17 @@
 package com.wlld.myjecs.tools;
 
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wlld.myjecs.bean.BeanMangerOnly;
 import com.wlld.myjecs.config.Config;
+import com.wlld.myjecs.config.SayOrderConfig;
 import com.wlld.myjecs.entity.business.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.wlld.entity.KeyWordForSentence;
 import org.wlld.entity.SentenceModel;
 import org.wlld.entity.WordTwoVectorModel;
@@ -24,10 +30,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
+@Slf4j
 public class Tools {
+    @Getter
+    @Setter
+    private SayOrderConfig sayOrderConfig;
+
+    public Tools(SayOrderConfig sayOrderConfig) {
+        this.sayOrderConfig = sayOrderConfig;
+    }
+
     private void haveKeyWord(BeanMangerOnly beanMangerOnly, List<MySentence> sentences, boolean init) throws Exception {
-        File file = new File(Config.onlyKeyWord); //创建文件
+        File file = new File(sayOrderConfig.getBaseDir() + Config.onlyKeyWord); //创建文件
         Map<Integer, MyKeyWord> haveKeyWords = beanMangerOnly.getMyKeyWord();
         if (!file.exists() || init) {//模型文件不存在重新学习
             Map<Integer, List<KeyWordForSentence>> keyWordForSentenceMap = new HashMap<>();
@@ -65,7 +79,7 @@ public class Tools {
                 haveKey.setModelParameter(modelParameter);
                 haveKeyList.add(haveKey);
             }
-            writeModel(JSONObject.toJSONString(haveAllKeyWord), Config.onlyKeyWord);
+            writeModel(JSONObject.toJSONString(haveAllKeyWord), sayOrderConfig.getBaseDir() + Config.onlyKeyWord);
         } else {//模型文件存在直接读
             List<HaveKey> haveKeyList = readModelParameter().getHaveKeyList();//haveKeyWords
             for (HaveKey haveKey : haveKeyList) {
@@ -77,7 +91,7 @@ public class Tools {
     }
 
     private void keyWord(BeanMangerOnly beanMangerOnly, List<MySentence> sentences) throws IOException {//处理关键词
-        File file = new File(Config.KeyWordModelUrl); //创建文件
+        File file = new File(sayOrderConfig.getBaseDir() + Config.KeyWordModelUrl); //创建文件
         Map<Integer, CatchKeyWord> catchKeyWordMap = beanMangerOnly.catchKeyWord();
         if (!file.exists()) {//重新学习
             List<KeyWordModelMapping> keyWordModelMappings = new ArrayList<>();
@@ -109,7 +123,7 @@ public class Tools {
                 List<KeyWordForSentence> keyWordForSentenceList = new ArrayList<>();
                 CatchKeyWord catchKeyWord = new CatchKeyWord();
                 catchKeyWordMap.put(key, catchKeyWord);//TODO 吃内存
-                System.out.println("key:" + key);
+                log.info("key:" + key);
                 for (KeySentence sentence : sentenceList) {
                     KeyWordForSentence keyWordForSentence = new KeyWordForSentence();
                     keyWordForSentence.setSentence(sentence.getWord());
@@ -125,7 +139,7 @@ public class Tools {
             MyWordModel model = new MyWordModel();
             model.setKeyWordModelMappings(keyWordModelMappings);
             //模型写出
-            writeModel(JSONObject.toJSONString(model), Config.KeyWordModelUrl);
+            writeModel(JSONObject.toJSONString(model), sayOrderConfig.getBaseDir() + Config.KeyWordModelUrl);
         } else {//TODO 读取模型
             List<KeyWordModelMapping> keyWordModels = JSONObject.parseObject(readPaper(file), MyWordModel.class).getKeyWordModelMappings();
             for (KeyWordModelMapping keyWordModelMapping : keyWordModels) {
@@ -138,7 +152,7 @@ public class Tools {
     }
 
     private void allKeyWord(BeanMangerOnly beanMangerOnly, List<MySentence> sentences) throws IOException {
-        File file = new File(Config.keyWordIndex);//关键词
+        File file = new File(sayOrderConfig.getBaseDir() + Config.keyWordIndex);//关键词
         AllKeyWords allKeyWords = beanMangerOnly.getAllKeyWords();
         if (file.exists()) {
             List<KeyWord> keyWords = JSONObject.parseObject(readPaper(file), AllKeyWords.class).getKeyWords();
@@ -159,7 +173,7 @@ public class Tools {
                     }
                 }
             }
-            writeModel(JSONObject.toJSONString(allKeyWords), Config.keyWordIndex);
+            writeModel(JSONObject.toJSONString(allKeyWords), sayOrderConfig.getBaseDir() + Config.keyWordIndex);
         }
     }
 
@@ -203,12 +217,12 @@ public class Tools {
                 right++;
             }
             double point = (double) right / (double) t;
-            System.out.println("准确率:" + point + ",检测数量:" + t);
+            log.info("准确率:" + point + ",检测数量:" + t);
         }
     }
 
     private void initSentenceModel(BeanMangerOnly beanMangerOnly, List<MySentence> sentences, boolean isStudy) throws Exception {//初始化语言模型
-        File file = new File(Config.SentenceModelUrl); //创建文件
+        File file = new File(sayOrderConfig.getBaseDir() + Config.SentenceModelUrl); //创建文件
         if (!file.exists() || isStudy) {//模型文件不存在，或者需要强制初始化，则进行初始化
             Map<Integer, List<String>> model = new HashMap<>();//语义识别
             for (MySentence sentence : sentences) {
@@ -227,14 +241,15 @@ public class Tools {
             RRNerveManager randomNerveManager = beanMangerOnly.getRRNerveManager();
             RandomModel mySentenceModel = randomNerveManager.studyType(model);
             String sentenceModel = JSON.toJSONString(mySentenceModel);
-            writeModel(sentenceModel, Config.SentenceModelUrl);
+            writeModel(sentenceModel, sayOrderConfig.getBaseDir() + Config.SentenceModelUrl);
         } else {//直接读文件
             beanMangerOnly.getRRNerveManager().insertModel(readSentenceModel());//初始化随机rnn网络集群
         }
     }
 
     private boolean initWordEmbedding(BeanMangerOnly beanMangerOnly, List<MySentence> sentences) throws Exception {//初始化词嵌入模型
-        File file = new File(Config.Word2VecModelUrl); //创建文件
+        log.info("基本路径：{}",sayOrderConfig.getBaseDir());
+        File file = new File(sayOrderConfig.getBaseDir() + Config.Word2VecModelUrl); //创建文件
         WordEmbedding wordEmbedding = beanMangerOnly.getWordEmbedding();
         boolean isStudy = false;
         if (file.exists()) {//模型文件存在
@@ -248,7 +263,7 @@ public class Tools {
             wordEmbedding.init(sentenceModel, beanMangerOnly.getConfig().getWordVectorDimension());
             WordTwoVectorModel wordTwoVectorModel = wordEmbedding.start();//词向量开始学习
             String model = JSON.toJSONString(wordTwoVectorModel);
-            writeModel(model, Config.Word2VecModelUrl);
+            writeModel(model, sayOrderConfig.getBaseDir() + Config.Word2VecModelUrl);
         } else {
             throw new Exception("训练数据为空");
         }
@@ -269,19 +284,19 @@ public class Tools {
     }
 
     private RandomModel readSentenceModel() {
-        File file = new File(Config.SentenceModelUrl);
+        File file = new File(sayOrderConfig.getBaseDir() + Config.SentenceModelUrl);
         String a = readPaper(file);
         return JSONObject.parseObject(a, RandomModel.class);
     }
 
     private WordTwoVectorModel readWord2VecModel() {
-        File file = new File(Config.Word2VecModelUrl);
+        File file = new File(sayOrderConfig.getBaseDir() + Config.Word2VecModelUrl);
         String a = readPaper(file);
         return JSONObject.parseObject(a, WordTwoVectorModel.class);
     }
 
     private HaveAllKeyWord readModelParameter() {
-        File file = new File(Config.onlyKeyWord);
+        File file = new File(sayOrderConfig.getBaseDir() + Config.onlyKeyWord);
         String a = readPaper(file);
         return JSONObject.parseObject(a, HaveAllKeyWord.class);
     }

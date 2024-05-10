@@ -10,6 +10,8 @@ import com.wlld.myjecs.entity.qo.TreeQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
 * @author 44223
 * @description 针对表【sentence】的数据库操作Mapper
@@ -20,6 +22,8 @@ import org.apache.ibatis.annotations.Param;
 public interface SentenceMapper extends BaseMapper<Sentence> {
 
     IPage<Sentence> pageSentence(Page<Sentence> page, @Param("query") KeywordSql query);
+    List<Sentence> listByKeyWord(KeywordSql query);
+    List<Sentence> listByOrders(KeywordSql query,@Param("ids") List<Integer> ids);
 }
 
 
