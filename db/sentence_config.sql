@@ -29,4 +29,4 @@ insert into sentence_config(title,remark,type_nub, word_vector_dimension, qa_wor
                             max_word_length, max_answer_length, key_word_nerve_deep,
                             times, show_log, param, min_length, trust_power_th,
                             sentence_trust_power_th, we_study_point, we_lparam,status,base_dir,created_time,updated_time) value
-    ('默认模型','默认模型',11,21,66,20,20,3,10,1,0.4,5,0.5,0.2,0.01,0.001,'1','D:\testModel\',now(),null);
+    ('默认模型','默认模型',11,21,66,20,20,3,10,1,0.4,5,0.5,0.2,0.01,0.001,'0','D:\\testModel\\',now(),null);
