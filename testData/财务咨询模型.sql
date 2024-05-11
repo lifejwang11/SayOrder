@@ -71,7 +71,7 @@ CREATE TABLE `keyword_type`  (
 -- ----------------------------
 -- Records of keyword_type
 -- ----------------------------
-INSERT INTO `keyword_type` VALUES (25, 23, '财务咨询', '请问你想咨询哪方面财务问题？', 29);
+INSERT INTO `keyword_type` VALUES (25, 23, '财务咨询', '请问你想咨询哪方面财务问题？', 22);
 
 -- ----------------------------
 -- Table structure for my_tree
@@ -87,7 +87,7 @@ CREATE TABLE `my_tree`  (
 -- ----------------------------
 -- Records of my_tree
 -- ----------------------------
-INSERT INTO `my_tree` VALUES (23, '财务咨询', 29);
+INSERT INTO `my_tree` VALUES (23, '财务咨询', 22);
 
 -- ----------------------------
 -- Table structure for oauth_client_details
