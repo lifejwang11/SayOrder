@@ -101,27 +101,32 @@ public class SayOrderApplication {
         }
         Config.TALK_DOING = true;
         Config.SEMANTICS_DOING = true;
-        applicationContext.getBean(BeanManger.class).tools(sayOrderConfig).initSemantics(beanMangerOnly, sentences, Config.selfTest);
-        List<TalkBody> talkBodies = null;
-        boolean needTalk = AssertTools.needTalkSql(sayOrderConfig);
-        if (needTalk) {
-            talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
-            for (int i = 0; i < talkBodies.size(); i++) {
-                TalkBody talkBody = talkBodies.get(i);
-                String answer = talkBody.getAnswer();
-                String question = talkBody.getQuestion();
-                if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
-                    talkBodies.remove(i);
-                    i--;
+        try {
+            applicationContext.getBean(BeanManger.class).tools(sayOrderConfig).initSemantics(beanMangerOnly, sentences, Config.selfTest);
+            List<TalkBody> talkBodies = null;
+            boolean needTalk = AssertTools.needTalkSql(sayOrderConfig);
+            if (needTalk) {
+                talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
+                for (int i = 0; i < talkBodies.size(); i++) {
+                    TalkBody talkBody = talkBodies.get(i);
+                    String answer = talkBody.getAnswer();
+                    String question = talkBody.getQuestion();
+                    if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
+                        talkBodies.remove(i);
+                        i--;
+                    }
                 }
             }
-        }
-        if (!needTalk || !talkBodies.isEmpty()) {
-            applicationContext.getBean(BeanManger.class).talkTools(sayOrderConfig).initSemantics(beanMangerOnly, talkBodies);
+            if (!needTalk || !talkBodies.isEmpty()) {
+                applicationContext.getBean(BeanManger.class).talkTools(sayOrderConfig).initSemantics(beanMangerOnly, talkBodies);
+            }
+        } catch (Exception e) {
+            log.error("初始化异常");
+        } finally {
+            Config.TALK_DOING = false;
+            Config.SEMANTICS_DOING = false;
         }
         Config.start = true;
-        Config.TALK_DOING = false;
-        Config.SEMANTICS_DOING = false;
         log.info("完成初始化");
     }
 
