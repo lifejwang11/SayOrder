@@ -1,4 +1,5 @@
-create table test.sentence_config
+DROP TABLE IF EXISTS `sentence_config`;
+create table sentence_config
 (
     id                       int auto_increment
         primary key,
