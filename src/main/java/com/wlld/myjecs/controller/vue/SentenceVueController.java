@@ -91,10 +91,17 @@ public class SentenceVueController {
             if (keyword.isEmpty()) {
                 return Response.fail(500, "请填写子分类对应的关键字");
             }
+            List<KeywordSql> toSaveSql = new ArrayList<>();
+            for (int i = 0; i < keywordIds.size(); i++) {
+                String curKeyword = (String) keyword.get("keyword" + i);
+                if (!sentence.getWord().contains(curKeyword)) {
+                    return Response.fail(500, "语句必须包含关键词");
+                }
+
+            }
             //保存语句
             boolean success = sentenceService.save(toSave);
             int sentenceId = toSave.getSentence_id();
-            List<KeywordSql> toSaveSql = new ArrayList<>();
             for (int i = 0; i < keywordIds.size(); i++) {
                 Integer keywordId = keywordIds.get(i);
                 KeywordSql keywordSql = new KeywordSql();
