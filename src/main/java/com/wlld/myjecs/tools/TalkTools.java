@@ -52,7 +52,7 @@ public class TalkTools {
         if (file.exists() && !isStudy) {//读模型
             customManager.insertModel(readCreatorModel());
         } else if (sentences != null && !sentences.isEmpty()) {//训练
-            CreatorModel creatorModel = customManager.study(sentences, 1);
+            CreatorModel creatorModel = customManager.study(sentences);
             String model = JSON.toJSONString(creatorModel);
             writeModel(model, Config.talkUrl);
         }

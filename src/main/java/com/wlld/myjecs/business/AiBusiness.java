@@ -43,7 +43,7 @@ public class AiBusiness {
             long eventId = SnowflakeIdWorker.get().nextId();//保证线程安全
             Shop shop = new Shop();//协议
             RRNerveManager rrNerveManager = beanMangerOnly.getRRNerveManager();//语言模型
-            KeyWord keyWord = keyWordEq(word);
+            KeyWord keyWord = keyWordEq(word);//
             int type;
             if (keyWord == null) {
                 type = rrNerveManager.getType(word, eventId);
