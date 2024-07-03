@@ -76,7 +76,7 @@ public class Tools {
         }
     }
 
-    private void keyWord(BeanMangerOnly beanMangerOnly, List<MySentence> sentences) throws IOException {//处理关键词
+    private void keyWord(BeanMangerOnly beanMangerOnly, List<MySentence> sentences) throws Exception {//处理关键词
         File file = new File(Config.KeyWordModelUrl); //创建文件
         Map<Integer, CatchKeyWord> catchKeyWordMap = beanMangerOnly.catchKeyWord();
         if (!file.exists()) {//重新学习
