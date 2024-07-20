@@ -10,7 +10,7 @@
 
     <properties>
         <!-- 项目版本 -->
-        <revesion>1.0.3</revesion>
+        <revesion>1.0.4</revesion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--java & spring-boot -->
@@ -24,7 +24,7 @@
         <!-- swagger2 -->
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <!-- easyAi -->
-        <easyAi.version>1.2.0</easyAi.version>
+        <easyAi.version>1.2.1</easyAi.version>
         <mysql.version>8.0.33</mysql.version>
         <!-- p6spy sql日志 -->
         <p6spy.version>3.9.1</p6spy.version>

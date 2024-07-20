@@ -1,6 +1,7 @@
 package com.wlld.myjecs.business;
 
 import com.wlld.myjecs.bean.BeanMangerOnly;
+import com.wlld.myjecs.config.Config;
 import com.wlld.myjecs.config.ErrorCode;
 import com.wlld.myjecs.entity.business.KeyWord;
 import com.wlld.myjecs.entity.mes.Order;
@@ -10,6 +11,7 @@ import com.wlld.myjecs.entity.KeywordType;
 import com.wlld.myjecs.tools.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wlld.naturalLanguage.TalkToTalk;
 import org.wlld.naturalLanguage.languageCreator.CatchKeyWord;
 import org.wlld.naturalLanguage.word.MyKeyWord;
 import org.wlld.rnnJumpNerveCenter.CustomManager;
@@ -24,8 +26,18 @@ public class AiBusiness {
 
     public Response myTalk(String word) throws Exception {
         Response response = new Response();
-        CustomManager customManager = beanMangerOnly.getCustomManager();
-        String answer = customManager.getAnswer(word, SnowflakeIdWorker.get().nextId());
+        String answer;
+        if (Config.QA_MODEL > 0) {
+            if (Config.QA_MODEL == 1) {
+                CustomManager customManager = beanMangerOnly.getCustomManager();
+                answer = customManager.getAnswer(word, SnowflakeIdWorker.get().nextId());
+            } else {
+                TalkToTalk talkToTalk = beanMangerOnly.getTalkToTalk();
+                answer = talkToTalk.getAnswer(word, SnowflakeIdWorker.get().nextId());
+            }
+        } else {
+            answer = "该模块没有打开，请在配置类Config中，修改QA_MODEL属性";
+        }
         if (answer != null) {
             response.setAnswer(answer);
         } else {

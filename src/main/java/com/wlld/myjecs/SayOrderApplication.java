@@ -85,22 +85,24 @@ public class SayOrderApplication {
             }
         }
         applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
-        List<TalkBody> talkBodies = null;
-        boolean needTalk = AssertTools.needTalkSql();
-        if (needTalk) {
-            talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
-            for (int i = 0; i < talkBodies.size(); i++) {
-                TalkBody talkBody = talkBodies.get(i);
-                String answer = talkBody.getAnswer();
-                String question = talkBody.getQuestion();
-                if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
-                    talkBodies.remove(i);
-                    i--;
+        if (Config.QA_MODEL>0) {
+            List<TalkBody> talkBodies = null;
+            boolean needTalk = AssertTools.needTalkSql();
+            if (needTalk) {
+                talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
+                for (int i = 0; i < talkBodies.size(); i++) {
+                    TalkBody talkBody = talkBodies.get(i);
+                    String answer = talkBody.getAnswer();
+                    String question = talkBody.getQuestion();
+                    if (answer == null || question == null || answer.isEmpty() || question.isEmpty()) {
+                        talkBodies.remove(i);
+                        i--;
+                    }
                 }
             }
-        }
-        if (!needTalk || !talkBodies.isEmpty()) {
-            applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
+            if (!needTalk || !talkBodies.isEmpty()) {
+                applicationContext.getBean(BeanManger.class).talkTools().initSemantics(beanMangerOnly, talkBodies);
+            }
         }
         Config.start = true;
         System.out.println("完成初始化");

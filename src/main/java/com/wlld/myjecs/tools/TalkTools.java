@@ -8,8 +8,10 @@ import org.wlld.entity.CreatorModel;
 import org.wlld.entity.SentenceModel;
 import org.wlld.entity.TalkBody;
 import org.wlld.entity.WordTwoVectorModel;
+import org.wlld.naturalLanguage.TalkToTalk;
 import org.wlld.naturalLanguage.word.WordEmbedding;
 import org.wlld.rnnJumpNerveCenter.CustomManager;
+import org.wlld.transFormer.model.TransFormerModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +31,11 @@ public class TalkTools {
             sen = anySort(sentences);
         }
         boolean isStudy = initWordEmbedding(beanMangerOnly, sen);//初始化词向量嵌入
-        initCustomServer(isStudy, beanMangerOnly, sen);
+        if (Config.QA_MODEL==1) {
+            initCustomServer(isStudy, beanMangerOnly, sen);
+        }else {
+            initTalkToTalk(isStudy, beanMangerOnly, sen);
+        }
     }
 
     private List<TalkBody> anySort(List<TalkBody> sentences) {//做乱序
@@ -45,8 +51,21 @@ public class TalkTools {
         return sent;
     }
 
+    private void initTalkToTalk(boolean isStudy, BeanMangerOnly beanMangerOnly, List<TalkBody> sentences) throws Exception {
+        File file = new File(Config.longTalkUrl); //创建文件
+        TalkToTalk talkToTalk = beanMangerOnly.getTalkToTalk();
+        talkToTalk.init();
+        if (file.exists() && !isStudy) {
+            talkToTalk.insertModel(readCreatorModel2());
+        } else {
+            TransFormerModel transFormerModel = talkToTalk.study(sentences);
+            String model = JSON.toJSONString(transFormerModel);
+            writeModel(model, Config.longTalkUrl);
+        }
+    }
+
     private void initCustomServer(boolean isStudy, BeanMangerOnly beanMangerOnly, List<TalkBody> sentences) throws Exception {
-        File file = new File(Config.talkUrl); //创建文件
+        File file = new File(Config.shortTalkUrl); //创建文件
         CustomManager customManager = beanMangerOnly.getCustomManager();
         customManager.init();
         if (file.exists() && !isStudy) {//读模型
@@ -54,7 +73,7 @@ public class TalkTools {
         } else if (sentences != null && !sentences.isEmpty()) {//训练
             CreatorModel creatorModel = customManager.study(sentences);
             String model = JSON.toJSONString(creatorModel);
-            writeModel(model, Config.talkUrl);
+            writeModel(model, Config.shortTalkUrl);
         }
     }
 
@@ -87,8 +106,14 @@ public class TalkTools {
         return JSONObject.parseObject(a, WordTwoVectorModel.class);
     }
 
+    private TransFormerModel readCreatorModel2() {
+        File file = new File(Config.longTalkUrl);
+        String a = readPaper(file);
+        return JSONObject.parseObject(a, TransFormerModel.class);
+    }
+
     private CreatorModel readCreatorModel() {
-        File file = new File(Config.talkUrl);
+        File file = new File(Config.shortTalkUrl);
         String a = readPaper(file);
         return JSONObject.parseObject(a, CreatorModel.class);
     }
