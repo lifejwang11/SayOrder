@@ -11,7 +11,7 @@
  Target Server Version : 50744
  File Encoding         : 65001
 
- Date: 20/07/2024 14:41:32
+ Date: 21/07/2024 08:25:53
 */
 
 SET NAMES utf8mb4;
@@ -2990,7 +2990,7 @@ INSERT INTO `q_a` VALUES ('我要订一张从南京去往上海的车票', 94, '
 INSERT INTO `q_a` VALUES ('我要十点订去往上海的车票', 95, '从哪里去上海');
 INSERT INTO `q_a` VALUES ('我要十点钟从北京出发的车票', 96, '想去哪里');
 INSERT INTO `q_a` VALUES ('我要十点买票去北京', 97, '从哪里出发');
-INSERT INTO `q_a` VALUES ('我十点钟从烟台出发', 98, '你要去哪儿');
+INSERT INTO `q_a` VALUES ('我十点钟从烟台出发', 98, '要去哪儿');
 INSERT INTO `q_a` VALUES ('我要从烟台去上海', 99, '几点钟走');
 INSERT INTO `q_a` VALUES ('我买九点从烟台出发的机票', 100, '要到哪里呢');
 INSERT INTO `q_a` VALUES ('我买烟台到北京的机票', 101, '几点钟出发');
