@@ -6,10 +6,10 @@
 * 为电商类，咨询类，平台类服务应用(web/小程序/APP/JAVA)，提供高性能的自动智能客服支持。
 * 本项目是依赖easyAi引擎衍生应用，以easyAi高性能廉价部署的思路，可在cpu上无压力高效运行，开包即用。功能持续扩展，敬请期待。
 * 本项目永久免费商用，如果能对您生产和学习有帮助请给作者一个star，这会非常鼓励我。
-* 项目依赖easyAi下载链接：https://gitee.com/dromara/easyAi (gitee)  https://github.com/lifejwang11/easyAi (github)
+* 项目依赖easyAi下载链接：https://gitee.com/dromara/easyAi (gitee)  https://gitcode.com/dromara/EasyAi/overview (gitCode)
 * 管理后台登陆地址:http://localhost:8080/
-### github同步链接
-https://github.com/lifejwang11/SayOrder
+### gitCode同步链接
+https://gitcode.com/dromara/sayOrder/overview
 ## 开发者常见疑问整理
 > 问：为什么 /ai/myTalk 有时候返回结果不是我想要的？
 >>——这是因为SQL脚本里，作者提供用来演示语句生成的训练样本数量太少，只有不到二十条，只能用作教学演示，会出现不好的回复也是很正常的。若生产使用请扩充自己的训练样本库！
@@ -61,7 +61,7 @@ int keyWordNerveDeep;//关键词敏感嗅探颗粒度大小
   ![设置模型保存路径](./picture/start.png)
 * /testData/sentence_data.sql，建立本地数据库，并执行此带有测试数据的mySQl数据库脚本到本地数据库。
 * 修改application.properties 本地数据库配置，指向执行上一步脚本所执行的数据库
-* 下载easyAi-1.1.7依赖并打包到本地maven仓库：https://gitee.com/dromara/easyAi
+* 下载easyAi-1.2.1依赖并打包到本地maven仓库：https://gitee.com/dromara/easyAi (gitee)  https://gitcode.com/dromara/EasyAi/overview (gitCode)
 * 启动应用，访问127.0.0.1:8080/ai/talk，直接输入语句字符串，不要使用JSON格式
 * 目前测试数据支持的语言类型保存在数据库表如下位置，请自行查看
   ![测试数据支持语义类别](./picture/start2.png)
@@ -137,14 +137,6 @@ int keyWordNerveDeep;//关键词敏感嗅探颗粒度大小
 ### 如果该项目对你有用，请可怜一下作者的劳动力支持开源，请作者吃一顿早饭就好！给作者持续更新easyAi引擎，同时封装更多依赖easyAi的常用应用提供动力！为大家低成本部署AI应用添砖加瓦！万谢!好心人！
 
 ![支付宝支付](/zf/zs.jpg)![微信支付](/zf/ws.jpg)
-
-### 依赖
-
-项目依赖：
-
-* springboot-2.5.6
-* easyAi-1.1.7：https://gitee.com/dromara/easyAi
-
 ### 常见抛错
 
 * 表中的模板语句量少于101：Template statement must be greater than 101
