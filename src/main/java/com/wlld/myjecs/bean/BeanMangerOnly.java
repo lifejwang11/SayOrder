@@ -35,9 +35,8 @@ public class BeanMangerOnly {//需要单例的类
         sentenceConfig.setTrustPowerTh(0.5);//语义分类可信阈值，范围0-1
         sentenceConfig.setSentenceTrustPowerTh(0.3);//生成语句可信阈值
         sentenceConfig.setMaxAnswerLength(6);//回复语句的最长长度
-        sentenceConfig.setTimes(8);//qa模型训练增强
+        sentenceConfig.setTimes(1);//qa模型训练增强
         sentenceConfig.setParam(0.3);//正则抑制系数
-        sentenceConfig.setTimes(100);
         return sentenceConfig;
     }
 
