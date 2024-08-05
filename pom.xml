@@ -10,7 +10,7 @@
 
     <properties>
         <!-- 项目版本 -->
-        <revesion>1.0.4</revesion>
+        <revesion>1.0.5</revesion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--java & spring-boot -->
