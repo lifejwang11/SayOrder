@@ -23,5 +23,5 @@ public class Config {//配置文件 "/usr/local/depends/
     public static boolean start = false;//模型是否准备好了
     public static boolean TALK_DOING = false;//对话模型是否在训练中
     public static boolean SEMANTICS_DOING = false;//语义模型是否在训练中
-    public static int QA_MODEL =2;//0是不启动，1使用短语句交互，2是启用长语句交互
+    public static int QA_MODEL = 2;//0是不启动，1使用短语句交互，2是启用长语句交互
 }

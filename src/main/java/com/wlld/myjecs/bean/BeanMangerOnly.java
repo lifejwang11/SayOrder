@@ -32,7 +32,7 @@ public class BeanMangerOnly {//需要单例的类
         SentenceConfig sentenceConfig = new SentenceConfig();
         sentenceConfig.setQaWordVectorDimension(50);
         sentenceConfig.setMaxWordLength(20);//语言长度 越长越好，但是越长需求的数据量越大，计算时间越长性能越差，也需要更多的内存。
-        sentenceConfig.setTrustPowerTh(0.5);//语义分类可信阈值，范围0-1
+        sentenceConfig.setTrustPowerTh(0);//语义分类可信阈值，范围0-1
         sentenceConfig.setSentenceTrustPowerTh(0.3);//生成语句可信阈值
         sentenceConfig.setMaxAnswerLength(6);//回复语句的最长长度
         sentenceConfig.setTimes(1);//qa模型训练增强
@@ -43,11 +43,11 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public TfConfig getTfConfig() {
         TfConfig tfConfig = new TfConfig();
-        tfConfig.setTimes(500);
+        tfConfig.setTimes(100);
         tfConfig.setMultiNumber(6);
         tfConfig.setAllDepth(1);
         tfConfig.setMaxLength(20);
-        tfConfig.setStudyPoint(0.02);
+        tfConfig.setStudyPoint(0.01);
         return tfConfig;
     }
 

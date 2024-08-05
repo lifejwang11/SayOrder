@@ -24,7 +24,7 @@
         <!-- swagger2 -->
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <!-- easyAi -->
-        <easyAi.version>1.2.1</easyAi.version>
+        <easyAi.version>1.2.2</easyAi.version>
         <mysql.version>8.0.33</mysql.version>
         <!-- p6spy sql日志 -->
         <p6spy.version>3.9.1</p6spy.version>
