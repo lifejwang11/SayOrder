@@ -7,6 +7,7 @@ import com.wlld.myjecs.config.SysConfig;
 import com.wlld.myjecs.entity.KeywordType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.wlld.config.RZ;
 import org.wlld.config.SentenceConfig;
 import org.wlld.config.TfConfig;
 import org.wlld.naturalLanguage.TalkToTalk;
@@ -30,11 +31,11 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public SentenceConfig getConfig() {//配置文件
         SentenceConfig sentenceConfig = new SentenceConfig();
-        sentenceConfig.setQaWordVectorDimension(50);
+        sentenceConfig.setQaWordVectorDimension(32);
         sentenceConfig.setMaxWordLength(20);//语言长度 越长越好，但是越长需求的数据量越大，计算时间越长性能越差，也需要更多的内存。
         sentenceConfig.setTrustPowerTh(0);//语义分类可信阈值，范围0-1
         sentenceConfig.setSentenceTrustPowerTh(0.3);//生成语句可信阈值
-        sentenceConfig.setMaxAnswerLength(6);//回复语句的最长长度
+        sentenceConfig.setMaxAnswerLength(16);//回复语句的最长长度
         sentenceConfig.setTimes(1);//qa模型训练增强
         sentenceConfig.setParam(0.3);//正则抑制系数
         return sentenceConfig;
@@ -43,10 +44,12 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public TfConfig getTfConfig() {
         TfConfig tfConfig = new TfConfig();
-        tfConfig.setTimes(100);
-        tfConfig.setMultiNumber(6);
+        tfConfig.setTimes(200);
+        tfConfig.setMultiNumber(8);
         tfConfig.setAllDepth(1);
         tfConfig.setMaxLength(20);
+        tfConfig.setSplitWord(null);
+        tfConfig.setSelfTimeCode(true);
         tfConfig.setStudyPoint(0.01);
         return tfConfig;
     }
@@ -100,7 +103,9 @@ public class BeanMangerOnly {//需要单例的类
 
     @Bean
     public WordEmbedding getEmbedding() {//词向量嵌入器（word2Vec）
-        return new WordEmbedding();
+        WordEmbedding wordEmbedding = new WordEmbedding();
+        wordEmbedding.setStudyTimes(20);
+        return wordEmbedding;
     }
 
     @Bean

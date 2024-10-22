@@ -10,7 +10,7 @@
 
     <properties>
         <!-- 项目版本 -->
-        <revesion>1.0.6</revesion>
+        <revesion>1.0.7</revesion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--java & spring-boot -->
@@ -24,7 +24,7 @@
         <!-- swagger2 -->
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <!-- easyAi -->
-        <easyAi.version>1.2.3</easyAi.version>
+        <easyAi.version>1.2.8</easyAi.version>
         <mysql.version>8.0.33</mysql.version>
         <!-- p6spy sql日志 -->
         <p6spy.version>3.9.1</p6spy.version>
@@ -113,7 +113,7 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.wlld</groupId>
+            <groupId>cn.myeasyai</groupId>
             <artifactId>easyAi</artifactId>
             <version>${easyAi.version}</version>
         </dependency>

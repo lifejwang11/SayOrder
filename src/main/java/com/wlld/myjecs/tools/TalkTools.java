@@ -9,6 +9,8 @@ import org.wlld.entity.SentenceModel;
 import org.wlld.entity.TalkBody;
 import org.wlld.entity.WordTwoVectorModel;
 import org.wlld.naturalLanguage.TalkToTalk;
+import org.wlld.naturalLanguage.Tokenizer;
+import org.wlld.naturalLanguage.WordTemple;
 import org.wlld.naturalLanguage.word.WordEmbedding;
 import org.wlld.rnnJumpNerveCenter.CustomManager;
 import org.wlld.transFormer.model.TransFormerModel;
@@ -31,9 +33,9 @@ public class TalkTools {
             sen = anySort(sentences);
         }
         boolean isStudy = initWordEmbedding(beanMangerOnly, sen);//初始化词向量嵌入
-        if (Config.QA_MODEL==1) {
+        if (Config.QA_MODEL == 1) {
             initCustomServer(isStudy, beanMangerOnly, sen);
-        }else {
+        } else {
             initTalkToTalk(isStudy, beanMangerOnly, sen);
         }
     }

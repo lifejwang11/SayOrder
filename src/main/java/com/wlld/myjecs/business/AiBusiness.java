@@ -67,7 +67,7 @@ public class AiBusiness {
                     for (KeywordType keywordType : keywordTypeList) {
                         int keyword_type_id = keywordType.getKeyword_type_id();
                         boolean isKey = myKeyWordMap.get(keyword_type_id).isKeyWord(word, eventId);//是否有关键词
-                        if (isKey) {
+                        if (isKey) {//keyword_type_id类别嗅探通过，开始抓取keyword_type_id 关键词
                             CatchKeyWord catchKeyWord = catchKeyWordMap.get(keyword_type_id);
                             if (catchKeyWord != null) {
                                 Order order = new Order();
