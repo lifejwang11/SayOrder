@@ -132,7 +132,7 @@ public class SentenceConfigVueController {
         sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
         List<TalkBody> talkBodies = null;
-        boolean needTalk = true;// AssertTools.needTalkSql();
+        boolean needTalk = AssertTools.needTalkSql();
         if (needTalk) {
             talkBodies = sql.getTalkModel();//数据库模板，用户可自己修改数据库信息
             for (int i = 0; i < talkBodies.size(); i++) {
