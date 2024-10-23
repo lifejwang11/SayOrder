@@ -104,7 +104,7 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public WordEmbedding getEmbedding() {//词向量嵌入器（word2Vec）
         WordEmbedding wordEmbedding = new WordEmbedding();
-        wordEmbedding.setStudyTimes(20);
+        wordEmbedding.setStudyTimes(1);
         return wordEmbedding;
     }
 
