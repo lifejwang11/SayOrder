@@ -31,7 +31,7 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public SentenceConfig getConfig() {//配置文件
         SentenceConfig sentenceConfig = new SentenceConfig();
-        sentenceConfig.setQaWordVectorDimension(32);
+        sentenceConfig.setQaWordVectorDimension(32);//维度大参数多，它就能适应更复杂的情况，速度越慢，需要样本越多
         sentenceConfig.setMaxWordLength(20);//语言长度 越长越好，但是越长需求的数据量越大，计算时间越长性能越差，也需要更多的内存。
         sentenceConfig.setTrustPowerTh(0);//语义分类可信阈值，范围0-1
         sentenceConfig.setSentenceTrustPowerTh(0.3);//生成语句可信阈值
@@ -42,15 +42,15 @@ public class BeanMangerOnly {//需要单例的类
     }
 
     @Bean
-    public TfConfig getTfConfig() {
+    public TfConfig getTfConfig() {//64-128
         TfConfig tfConfig = new TfConfig();
-        tfConfig.setTimes(200);
+        tfConfig.setTimes(200);//样本量不足，增加训练量
         tfConfig.setMultiNumber(8);
         tfConfig.setAllDepth(1);
         tfConfig.setMaxLength(20);
         tfConfig.setSplitWord(null);
         tfConfig.setSelfTimeCode(true);
-        tfConfig.setStudyPoint(0.01);
+        tfConfig.setStudyPoint(0.01);//学习率越小越准，但是需要训练量越大
         return tfConfig;
     }
 

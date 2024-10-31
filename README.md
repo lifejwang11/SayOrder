@@ -134,7 +134,6 @@ https://gitcode.com/dromara/sayOrder/overview
 ### 演示数据sql脚本及静态资源位置
 
 * sql脚本（包含用于测试的数据）位置：/testData/sentence_data.sql
-* sql脚本（仅结构无测试数据）位置：/testData/sentence.sql
 * 对应模型文件位置：/testModel/**
 * myJesc前端页面资源位置：/wlTalk/**
 
