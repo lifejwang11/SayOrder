@@ -8,6 +8,8 @@ server:
     session:
       timeout: 1800
 spring:
+  profiles:
+    active: huawei
   datasource:
     dynamic:
 #      p6spy: true
@@ -16,9 +18,9 @@ spring:
       datasource:
         master:
           type: com.zaxxer.hikari.HikariDataSource
-          url: jdbc:mysql://127.0.0.1:3306/sentence_data?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
+          url: jdbc:mysql://127.0.0.1:3307/sentence_data?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
           username: root
-          password: 6205194max
+          password: 123456
           driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
           hikari:
             max-pool-size: 10                         #连接池的最大大小。这是可以同时打开的最大连接数

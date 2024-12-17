@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    dynamic:
+#      p6spy: true
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        master:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:opengauss://113.44.147.74:8000/sentence_data?currentSchema=public
+          username: root
+          password: qwer!1234
+          driver-class-name: com.huawei.opengauss.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
+          hikari:
+            max-pool-size: 10                         #连接池的最大大小。这是可以同时打开的最大连接数
+            min-idle: 5                               #连接池的最小空闲连接数
+            connection-timeout: 20000                 #连接超时时间（毫秒）。如果在这个时间内无法建立连接，将会抛出异常。
+            idle-timeout: 180000                      #连接空闲超时时间（毫秒）。如果连接在空闲状态下超过这个时间，它可能会被关闭
+            initialization-fail-timeout: 60000        #如果初始化连接失败，等待多长时间后重试
+            connection-test-query: select 1           #心跳检查
+            max-lifetime: 1800000

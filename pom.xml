@@ -109,6 +109,11 @@
             <version>${mysql.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.huaweicloud.gaussdb</groupId>
+            <artifactId>opengaussjdbc</artifactId>
+            <version>503.2.T35</version>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
