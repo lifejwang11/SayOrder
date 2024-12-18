@@ -2,7 +2,7 @@ package com.wlld.myjecs.config;
 
 
 public class Config {
-    public static final String path = ClassLoader.getSystemClassLoader().getResource("").getPath();
+    public static final String path = "/opt/model/sayOrder";
 
 
     public static final String Word2VecModelUrl = path  +"/end.json";//词向量嵌入模型（注意词向量模型无需频繁更新，只有当样本有超过50%增量时才有更新必要）
