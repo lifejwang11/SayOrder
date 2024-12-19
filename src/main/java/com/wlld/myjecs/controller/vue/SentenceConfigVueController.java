@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.wlld.entity.TalkBody;
+import org.dromara.easyai.entity.TalkBody;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -127,7 +127,7 @@ public class SentenceConfigVueController {
         BeanMangerOnly beanMangerOnly = applicationContext.getBean(BeanMangerOnly.class);
         SqlMapper sql = applicationContext.getBean(SqlMapper.class);
         List<MyTree> trees = sql.getMyTree();
-        org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+        org.dromara.easyai.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
         BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
         sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
@@ -172,7 +172,7 @@ public class SentenceConfigVueController {
                 kts.put(typeID, k);
             }
         }
-        org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+        org.dromara.easyai.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
         BeanUtil.copyProperties(getDbConfig(), sentenceConfig);
         sentenceConfig.setTypeNub(trees.size());
         beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);

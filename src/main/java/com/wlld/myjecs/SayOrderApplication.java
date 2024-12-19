@@ -15,8 +15,8 @@ import com.wlld.myjecs.tools.AssertTools;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.wlld.config.SentenceConfig;
-import org.wlld.entity.TalkBody;
+import org.dromara.easyai.config.SentenceConfig;
+import org.dromara.easyai.entity.TalkBody;
 
 import java.util.ArrayList;
 import java.util.HashMap;

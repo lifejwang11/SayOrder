@@ -2,7 +2,7 @@ package com.wlld.myjecs.entity.business;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.wlld.naturalLanguage.languageCreator.KeyWordModel;
+import org.dromara.easyai.naturalLanguage.languageCreator.KeyWordModel;
 
 @Setter
 @Getter

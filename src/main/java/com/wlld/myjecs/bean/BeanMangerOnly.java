@@ -7,15 +7,15 @@ import com.wlld.myjecs.config.SysConfig;
 import com.wlld.myjecs.entity.KeywordType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.wlld.config.RZ;
-import org.wlld.config.SentenceConfig;
-import org.wlld.config.TfConfig;
-import org.wlld.naturalLanguage.TalkToTalk;
-import org.wlld.naturalLanguage.languageCreator.CatchKeyWord;
-import org.wlld.naturalLanguage.word.MyKeyWord;
-import org.wlld.naturalLanguage.word.WordEmbedding;
-import org.wlld.rnnJumpNerveCenter.CustomManager;
-import org.wlld.rnnJumpNerveCenter.RRNerveManager;
+import org.dromara.easyai.config.RZ;
+import org.dromara.easyai.config.SentenceConfig;
+import org.dromara.easyai.config.TfConfig;
+import org.dromara.easyai.naturalLanguage.TalkToTalk;
+import org.dromara.easyai.naturalLanguage.languageCreator.CatchKeyWord;
+import org.dromara.easyai.naturalLanguage.word.MyKeyWord;
+import org.dromara.easyai.naturalLanguage.word.WordEmbedding;
+import org.dromara.easyai.rnnJumpNerveCenter.CustomManager;
+import org.dromara.easyai.rnnJumpNerveCenter.RRNerveManager;
 
 import java.util.*;
 
