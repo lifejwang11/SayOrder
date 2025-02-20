@@ -35,6 +35,7 @@ public class BeanMangerOnly {//需要单例的类
         sentenceConfig.setMaxWordLength(20);//语言长度 越长越好，但是越长需求的数据量越大，计算时间越长性能越差，也需要更多的内存。
         sentenceConfig.setTrustPowerTh(0);//语义分类可信阈值，范围0-1
         sentenceConfig.setSentenceTrustPowerTh(0.3f);//生成语句可信阈值
+        sentenceConfig.setWeStudyPoint(0.005f);
         sentenceConfig.setMaxAnswerLength(16);//回复语句的最长长度
         sentenceConfig.setTimes(1);//qa模型训练增强
         sentenceConfig.setParam(0.3f);//正则抑制系数
@@ -48,8 +49,10 @@ public class BeanMangerOnly {//需要单例的类
         tfConfig.setMultiNumber(8);
         tfConfig.setAllDepth(1);
         tfConfig.setMaxLength(20);
+        tfConfig.setStudyPoint(0.005f);
         tfConfig.setSplitWord(null);
         tfConfig.setSelfTimeCode(true);
+        tfConfig.setShowLog(true);
         tfConfig.setStudyPoint(0.01f);//学习率越小越准，但是需要训练量越大
         return tfConfig;
     }
