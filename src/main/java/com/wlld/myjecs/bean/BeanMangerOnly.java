@@ -36,7 +36,7 @@ public class BeanMangerOnly {//需要单例的类
         sentenceConfig.setTrustPowerTh(0);//语义分类可信阈值，范围0-1
         sentenceConfig.setSentenceTrustPowerTh(0.3f);//生成语句可信阈值
         sentenceConfig.setWeStudyPoint(0.005f);
-        sentenceConfig.setMaxAnswerLength(16);//回复语句的最长长度
+        sentenceConfig.setMaxAnswerLength(50);//回复语句的最长长度
         sentenceConfig.setTimes(1);//qa模型训练增强
         sentenceConfig.setParam(0.3f);//正则抑制系数
         return sentenceConfig;
@@ -45,15 +45,14 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public TfConfig getTfConfig() {//64-128
         TfConfig tfConfig = new TfConfig();
-        tfConfig.setTimes(200);//样本量不足，增加训练量
-        tfConfig.setMultiNumber(8);
+        tfConfig.setTimes(100);//样本量不足，增加训练量
+        tfConfig.setMultiNumber(32);
         tfConfig.setAllDepth(1);
-        tfConfig.setMaxLength(20);
-        tfConfig.setStudyPoint(0.005f);
+        tfConfig.setMaxLength(50);
+        tfConfig.setStudyPoint(0.001f);
         tfConfig.setSplitWord(null);
         tfConfig.setSelfTimeCode(true);
         tfConfig.setShowLog(true);
-        tfConfig.setStudyPoint(0.01f);//学习率越小越准，但是需要训练量越大
         return tfConfig;
     }
 

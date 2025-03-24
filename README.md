@@ -72,8 +72,6 @@ https://gitcode.com/dromara/sayOrder/overview
   ![设置模型保存路径](./picture/start.png)
 * /testData/sentence_data.sql，建立本地数据库，并执行此带有测试数据的mySQl数据库脚本到本地数据库。
 * 修改application.properties 本地数据库配置，指向执行上一步脚本所执行的数据库
-* 下载easyAi-1.2.1依赖并打包到本地maven仓库：https://gitee.com/dromara/easyAi (
-  gitee)  https://gitcode.com/dromara/EasyAi/overview (gitCode)
 * 启动应用，访问127.0.0.1:8080/ai/talk，直接输入语句字符串，不要使用JSON格式
 * 目前测试数据支持的语言类型保存在数据库表如下位置，请自行查看
   ![测试数据支持语义类别](./picture/start2.png)

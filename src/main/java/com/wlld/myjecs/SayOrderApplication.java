@@ -85,7 +85,7 @@ public class SayOrderApplication {
             }
         }
         applicationContext.getBean(BeanManger.class).tools().initSemantics(beanMangerOnly, sentences, Config.selfTest);
-        if (Config.QA_MODEL>0) {
+        if (Config.QA_MODEL > 0) {
             List<TalkBody> talkBodies = null;
             boolean needTalk = AssertTools.needTalkSql();
             if (needTalk) {

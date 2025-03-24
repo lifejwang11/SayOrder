@@ -59,8 +59,17 @@ public class TalkTools {
         talkToTalk.init();
         if (file.exists() && !isStudy) {
             talkToTalk.insertModel(readCreatorModel2());
-        } else {
+            long startTime = System.currentTimeMillis() / 1000;
             TransFormerModel transFormerModel = talkToTalk.study(sentences);
+            long endTime = System.currentTimeMillis() / 1000 - startTime;
+            System.out.println("qa训练总耗时:" + endTime);
+            String model = JSON.toJSONString(transFormerModel);
+            writeModel(model, Config.longTalkUrl);
+        } else {
+            long startTime = System.currentTimeMillis() / 1000;
+            TransFormerModel transFormerModel = talkToTalk.study(sentences);
+            long endTime = System.currentTimeMillis() / 1000 - startTime;
+            System.out.println("qa训练总耗时:" + endTime);
             String model = JSON.toJSONString(transFormerModel);
             writeModel(model, Config.longTalkUrl);
         }
