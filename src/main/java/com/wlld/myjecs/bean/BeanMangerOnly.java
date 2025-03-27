@@ -46,8 +46,8 @@ public class BeanMangerOnly {//需要单例的类
     public TfConfig getTfConfig() {//64-128
         TfConfig tfConfig = new TfConfig();
         tfConfig.setTimes(100);//样本量不足，增加训练量
-        tfConfig.setMultiNumber(32);
-        tfConfig.setAllDepth(1);
+        tfConfig.setMultiNumber(8);
+        tfConfig.setAllDepth(4);
         tfConfig.setMaxLength(50);
         tfConfig.setStudyPoint(0.001f);
         tfConfig.setSplitWord(null);
