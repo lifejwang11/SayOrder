@@ -45,7 +45,7 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public TfConfig getTfConfig() {//64-128
         TfConfig tfConfig = new TfConfig();
-        tfConfig.setTimes(100);//样本量不足，增加训练量
+        tfConfig.setTimes(200);//样本量不足，增加训练量
         tfConfig.setMultiNumber(8);
         tfConfig.setAllDepth(1);
         tfConfig.setMaxLength(50);
