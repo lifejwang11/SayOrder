@@ -45,20 +45,14 @@ public class BeanMangerOnly {//需要单例的类
     @Bean
     public TfConfig getTfConfig() {//64-128
         TfConfig tfConfig = new TfConfig();
-        tfConfig.setTimes(200);//样本量不足，增加训练量
-        tfConfig.setMultiNumber(8);
-        tfConfig.setAllDepth(1);
-        tfConfig.setMaxLength(50);
-        tfConfig.setStudyPoint(0.001f);
-        tfConfig.setSplitWord(null);
-        tfConfig.setSelfTimeCode(true);
+        tfConfig.setTimes(500);//样本量不足，增加训练量
         tfConfig.setShowLog(true);
         return tfConfig;
     }
 
     @Bean
     public TalkToTalk getTalkToTalk() throws Exception {
-        return new TalkToTalk(getEmbedding(), getTfConfig());
+        return new TalkToTalk(getTfConfig());
     }
 
     @Bean
@@ -84,7 +78,6 @@ public class BeanMangerOnly {//需要单例的类
 
     @Bean
     public Map<Integer, MyKeyWord> getMyKeyWord() {//关键词敏感性嗅探
-        // return new MyKeyWord(getConfig(), getWordEmbedding());
         return new HashMap<>();
     }
 
@@ -103,16 +96,5 @@ public class BeanMangerOnly {//需要单例的类
         return new SysConfig();
     }
 
-    @Bean
-    public WordEmbedding getEmbedding() {//词向量嵌入器（word2Vec）
-        WordEmbedding wordEmbedding = new WordEmbedding();
-        wordEmbedding.setStudyTimes(1);
-        return wordEmbedding;
-    }
-
-    @Bean
-    public CustomManager getCustomManager() throws Exception {
-        return new CustomManager(getEmbedding(), getConfig());
-    }
 
 }

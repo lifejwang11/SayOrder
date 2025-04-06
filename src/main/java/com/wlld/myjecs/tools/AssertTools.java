@@ -14,14 +14,8 @@ import java.io.File;
 public class AssertTools {
     public boolean needTalkSql() {
         boolean isNeedSReadSql = true;
-        File file1 = new File(Config.wordUrl);//词嵌入
-        File file2;
-        if (Config.QA_MODEL == 1) {
-            file2 = new File(Config.shortTalkUrl);//语句模型
-        } else {
-            file2 = new File(Config.longTalkUrl);//语句模型
-        }
-        if (file1.exists() && file2.exists()) {
+        File file2 = new File(Config.longTalkUrl);//语句模型;
+        if (file2.exists()) {
             isNeedSReadSql = false;
         }
         return isNeedSReadSql;

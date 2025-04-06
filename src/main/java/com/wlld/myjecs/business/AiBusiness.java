@@ -28,13 +28,8 @@ public class AiBusiness {
         Response response = new Response();
         String answer;
         if (Config.QA_MODEL > 0) {
-            if (Config.QA_MODEL == 1) {
-                CustomManager customManager = beanMangerOnly.getCustomManager();
-                answer = customManager.getAnswer(word, SnowflakeIdWorker.get().nextId());
-            } else {
-                TalkToTalk talkToTalk = beanMangerOnly.getTalkToTalk();
-                answer = talkToTalk.getAnswer(word, SnowflakeIdWorker.get().nextId());
-            }
+            TalkToTalk talkToTalk = beanMangerOnly.getTalkToTalk();
+            answer = talkToTalk.getAnswer(word, SnowflakeIdWorker.get().nextId());
         } else {
             answer = "该模块没有打开，请在配置类Config中，修改QA_MODEL属性";
         }

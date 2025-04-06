@@ -11,7 +11,7 @@
  Target Server Version : 90001 (9.0.1-commercial)
  File Encoding         : 65001
 
- Date: 31/10/2024 17:45:58
+ Date: 06/04/2025 11:18:52
 */
 
 SET NAMES utf8mb4;
@@ -2986,31 +2986,22 @@ CREATE TABLE `q_a` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
   `answer` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '回答',
   UNIQUE KEY `q_a_pk` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin ROW_FORMAT=DYNAMIC COMMENT='聊天样本';
+) ENGINE=InnoDB AUTO_INCREMENT=410 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin ROW_FORMAT=DYNAMIC COMMENT='聊天样本';
 
 -- ----------------------------
 -- Records of q_a
 -- ----------------------------
 BEGIN;
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('给我订一张从济南出发到北京的机票', 83, '几点出发呢');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('给我订一张十点钟到北京的机票', 84, '从哪里出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('给我订一张十点从济南出发的机票', 85, '要去哪里');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我要订一张从南京去往上海的车票', 94, '几点出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我要十点订去往上海的车票', 95, '从哪里出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我要十点钟从北京出发的车票', 96, '想去哪里');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我要十点买票去北京', 97, '从哪里出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我十点钟从烟台出发', 98, '要去哪里');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我要从烟台去上海', 99, '几点钟走');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我买九点从烟台出发的机票', 100, '要到哪里呢');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我买烟台到北京的机票', 101, '几点钟出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我买十点去北京的机票', 102, '从哪里出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('有没有十八点从上海出发的车票', 103, '要到哪里去');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('有没有从北京去上海的车票', 104, '几点出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我准备九点出发去往齐齐哈尔', 105, '从哪里出发去');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('有十一点半从成都出发的票吗', 106, '要到哪里的票');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('有十一点半到北京的票吗', 107, '从哪里出发');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('有从成都到北京的票吗', 108, '几点从家走');
-INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('我要买从北京出发的车票', 109, '要去哪里');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦的最佳播种时间是什么时候', 110, '小麦的最佳播种时间是秋季的10月至11月');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦适合哪种土壤', 111, '小麦适合富含有机质的中性壤土');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦需水量大吗', 112, '小麦需水量中等但生长关键期需保持土壤湿润');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦成熟需要多少天', 113, '小麦成熟通常需要90至120天');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦常见的病虫害有哪些', 114, '小麦常见的病虫害有白粉病、锈病、蚜虫等');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦需不需要轮作', 115, '小麦需要轮作避免连作引发病害和土壤退化');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦对温度的要求是什么', 116, '小麦适宜温度为10°C至25°C');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦如何防止倒伏', 117, '小麦防止倒伏需合理密植、施肥和灌溉');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦灌溉次数多少合适', 118, '小麦灌溉3至4次，重点在拔节、孕穗和灌浆期');
+INSERT INTO `q_a` (`question`, `id`, `answer`) VALUES ('小麦的生长周期分为哪几个阶段', 119, '小麦生长周期分为播种、出苗、拔节、抽穗、灌浆、成熟');
 COMMIT;
 
 -- ----------------------------

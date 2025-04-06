@@ -6,9 +6,7 @@ public class Config {//配置文件 "/usr/local/depends/
     public static final String onlyKeyWord = "/Users/lidapeng/job/sayOrderModel/preKeyWord.json";//关键词敏感性嗅探
     public static final String KeyWordModelUrl = "/Users/lidapeng/job/sayOrderModel/myKeyWord.json";//关键词查找模型
     public static final String keyWordIndex = "/Users/lidapeng/job/sayOrderModel/keyWordIndex.json";//关键词索引模型
-    public static final String wordUrl = "/Users/lidapeng/job/sayOrderModel/word.json";//聊天词向量嵌入模型
     public static final String longTalkUrl = "/Users/lidapeng/job/sayOrderModel/longTalk.json";//聊天问答模型
-    public static final String shortTalkUrl = "/Users/lidapeng/job/sayOrderModel/shortTalk.json";//聊天问答模型
     public static final boolean selfTest = false;//服务启动时是否需要自检（自检时间较长）
     public static final boolean starModel = true;//服务启动是否启动模型
     public static final String adminAccount = "admin";//管理员账号
