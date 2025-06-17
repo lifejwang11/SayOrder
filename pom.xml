@@ -10,7 +10,7 @@
 
     <properties>
         <!-- 项目版本 -->
-        <revesion>1.0.3</revesion>
+        <revesion>1.0.7</revesion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--java & spring-boot -->
@@ -24,16 +24,18 @@
         <!-- swagger2 -->
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <!-- easyAi -->
-        <easyAi.version>1.1.8</easyAi.version>
+        <easyAi.version>1.4.4</easyAi.version>
         <mysql.version>8.0.33</mysql.version>
         <!-- p6spy sql日志 -->
         <p6spy.version>3.9.1</p6spy.version>
         <!-- maven-plugin  -->
-        <maven-plugin.version>3.8.1</maven-plugin.version>
+        <maven-plugin.version>3.11.0</maven-plugin.version>
         <!-- pagehelper -->
         <pagehelper.version>1.4.1</pagehelper.version>
         <!-- fastjson -->
         <fastjson.version>1.2.83</fastjson.version>
+        <!-- lombok -->
+        <lombok.version>1.18.30</lombok.version>
 
     </properties>
 
@@ -76,7 +78,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <!--	swagger-->
+        <!--		swagger-->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -97,6 +99,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- mysql -->
         <!-- sql性能分析插件 -->
@@ -115,7 +119,7 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.wlld</groupId>
+            <groupId>org.dromara.easyai</groupId>
             <artifactId>easyAi</artifactId>
             <version>${easyAi.version}</version>
         </dependency>

@@ -8,12 +8,12 @@ import com.wlld.myjecs.config.SayOrderConfig;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.wlld.entity.CreatorModel;
-import org.wlld.entity.SentenceModel;
-import org.wlld.entity.TalkBody;
-import org.wlld.entity.WordTwoVectorModel;
-import org.wlld.naturalLanguage.word.WordEmbedding;
-import org.wlld.rnnJumpNerveCenter.CustomManager;
+import org.dromara.easyai.entity.CreatorModel;
+import org.dromara.easyai.entity.SentenceModel;
+import org.dromara.easyai.entity.TalkBody;
+import org.dromara.easyai.entity.WordTwoVectorModel;
+import org.dromara.easyai.naturalLanguage.word.WordEmbedding;
+import org.dromara.easyai.rnnJumpNerveCenter.CustomManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +66,7 @@ public class TalkTools {
         if (file.exists() && !isStudy) {//读模型
             customManager.insertModel(readCreatorModel());
         } else if (sentences != null && !sentences.isEmpty()) {//训练
-            CreatorModel creatorModel = customManager.study(sentences, 1);
+            CreatorModel creatorModel = customManager.study(sentences);
             String model = JSON.toJSONString(creatorModel);
             writeModel(model, sayOrderConfig.getBaseDir() + Config.talkUrl);
         }

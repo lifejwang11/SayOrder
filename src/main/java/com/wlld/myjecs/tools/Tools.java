@@ -12,15 +12,15 @@ import com.wlld.myjecs.entity.business.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.wlld.entity.KeyWordForSentence;
-import org.wlld.entity.SentenceModel;
-import org.wlld.entity.WordTwoVectorModel;
-import org.wlld.naturalLanguage.languageCreator.CatchKeyWord;
-import org.wlld.naturalLanguage.word.MyKeyWord;
-import org.wlld.naturalLanguage.word.WordEmbedding;
-import org.wlld.rnnJumpNerveCenter.RRNerveManager;
-import org.wlld.rnnJumpNerveCenter.RandomModel;
-import org.wlld.rnnNerveCenter.ModelParameter;
+import org.dromara.easyai.entity.KeyWordForSentence;
+import org.dromara.easyai.entity.SentenceModel;
+import org.dromara.easyai.entity.WordTwoVectorModel;
+import org.dromara.easyai.naturalLanguage.languageCreator.CatchKeyWord;
+import org.dromara.easyai.naturalLanguage.word.MyKeyWord;
+import org.dromara.easyai.naturalLanguage.word.WordEmbedding;
+import org.dromara.easyai.rnnJumpNerveCenter.RRNerveManager;
+import org.dromara.easyai.rnnJumpNerveCenter.RandomModel;
+import org.dromara.easyai.rnnNerveCenter.ModelParameter;
 
 import java.io.File;
 import java.io.IOException;
@@ -130,7 +130,12 @@ public class Tools {
                     keyWordForSentence.setKeyWord(sentence.getKeyword());
                     keyWordForSentenceList.add(keyWordForSentence);
                 }
-                catchKeyWord.study(keyWordForSentenceList);//耗时的过程
+                try {
+                    catchKeyWord.study(keyWordForSentenceList);//耗时的过程
+                } catch (Exception e) {
+                    log.error("训练关键词模型失败", e);
+                    throw new RuntimeException("训练关键词模型失败", e);
+                }
                 KeyWordModelMapping keyWordModelMapping = new KeyWordModelMapping();
                 keyWordModelMapping.setKey(key);
                 keyWordModelMapping.setKeyWordModel(catchKeyWord.getModel());

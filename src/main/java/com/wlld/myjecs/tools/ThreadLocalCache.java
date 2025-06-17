@@ -1,7 +1,7 @@
 package com.wlld.myjecs.tools;
 
 import lombok.experimental.UtilityClass;
-import org.wlld.config.SentenceConfig;
+import org.dromara.easyai.config.SentenceConfig;
 
 /**
  * @author fn

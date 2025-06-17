@@ -2,7 +2,7 @@ package com.wlld.myjecs.entity.business;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.wlld.rnnNerveCenter.ModelParameter;
+import org.dromara.easyai.rnnNerveCenter.ModelParameter;
 
 @Getter
 @Setter

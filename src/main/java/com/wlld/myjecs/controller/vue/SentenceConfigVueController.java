@@ -30,9 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.wlld.entity.TalkBody;
-import org.wlld.naturalLanguage.languageCreator.CatchKeyWord;
-import org.wlld.naturalLanguage.word.MyKeyWord;
+import org.dromara.easyai.entity.TalkBody;
+import org.dromara.easyai.naturalLanguage.languageCreator.CatchKeyWord;
+import org.dromara.easyai.naturalLanguage.word.MyKeyWord;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class SentenceConfigVueController {
         sentenceConfigService.update(query1.set(SentenceConfig::getStatus, 0).ne(sentenceConfig.getId() != null, SentenceConfig::getId, sentenceConfig.getId()));
         SentenceConfig dbConfig = sentenceConfigService.getConfig();
         if (dbConfig != null) {
-            org.wlld.config.SentenceConfig config = new org.wlld.config.SentenceConfig();
+            org.dromara.easyai.config.SentenceConfig config = new org.dromara.easyai.config.SentenceConfig();
             BeanUtil.copyProperties(dbConfig, config);
             //使用替换模型更新缓存
             ThreadLocalCache.setConfig(config);
@@ -213,7 +213,7 @@ public class SentenceConfigVueController {
             if (!needTalk || !talkBodies.isEmpty()) {
                 TalkTools tools = applicationContext.getBean(TalkTools.class);
                 tools.setSayOrderConfig(config);
-                org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+                org.dromara.easyai.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
                 beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
                 tools.initSemantics(beanMangerOnly, talkBodies);
             }
@@ -245,7 +245,7 @@ public class SentenceConfigVueController {
                     kts.put(typeID, k);
                 }
             }
-            org.wlld.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
+            org.dromara.easyai.config.SentenceConfig sentenceConfig = beanMangerOnly.getConfig();
             sentenceConfig.setTypeNub(trees.size());
             beanMangerOnly.getWordEmbedding().setConfig(sentenceConfig);
             beanMangerOnly.getRRNerveManager().init(sentenceConfig);
